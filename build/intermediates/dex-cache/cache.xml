@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="Z:\Proyectos\PFC\MyApplicationProject\MyApplication\libs\android-support-v4.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="307c1cc532eabbf1d135b43e5c983c9da700449d">
+        <dex dex="Z:\Proyectos\PFC\MyApplicationProject\MyApplication\build\intermediates\pre-dexed\debug\android-support-v4-85e8cd11498477dbf8801bcbe61749b9504c1af9.jar" />
+    </item>
+    <item
+        jar="C:\Users\Snapster\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.3.2\c75edc740a6d8cb1cef6fa82fa594e0bce561916\jackson-databind-2.3.2.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="c75edc740a6d8cb1cef6fa82fa594e0bce561916">
+        <dex dex="Z:\Proyectos\PFC\MyApplicationProject\MyApplication\build\intermediates\pre-dexed\debug\jackson-databind-2.3.2-a8431192f404177d515bc6e8199ef9c5928e4730.jar" />
+    </item>
+    <item
+        jar="C:\Users\Snapster\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.3.2\559b70ac8a0d5cad611da4223137a920147201ba\jackson-core-2.3.2.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="559b70ac8a0d5cad611da4223137a920147201ba">
+        <dex dex="Z:\Proyectos\PFC\MyApplicationProject\MyApplication\build\intermediates\pre-dexed\debug\jackson-core-2.3.2-e77cdf82702705a20e01fa37912412c581c3c506.jar" />
+    </item>
+    <item
+        jar="C:\Users\Snapster\.gradle\caches\modules-2\files-2.1\org.springframework.android\spring-android-core\1.0.1.RELEASE\e68f0e8e4b636ee30c4de58953be38d9b72a5e3b\spring-android-core-1.0.1.RELEASE.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="e68f0e8e4b636ee30c4de58953be38d9b72a5e3b">
+        <dex dex="Z:\Proyectos\PFC\MyApplicationProject\MyApplication\build\intermediates\pre-dexed\debug\spring-android-core-1.0.1.RELEASE-d151b247442591f87a8749da71e6d118b2e89b55.jar" />
+    </item>
+    <item
+        jar="C:\Users\Snapster\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-annotations\2.3.0\f5e853a20b60758922453d56f9ae1e64af5cb3da\jackson-annotations-2.3.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="f5e853a20b60758922453d56f9ae1e64af5cb3da">
+        <dex dex="Z:\Proyectos\PFC\MyApplicationProject\MyApplication\build\intermediates\pre-dexed\debug\jackson-annotations-2.3.0-ef3fd99ba11e44f460ff875da3e2343c6f375bee.jar" />
+    </item>
+    <item
+        jar="C:\Users\Snapster\.gradle\caches\modules-2\files-2.1\org.springframework.android\spring-android-rest-template\1.0.1.RELEASE\e132d929bd181941f79b0d63edafb8a86ae6fd33\spring-android-rest-template-1.0.1.RELEASE.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="e132d929bd181941f79b0d63edafb8a86ae6fd33">
+        <dex dex="Z:\Proyectos\PFC\MyApplicationProject\MyApplication\build\intermediates\pre-dexed\debug\spring-android-rest-template-1.0.1.RELEASE-d1d0c0ded66e83b271669634324f72a9eb080a78.jar" />
+    </item>
+
+</items>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="display_name" type="id">DisplayName</item>
+    <item name="label" type="id">LABEL</item>
+    <item name="addCalendarEvent" type="id">addCalendarEvent</item>
+</resources>

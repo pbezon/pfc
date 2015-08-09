@@ -1,0 +1,62 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    tools:context=".MainActivity"
+    tools:ignore="MergeRootFrame">
+
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="490dp"
+        android:layout_gravity="bottom"
+        android:columnCount="2">
+
+        <Button
+            android:id="@+id/scan"
+            android:layout_width="match_parent"
+            android:layout_height="91dp"
+            android:layout_column="0"
+            android:layout_columnSpan="2"
+            android:layout_row="0"
+            android:text="@string/scan" />
+
+        <Button
+            android:id="@+id/readContacts"
+            android:layout_width="match_parent"
+            android:layout_height="91dp"
+            android:layout_column="0"
+            android:layout_columnSpan="2"
+            android:layout_row="1"
+            android:text="@string/Contacts" />
+
+        <Button
+            android:id="@+id/addCalendarEvent"
+            android:layout_width="match_parent"
+            android:layout_height="91dp"
+            android:layout_column="0"
+            android:layout_columnSpan="2"
+            android:layout_row="2"
+            android:text="@string/addCalendarEvent" />
+
+        <Button
+            android:id="@+id/getAllFromServer"
+            android:layout_width="184dp"
+            android:layout_height="91dp"
+            android:layout_column="0"
+            android:layout_row="3"
+            android:text="Get all From Server" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="192dp"
+            android:layout_height="91dp"
+            android:layout_column="1"
+            android:layout_row="3"
+            android:layout_rowSpan="2"
+            android:text="New Button" />
+
+    </GridLayout>
+
+</FrameLayout>

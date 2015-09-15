@@ -1,18 +1,23 @@
 package com.example.myapplication.activities.display;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
+import android.app.Fragment;
+import android.app.ListActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.myapplication.R;
-import com.example.myapplication.service.ApiProxy;
+import com.example.myapplication.dao.Product;
 import com.example.myapplication.service.ProductService;
+import com.example.myapplication.util.adapter.ProductAdapter;
 
-import java.util.concurrent.ExecutionException;
-
-public class DisplayResults extends Activity {
+public class DisplayResults extends ListActivity {
 
     private String id;
 
@@ -21,22 +26,15 @@ public class DisplayResults extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_results);
 
-        Bundle extras = getIntent().getExtras();
-        id = extras.getString("ID");
+        ProductAdapter productAdapter = new ProductAdapter(this, (Product[]) new ProductService().getProduct("").toArray());
+        setListAdapter(productAdapter);
+    }
 
-        TextView textView = new TextView(this);
-        textView.setTextSize(12);
-//        try {
-            //textView.setText(new ApiProxy().execute("http://192.168.1.42:8081/53fe0690999387e508b476ad").get());
-            textView.setText(new ProductService().getProduct("53fe0690999387e508b476ad").toString());
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
-
-
-        setContentView(textView);
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        Product item = (Product) getListAdapter().getItem(position);
+        Toast.makeText(this, item.getName() + " selected", Toast.LENGTH_LONG).show();
+        this.flipCard();
     }
 
     @Override
@@ -57,4 +55,47 @@ public class DisplayResults extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void flipCard() {
+        // Create and commit a new fragment transaction that adds the fragment for the back of
+        // the card, uses custom animations, and is part of the fragment manager's back stack.
+
+        getFragmentManager()
+                .beginTransaction()
+
+                        // Replace the default fragment animations with animator resources representing
+                        // rotations when switching to the back of the card, as well as animator
+                        // resources representing rotations when flipping back to the front (e.g. when
+                        // the system Back button is pressed).
+                .setCustomAnimations(
+                        R.animator.card_flip_right_in, R.animator.card_flip_right_out,
+                        R.animator.card_flip_left_in, R.animator.card_flip_left_out)
+
+                        // Replace any fragments currently in the container view with a fragment
+                        // representing the next page (indicated by the just-incremented currentPage
+                        // variable).
+
+                .replace(R.id.flipContainer, new CardBackFragment())
+
+                        // Add this transaction to the back stack, allowing users to press Back
+                        // to get to the front of the card.
+                .addToBackStack(null)
+
+                        // Commit the transaction.
+                .commit();
+    }
+
+
+    /**
+     * A fragment representing the back of the card.
+     */
+    @SuppressLint("ValidFragment")
+    private class CardBackFragment extends Fragment {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.activity_display_results_detail, container, false);
+        }
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.myapplication.service;
 
+import com.example.myapplication.dao.History;
 import com.example.myapplication.dao.Product;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -10,6 +11,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Snapster on 21/03/2015.
@@ -25,7 +29,26 @@ public class ProductService {
     private final String returnRest = "/return/";
     private final String withdrawRest = "/withdraw/";
 
-    public Product getProduct(String id) {
+
+    public List<Product> getProduct(String id) {
+        Product p = new Product();
+        p.set_id("123456");
+        p.setName("fakeProductName");
+        p.setDescription("fakeProductDescription");
+        p.setDiscontinued(false);
+        p.setUnitprice(123);
+        History nowStatus = new History();
+        nowStatus.setInDate("01/01/01");
+        nowStatus.setName("Key");
+        nowStatus.setWho("Dude");
+        p.setCurrentStatus(nowStatus);
+        p.getProductHistory().add(nowStatus);
+        p.getProductHistory().add(nowStatus);
+        return Arrays.asList(p, p);
+
+    }
+
+    private Product realGetProduct(String id) {
         try {
             String response;
             String urlString = url + getRest + id; // URL to call
@@ -76,6 +99,25 @@ public class ProductService {
             System.out.println(e.getMessage());
         }
         return false;
+    }
+
+    public Boolean returnProduct(Product product) {
+        return true;
+    }
+
+    public Product withdrawProduct(String id) {
+        Product p = new Product();
+        p.set_id("123456");
+        p.setDescription("fakeProduct");
+        p.setDiscontinued(false);
+        p.setUnitprice(123);
+        History nowStatus = new History();
+        nowStatus.setOutDate(new Date().toString());
+        nowStatus.setName("Key");
+        nowStatus.setWho("Dude");
+        p.setCurrentStatus(nowStatus);
+        p.getProductHistory().add(nowStatus);
+        return p;
     }
 
 }

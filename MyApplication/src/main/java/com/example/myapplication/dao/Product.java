@@ -3,6 +3,7 @@ package com.example.myapplication.dao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Product {
@@ -22,7 +23,7 @@ public class Product {
     @JsonProperty("History")
     private List<History> productHistory;
     @JsonProperty("Current Status")
-    protected  History currentStatus;
+    protected History currentStatus;
 
 
     @Override
@@ -79,6 +80,8 @@ public class Product {
     }
 
     public List<History> getProductHistory() {
+        if (productHistory == null)
+            productHistory = new ArrayList<History>();
         return productHistory;
     }
 

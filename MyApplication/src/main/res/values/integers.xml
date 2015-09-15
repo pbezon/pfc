@@ -19,5 +19,7 @@
          in the ContactDetailFragment. -->
     <integer name="contact_detail_photo_percent">45</integer>
     <integer name="contact_detail_info_percent">55</integer>
+    <integer name="card_flip_time_full">300</integer>
+    <integer name="card_flip_time_half">150</integer>
 
 </resources>

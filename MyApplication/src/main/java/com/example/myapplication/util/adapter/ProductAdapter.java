@@ -28,7 +28,11 @@ public class ProductAdapter extends ArrayAdapter<Product> {
     @Override
     public View getView(int position, View convertview, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.product_row, parent, false);
+        View rowView;
+        if (position % 2 == 0)
+            rowView = inflater.inflate(R.layout.product_row_even, parent, false);
+        else
+            rowView = inflater.inflate(R.layout.product_row, parent, false);
         TextView nameText = (TextView) rowView.findViewById(R.id.toptext);
         TextView descText = (TextView) rowView.findViewById(R.id.bottomtext);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);

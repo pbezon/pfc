@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,12 +39,16 @@ public class ProductService {
         p.setUnitprice(123);
         History nowStatus = new History();
         nowStatus.setInDate("01/01/01");
+        nowStatus.setOutDate("01/01/02");
         nowStatus.setName("Key");
         nowStatus.setWho("Dude");
         p.setCurrentStatus(nowStatus);
         p.getProductHistory().add(nowStatus);
         p.getProductHistory().add(nowStatus);
-        return Arrays.asList(p, p);
+        ArrayList<Product> result = new ArrayList<Product>();
+        result.add(p);
+        result.add(p);
+        return result;
 
     }
 

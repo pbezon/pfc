@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+        card_view:cardBackgroundColor="@color/cardview_initial_background"
+        card_view:cardCornerRadius="8dp"
+        android:layout_marginLeft="@dimen/margin_large"
+        android:layout_marginRight="@dimen/margin_large"
+        >
+
+        <TextView
+            android:layout_width="83dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/historyItemNameLabel"
+            android:text="@string/name"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="0dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp"
+            android:layout_alignRight="@+id/historyItemStatusLabel" />
+
+        <TextView
+            android:id="@+id/historyItemName"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="0.29"
+            android:gravity="center_vertical"
+            android:layout_alignBottom="@+id/historyItemNameLabel"
+            android:layout_toRightOf="@+id/historyItemNameLabel" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/status"
+            android:id="@+id/historyItemStatusLabel"
+            android:layout_below="@+id/historyItemName"
+            android:layout_alignParentLeft="true" />
+
+        <TextView
+            android:id="@+id/historyItemStatus"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="0.31"
+            android:gravity="center_vertical"
+            android:layout_below="@+id/historyItemName"
+            android:layout_toRightOf="@+id/historyItemStatusLabel" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/inDate"
+            android:id="@+id/historyItemInDateLabel"
+            android:layout_below="@+id/historyItemStatusLabel"
+            android:layout_alignParentLeft="true" />
+
+        <TextView
+            android:id="@+id/historyItemInDate"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_alignBaseline="@+id/historyItemoutDateLabel"
+            android:layout_alignBottom="@+id/historyItemoutDateLabel"
+            android:layout_toRightOf="@+id/historyItemInDateLabel" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/outDate"
+            android:id="@+id/historyItemoutDateLabel"
+            android:layout_below="@+id/historyItemInDateLabel"
+            android:layout_alignParentLeft="true" />
+
+        <TextView
+            android:id="@+id/historyItemOutDate"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_below="@+id/historyItemInDate"
+            android:layout_toRightOf="@+id/historyItemoutDateLabel" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/who"
+            android:id="@+id/historyItemWhoLabel"
+            android:layout_alignTop="@+id/historyItemOutDate"
+            android:layout_alignParentLeft="true" />
+
+        <TextView
+            android:id="@+id/historyItemWho"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_below="@+id/historyItemOutDate"
+            android:layout_toRightOf="@+id/historyItemWhoLabel" />
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

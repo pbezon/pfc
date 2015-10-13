@@ -19,5 +19,6 @@
          resource files or even code and it only needs to be updated in one place if we wanted
          to change it. -->
     <color name="holo_blue">#FF33B5E5</color>
+    <color name="cardview_initial_background">#71C3DE</color>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.example.myapplication.util.adapter;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,8 +18,6 @@ import java.util.List;
  */
 public class ProductHistoryCardAdapter extends RecyclerView.Adapter<ProductHistoryCardAdapter.HistoryViewHolder> {
 
-
-
     private List<History> historyList;
 
     public ProductHistoryCardAdapter(List<History> contactList) {
@@ -35,7 +34,7 @@ public class ProductHistoryCardAdapter extends RecyclerView.Adapter<ProductHisto
     public HistoryViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.fragment_card_history_item, viewGroup, false);
+                inflate(R.layout.histroy_card, viewGroup, false);
 
         HistoryViewHolder viewHolder = new HistoryViewHolder(itemView);
         return viewHolder;
@@ -54,9 +53,15 @@ public class ProductHistoryCardAdapter extends RecyclerView.Adapter<ProductHisto
         contactViewHolder.historyItemWho.setText(historyList.get(i).getWho());
     }
 
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
 
     public static class HistoryViewHolder extends RecyclerView.ViewHolder {
 
+        protected CardView cv;
         protected TextView historyItemName;
         protected TextView historyItemStatus;
         protected TextView historyItemInDate;
@@ -66,6 +71,7 @@ public class ProductHistoryCardAdapter extends RecyclerView.Adapter<ProductHisto
 
         public HistoryViewHolder(View v) {
             super(v);
+            cv = (CardView) itemView.findViewById(R.id.cardview);
             historyItemName = (TextView) v.findViewById(R.id.historyItemName);
             historyItemStatus = (TextView) v.findViewById(R.id.historyItemStatus);
             historyItemInDate = (TextView) v.findViewById(R.id.historyItemInDate);

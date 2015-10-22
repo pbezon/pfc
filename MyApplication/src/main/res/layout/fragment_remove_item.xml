@@ -17,7 +17,7 @@
         android:layout_below="@+id/textView"
         android:layout_marginLeft="43dp"
         android:layout_marginTop="102dp"
-        android:text="Large Text"
+        android:text="Remove"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

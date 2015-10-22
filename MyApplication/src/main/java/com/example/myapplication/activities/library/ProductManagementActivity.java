@@ -8,7 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
-import com.example.myapplication.util.adapter.TabsPagerAdapter;
+import com.example.myapplication.adapters.TabsPagerAdapter;
 
 /**
  * Created by Snapster on 17/04/2015.
@@ -19,16 +19,21 @@ public class ProductManagementActivity extends FragmentActivity implements Actio
     private ActionBar actionBar;
     private TabsPagerAdapter mAdapter;
 
-    public enum PROD_TABS {
-        Add ("Add"), Remove ("Remove"), Withdraw ("Withdraw"), Return ("Return");
+    public static enum PROD_TABS {
+        Add ("Add" ,AddFragment.FRAGMENT_ID ), Remove ("Remove", RemoveFragment.FRAGMENT_ID), Withdraw ("Withdraw", WithdrawFragment.FRAGMENT_ID ), Return ("Return", ReturnFragment.FRAGMENT_ID );
 
         String value;
-        private PROD_TABS (String s) {
+        int position;
+        private PROD_TABS (String s, int position) {
             value = s;
+            this.position = position;
         }
-
         public boolean equalsName(String otherName) {
             return (otherName == null) ? false : value.equals(otherName);
+        }
+
+        public int getPosition() {
+            return position;
         }
 
         public String toString() {

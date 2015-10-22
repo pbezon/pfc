@@ -1,7 +1,7 @@
 package com.example.myapplication.service;
 
-import com.example.myapplication.dao.History;
-import com.example.myapplication.dao.Product;
+import com.example.myapplication.pojo.History;
+import com.example.myapplication.pojo.Product;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

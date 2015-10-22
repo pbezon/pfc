@@ -1,4 +1,4 @@
-package com.example.myapplication.dao;
+package com.example.myapplication.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

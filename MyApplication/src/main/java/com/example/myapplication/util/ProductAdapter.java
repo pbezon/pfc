@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.dao.Product;
+import com.example.myapplication.pojo.Product;
 
 import java.util.ArrayList;
 

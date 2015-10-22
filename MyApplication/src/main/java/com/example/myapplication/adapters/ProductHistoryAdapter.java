@@ -1,4 +1,4 @@
-package com.example.myapplication.util.adapter;
+package com.example.myapplication.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.dao.History;
+import com.example.myapplication.pojo.History;
 
 import java.util.List;
 

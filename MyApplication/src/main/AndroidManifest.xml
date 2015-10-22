@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myapplication"
     android:versionCode="1"
-    android:versionName="1.0">
+    android:versionName="1.0" >
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -14,38 +14,46 @@
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
+
+    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".activities.MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!--<intent-filter>-->
-            <!--<action android:name="android.nfc.action.NDEF_DISCOVERED" />-->
-            <!--<category android:name="android.intent.category.DEFAULT" />-->
-            <!--<data android:mimeType="*/*" />-->
-            <!--</intent-filter>-->
-            <!--<intent-filter>-->
-            <!--<action android:name="android.nfc.action.TECH_DISCOVERED" />-->
-            <!--<category android:name="android.intent.category.DEFAULT" />-->
-            <!--<data android:mimeType="*/*" />-->
-            <!--</intent-filter>-->
-            <!--<intent-filter>-->
-            <!--<action android:name="android.nfc.action.TAG_DISCOVERED" />-->
-            <!--<category android:name="android.intent.category.DEFAULT" />-->
-            <!--<data android:mimeType="*/*" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.nfc.action.NDEF_DISCOVERED" /> -->
+            <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+            <!-- <data android:mimeType="*/*" /> -->
+            <!-- </intent-filter> -->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.nfc.action.TECH_DISCOVERED" /> -->
+            <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+            <!-- <data android:mimeType="*/*" /> -->
+            <!-- </intent-filter> -->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.nfc.action.TAG_DISCOVERED" /> -->
+            <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+            <!-- <data android:mimeType="*/*" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".activities.scan.ScanMenuActivity"
-            android:label="@string/title_activity_scan_menu">
-
+            android:label="@string/title_activity_scan_menu" >
             <intent-filter>
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
             </intent-filter>
@@ -56,15 +64,10 @@
         </activity>
         <activity
             android:name=".activities.display.DisplayResults"
-            android:label="@string/title_activity_display_results"></activity>
+            android:label="@string/title_activity_display_results" />
         <activity
             android:name=".activities.library.ProductManagementActivity"
-            android:label="@string/product_management"></activity>
-
+            android:label="@string/product_management" />
     </application>
-
-    <uses-feature
-        android:name="android.hardware.nfc"
-        android:required="true" />
 
 </manifest>

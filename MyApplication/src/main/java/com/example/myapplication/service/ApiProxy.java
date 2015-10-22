@@ -2,7 +2,7 @@ package com.example.myapplication.service;
 
 import android.os.AsyncTask;
 
-import com.example.myapplication.dao.Product;
+import com.example.myapplication.pojo.Product;
 
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;

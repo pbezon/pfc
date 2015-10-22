@@ -13,7 +13,7 @@ import com.example.myapplication.R;
  */
 public class ReturnFragment extends Fragment {
 
-    public final static int FRAGMENT_ID = 1;
+    public final static int FRAGMENT_ID = 3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

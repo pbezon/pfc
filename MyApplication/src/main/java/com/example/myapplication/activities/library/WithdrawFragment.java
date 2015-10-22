@@ -13,7 +13,7 @@ import com.example.myapplication.R;
  */
 public class WithdrawFragment extends Fragment {
 
-    public final static int FRAGMENT_ID = 0;
+    public final static int FRAGMENT_ID = 2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

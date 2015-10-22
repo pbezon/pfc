@@ -1,8 +1,10 @@
-package com.example.myapplication.dao;
+package com.example.myapplication.pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class History {
+import java.io.Serializable;
+
+public class History implements Serializable{
 
     @JsonProperty("Out Date")
     private String outDate;

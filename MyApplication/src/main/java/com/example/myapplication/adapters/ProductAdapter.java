@@ -1,4 +1,4 @@
-package com.example.myapplication.util.adapter;
+package com.example.myapplication.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.dao.Product;
+import com.example.myapplication.pojo.Product;
 
 import java.util.List;
 

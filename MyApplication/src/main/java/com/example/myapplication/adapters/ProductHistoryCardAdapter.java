@@ -1,5 +1,6 @@
-package com.example.myapplication.util.adapter;
+package com.example.myapplication.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.dao.History;
+import com.example.myapplication.pojo.History;
 
 import java.util.List;
 
@@ -19,23 +20,25 @@ import java.util.List;
 public class ProductHistoryCardAdapter extends RecyclerView.Adapter<ProductHistoryCardAdapter.HistoryViewHolder> {
 
     private List<History> historyList;
+    private LayoutInflater layoutInflater;
 
-    public ProductHistoryCardAdapter(List<History> contactList) {
-        this.historyList = contactList;
+    public ProductHistoryCardAdapter(Context context) {
+        layoutInflater = LayoutInflater.from(context);
     }
-
 
     @Override
     public int getItemCount() {
         return historyList.size();
     }
 
+    public void setHistoryList(List<History> historyList) {
+        this.historyList = historyList;
+        notifyDataSetChanged();
+    }
+
     @Override
     public HistoryViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.
-                from(viewGroup.getContext()).
-                inflate(R.layout.histroy_card, viewGroup, false);
-
+        View itemView = layoutInflater.inflate(R.layout.histroy_card, viewGroup, false);
         HistoryViewHolder viewHolder = new HistoryViewHolder(itemView);
         return viewHolder;
     }

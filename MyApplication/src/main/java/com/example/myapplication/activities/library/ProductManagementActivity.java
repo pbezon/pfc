@@ -19,27 +19,27 @@ public class ProductManagementActivity extends FragmentActivity implements Actio
     private ActionBar actionBar;
     private TabsPagerAdapter mAdapter;
 
-    public static enum PROD_TABS {
-        Add ("Add" ,AddFragment.FRAGMENT_ID ), Remove ("Remove", RemoveFragment.FRAGMENT_ID), Withdraw ("Withdraw", WithdrawFragment.FRAGMENT_ID ), Return ("Return", ReturnFragment.FRAGMENT_ID );
-
-        String value;
-        int position;
-        private PROD_TABS (String s, int position) {
-            value = s;
-            this.position = position;
-        }
-        public boolean equalsName(String otherName) {
-            return (otherName == null) ? false : value.equals(otherName);
-        }
-
-        public int getPosition() {
-            return position;
-        }
-
-        public String toString() {
-            return this.value;
-        }
-    }
+//    public static enum PROD_TABS {
+//        Add ("Add" ,AddFragment.FRAGMENT_ID ), Remove ("Remove", RemoveFragment.FRAGMENT_ID), Withdraw ("Withdraw", WithdrawFragment.FRAGMENT_ID ), Return ("Return", ReturnFragment.FRAGMENT_ID );
+//
+//        String value;
+//        int position;
+//        private PROD_TABS (String s, int position) {
+//            value = s;
+//            this.position = position;
+//        }
+//        public boolean equalsName(String otherName) {
+//            return (otherName == null) ? false : value.equals(otherName);
+//        }
+//
+//        public int getPosition() {
+//            return position;
+//        }
+//
+//        public String toString() {
+//            return this.value;
+//        }
+//    }
 
 
     @Override
@@ -49,26 +49,28 @@ public class ProductManagementActivity extends FragmentActivity implements Actio
 
 
         Bundle extras = getIntent().getExtras();
-        String id = extras.getString("ID");
+        String scannedCode = extras.getString("ID");
         int tab = extras.getInt("PRODUCT_ACTION");
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         actionBar = getActionBar();
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), scannedCode);
 
         viewPager.setAdapter(mAdapter);
+        viewPager.setOffscreenPageLimit(4);
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        String[] tabs = {"ADD", "REM", "WithDraw", "RETURN"};
+        String[] tabs = {AddFragment.TAB_NAME, RemoveFragment.TAB_NAME, WithdrawFragment.TAB_NAME, ReturnFragment.TAB_NAME};
 
         // Adding Tabs
         for (String tab_name : tabs) {
             actionBar.addTab(actionBar.newTab().setText(tab_name).setTabListener(this));
         }
+        actionBar.setSelectedNavigationItem(tab);
 
 //        ((EditText)findViewById(R.id.editText)).setText(id);
 
-        Toast.makeText(getApplicationContext(), "ID: " + id + ", tab: " + tab, Toast.LENGTH_LONG);
+        Toast.makeText(getApplicationContext(), "ID: " + scannedCode + ", tab: " + tab, Toast.LENGTH_LONG);
 
         /**
          * on swiping the viewpager make respective tab selected
@@ -78,7 +80,7 @@ public class ProductManagementActivity extends FragmentActivity implements Actio
             @Override
             public void onPageSelected(int position) {
                 // on changing the page
-                // make respected tab selected
+                // make tab selected
                 actionBar.setSelectedNavigationItem(position);
             }
 

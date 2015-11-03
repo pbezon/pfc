@@ -14,6 +14,7 @@ import com.example.myapplication.R;
 public class RemoveFragment extends Fragment {
 
     public final static int FRAGMENT_ID = 1;
+    public final static String TAB_NAME = "Remove";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

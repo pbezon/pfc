@@ -14,6 +14,7 @@ import com.example.myapplication.R;
 public class ReturnFragment extends Fragment {
 
     public final static int FRAGMENT_ID = 3;
+    public final static String TAB_NAME = "Return";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -10,41 +10,89 @@
         android:text="@string/scanedCode" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/scannedCodeAddFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView" />
+        android:layout_below="@+id/textView"
+        android:textColor="@color/holo_blue" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/type" />
+        android:text="@string/type"
+        android:layout_below="@+id/scannedCodeAddFragment"
+        android:layout_alignParentLeft="true" />
 
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText"
-        android:entries="@array/productTypes" />
+        android:entries="@array/productTypes"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentLeft="true" />
 
     <Button
         android:id="@+id/saveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/spinner"
         android:layout_gravity="center_horizontal"
-        android:text="@string/save" />
+        android:text="@string/save"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="97dp" />
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
-        android:layout_below="@+id/saveButton"
+        android:layout_below="@+id/imageButton"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="28dp" />
+        android:layout_above="@+id/saveButton"
+        android:layout_alignParentRight="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:id="@+id/textView5"
+        android:layout_below="@+id/spinner"
+        android:layout_alignParentLeft="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText2"
+        android:layout_below="@+id/textView5"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/holo_blue" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:id="@+id/textView6"
+        android:layout_below="@+id/editText2"
+        android:layout_alignParentLeft="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText3"
+        android:layout_below="@+id/textView6"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/holo_blue" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton"
+        android:layout_below="@+id/editText3"
+        android:layout_alignParentLeft="true"
+        android:background="@android:drawable/ic_menu_camera"
+        android:layout_alignRight="@+id/textView5" />
 
 </RelativeLayout>

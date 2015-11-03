@@ -14,6 +14,7 @@ import com.example.myapplication.R;
 public class WithdrawFragment extends Fragment {
 
     public final static int FRAGMENT_ID = 2;
+    public final static String TAB_NAME = "Withdraw";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

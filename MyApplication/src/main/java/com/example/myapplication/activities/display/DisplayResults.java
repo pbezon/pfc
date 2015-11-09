@@ -31,7 +31,7 @@ public class DisplayResults extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_results);
 
-        ProductAdapter productAdapter = new ProductAdapter(this, new ProductService().getProduct(""));
+        ProductAdapter productAdapter = new ProductAdapter(this, ProductService.getInstance().getProduct(""));
         setListAdapter(productAdapter);
     }
 

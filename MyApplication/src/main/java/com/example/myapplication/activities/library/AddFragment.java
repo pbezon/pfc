@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,15 +15,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
+import com.example.myapplication.pojo.Product;
+import com.example.myapplication.service.ProductService;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by Snapster on 15/06/2015.
@@ -33,38 +38,82 @@ public class AddFragment extends Fragment {
     public final static String TAB_NAME = "Add";
     private Uri imageUri;
 
+    private TextView id;
+    private TextView name;
+    private TextView description;
+    private ImageView photo;
+    private Spinner type;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_add_item, container, false);
+
+        id = (TextView) rootView.findViewById(R.id.scannedCodeAddFragment);
+        id.setText(this.getArguments().getString("scannedCode"));
+        name = (TextView) rootView.findViewById(R.id.addFragmentName);
+        description = (TextView) rootView.findViewById(R.id.addFragmentDescription);
+        photo = (ImageView) rootView.findViewById(R.id.imageView);
+        type = (Spinner) rootView.findViewById(R.id.addFragmentSpinner);
+
+
         this.addCameraButtonListener(rootView);
-        TextView viewById = (TextView) rootView.findViewById(R.id.scannedCodeAddFragment);
-        viewById.setText(this.getArguments().getString("scannedCode"));
-        if (imageUri != null) {
-            drawPhoto();
-        }
+        this.addSaveButtonListener(rootView);
+
+
         return rootView;
     }
 
+    private void addSaveButtonListener(final View rootView) {
+        Button save = (Button) rootView.findViewById(R.id.saveButton);
+        save.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String inputId = id.getText().toString();
+                        String inputName = name.getText().toString();
+                        String inputDescription =name.getText().toString();
+                        String inputType = type.getSelectedItem().toString();
+
+                        Product p = new Product();
+                        p.set_id(inputId);
+                        p.setName(inputName);
+                        p.setDescription(inputDescription);
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        if( photo != null && photo.getDrawable()!= null )
+                            try {
+                                ((BitmapDrawable) photo.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.PNG, 100, stream);
+                            } catch (Exception e) {
+                                Log.e("tag", e.getMessage());
+                            }
+                        p.setPhoto(stream.toByteArray());
+
+                        boolean response = ProductService.getInstance().add(p);
+                        if (response) {
+                            Toast.makeText(getActivity().getApplicationContext(), "OK!!", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getActivity().getApplicationContext(), "ERROR!!", Toast.LENGTH_LONG).show();
+                        }
+
+
+                    }
+                }
+
+        );
+    }
+
     public void addCameraButtonListener(View rootView) {
-
-
         try {
             //comportamiento SCAN
-            ImageButton scan = (ImageButton) rootView.findViewById(R.id.imageButton);
-            scan.setOnClickListener(
+//            ImageButton scan = (ImageButton) rootView.findViewById(R.id.imageButton);
+            photo.setOnClickListener(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             //lanzamos intent
                             Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                             File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
-//                            try {
-//                                photo = File.createTempFile("xyz", null, getActivity().getApplicationContext().getCacheDir());
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
                             imageUri = Uri.fromFile(photo);
                             startActivityForResult(intent, 1);

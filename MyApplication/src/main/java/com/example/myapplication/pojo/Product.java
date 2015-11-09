@@ -21,10 +21,12 @@ public class Product implements Serializable {
     private String description;
     @JsonProperty("discontinued")
     private Boolean discontinued;
-    @JsonProperty("History")
+    @JsonProperty("history")
     private List<History> productHistory;
-    @JsonProperty("Current Status")
+    @JsonProperty("currentStatus")
     protected History currentStatus;
+    @JsonProperty("bitmap")
+    protected byte[] photo;
 
 
     @Override
@@ -96,5 +98,13 @@ public class Product implements Serializable {
 
     public void setCurrentStatus(History currentStatus) {
         this.currentStatus = currentStatus;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
     }
 }

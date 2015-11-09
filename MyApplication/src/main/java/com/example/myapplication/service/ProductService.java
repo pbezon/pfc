@@ -20,14 +20,29 @@ import java.util.List;
  */
 public class ProductService {
 
-    private ApiProxy apiProxy = new ApiProxy();
-    private ObjectMapper productMapper = new ObjectMapper();
+    private ApiProxy apiProxy;
+    private ObjectMapper productMapper;
     private final String url = "http://192.168.1.42:80801";
     private final String getRest = "/";
     private final String updateRest = "/update/";
     private final String deleteRest = "/delete/";
     private final String returnRest = "/return/";
     private final String withdrawRest = "/withdraw/";
+
+    private static ProductService instance;
+
+    private List<Product> dummyList = new ArrayList<Product>();
+
+    private ProductService (){
+        apiProxy = new ApiProxy();
+        productMapper = new ObjectMapper();
+    }
+
+    public static ProductService getInstance (){
+        if (instance == null)
+            instance = new ProductService();
+        return  instance;
+    }
 
 
     public List<Product> getProduct(String id) {
@@ -124,4 +139,8 @@ public class ProductService {
         return p;
     }
 
+    public boolean add(Product p) {
+        dummyList.add(p);
+        return true;
+    }
 }

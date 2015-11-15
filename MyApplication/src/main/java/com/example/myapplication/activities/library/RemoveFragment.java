@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.myapplication.R;
 
@@ -16,11 +17,14 @@ public class RemoveFragment extends Fragment {
     public final static int FRAGMENT_ID = 1;
     public final static String TAB_NAME = "Remove";
 
+    private TextView id;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_remove_item, container, false);
+        id = (TextView) rootView.findViewById(R.id.scannedCodeFragment);
 
         return rootView;
     }

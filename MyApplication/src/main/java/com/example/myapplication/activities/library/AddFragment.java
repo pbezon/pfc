@@ -1,14 +1,17 @@
 package com.example.myapplication.activities.library;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,6 +30,8 @@ import com.example.myapplication.service.ProductService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by Snapster on 15/06/2015.
@@ -35,7 +39,9 @@ import java.io.File;
 public class AddFragment extends Fragment {
 
     public final static int FRAGMENT_ID = 0;
+    public final static int REQUEST_CONTACTPICKER = 2;
     public final static String TAB_NAME = "Add";
+    private final static String TAG = "AddFragment";
     private Uri imageUri;
 
     private TextView id;
@@ -44,22 +50,25 @@ public class AddFragment extends Fragment {
     private ImageView photo;
     private Spinner type;
 
+    private String contactID;
+    private Uri uriContact;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_add_item, container, false);
 
-        id = (TextView) rootView.findViewById(R.id.scannedCodeAddFragment);
+        id = (TextView) rootView.findViewById(R.id.scannedCodeFragment);
         id.setText(this.getArguments().getString("scannedCode"));
         name = (TextView) rootView.findViewById(R.id.addFragmentName);
         description = (TextView) rootView.findViewById(R.id.addFragmentDescription);
         photo = (ImageView) rootView.findViewById(R.id.imageView);
         type = (Spinner) rootView.findViewById(R.id.addFragmentSpinner);
 
-
         this.addCameraButtonListener(rootView);
         this.addSaveButtonListener(rootView);
+        this.addContactsListener(rootView);
 
 
         return rootView;
@@ -73,7 +82,7 @@ public class AddFragment extends Fragment {
                     public void onClick(View view) {
                         String inputId = id.getText().toString();
                         String inputName = name.getText().toString();
-                        String inputDescription =name.getText().toString();
+                        String inputDescription = name.getText().toString();
                         String inputType = type.getSelectedItem().toString();
 
                         Product p = new Product();
@@ -81,7 +90,7 @@ public class AddFragment extends Fragment {
                         p.setName(inputName);
                         p.setDescription(inputDescription);
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        if( photo != null && photo.getDrawable()!= null )
+                        if (photo != null && photo.getDrawable() != null)
                             try {
                                 ((BitmapDrawable) photo.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.PNG, 100, stream);
                             } catch (Exception e) {
@@ -135,7 +144,30 @@ public class AddFragment extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     drawPhoto();
                 }
+                break;
+            case REQUEST_CONTACTPICKER:
+                String x = "x";
+                x.toString();
+                uriContact = data.getData();
+                retrieveContactName();
+                retrieveContactNumber();
+                retrieveContactPhoto();
+                break;
         }
+    }
+
+    private void addContactsListener(View rootView) {
+        Button contacts = (Button) rootView.findViewById(R.id.readContacts);
+        contacts.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Intent.ACTION_PICK,
+                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                        startActivityForResult(intent, REQUEST_CONTACTPICKER);
+                    }
+                }
+        );
     }
 
     public void drawPhoto() {
@@ -188,5 +220,69 @@ public class AddFragment extends Fragment {
         }
 
         return inSampleSize;
+    }
+
+    private void retrieveContactPhoto() {
+        Bitmap photo = null;
+        try {
+            InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(getActivity().getContentResolver(),
+                    ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contactID)));
+            if (inputStream != null) {
+                photo = BitmapFactory.decodeStream(inputStream);
+                ImageView imageView = (ImageView) getActivity().findViewById(R.id.img_contact);
+                imageView.setImageBitmap(photo);
+            }
+            if(inputStream != null)
+                inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void retrieveContactNumber() {
+        String contactNumber = null;
+        // getting contacts ID
+        Cursor cursorID = getActivity().getContentResolver().query(uriContact,
+                new String[]{ContactsContract.Contacts._ID}, null, null, null);
+        if (cursorID.moveToFirst()) {
+            contactID = cursorID.getString(cursorID.getColumnIndex(ContactsContract.Contacts._ID));
+        }
+
+        cursorID.close();
+        Log.d(TAG, "Contact ID: " + contactID);
+        // Using the contact ID now we will get contact phone number
+        Cursor cursorPhone = getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER},
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ? AND " +
+                        ContactsContract.CommonDataKinds.Phone.TYPE + " = " +
+                        ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE,
+                new String[]{contactID},
+                null);
+        if (cursorPhone.moveToFirst()) {
+            contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+        }
+        cursorPhone.close();
+
+        Log.d(TAG, "Contact Phone Number: " + contactNumber);
+
+        ((TextView)getActivity().findViewById(R.id.contactPhone)).setText(contactNumber);
+    }
+
+    private void retrieveContactName() {
+        String contactName = null;
+        // querying contact data store
+        Cursor cursor = getActivity().getContentResolver().query(uriContact, null, null, null, null);
+        if (cursor.moveToFirst()) {
+
+            // DISPLAY_NAME = The display name for the contact.
+            // HAS_PHONE_NUMBER =   An indicator of whether this contact has at least one phone number.
+
+            contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+        }
+        cursor.close();
+        Log.d(TAG, "Contact Name: " + contactName);
+        ((TextView)getActivity().findViewById(R.id.contactName)).setText(contactName);
+
     }
 }

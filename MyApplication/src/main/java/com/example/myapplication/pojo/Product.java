@@ -27,6 +27,8 @@ public class Product implements Serializable {
     protected History currentStatus;
     @JsonProperty("bitmap")
     protected byte[] photo;
+    protected String contactUri;
+    protected String calendarEventId;
 
 
     @Override
@@ -106,5 +108,21 @@ public class Product implements Serializable {
 
     public void setPhoto(byte[] photo) {
         this.photo = photo;
+    }
+
+    public String getContactUri() {
+        return contactUri;
+    }
+
+    public void setContactUri(String contactUri) {
+        this.contactUri = contactUri;
+    }
+
+    public String getCalendarEventId() {
+        return calendarEventId;
+    }
+
+    public void setCalendarEventId(String calendarEventId) {
+        this.calendarEventId = calendarEventId;
     }
 }

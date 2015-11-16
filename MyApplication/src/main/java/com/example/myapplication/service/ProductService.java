@@ -52,17 +52,19 @@ public class ProductService {
         p.setDescription("fakeProductDescription");
         p.setDiscontinued(false);
         p.setUnitprice(123);
+        p.setCalendarEventId("4771");
+        p.setContactUri("content://com.android.contacts/data/36");
         History nowStatus = new History();
         nowStatus.setInDate("01/01/01");
         nowStatus.setOutDate("01/01/02");
-        nowStatus.setName("Key");
+        nowStatus.setName("Available");
         nowStatus.setWho("Dude");
         p.setCurrentStatus(nowStatus);
         p.getProductHistory().add(nowStatus);
         p.getProductHistory().add(nowStatus);
         ArrayList<Product> result = new ArrayList<Product>();
         result.add(p);
-        result.add(p);
+//        result.add(p);
         return result;
 
     }

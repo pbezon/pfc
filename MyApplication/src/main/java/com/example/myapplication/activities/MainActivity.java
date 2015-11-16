@@ -1,6 +1,8 @@
 package com.example.myapplication.activities;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -27,12 +29,16 @@ import com.example.myapplication.activities.scan.ScanMenuActivity;
 import com.example.myapplication.nfc.NFCForegroundUtil;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class MainActivity extends Activity {
 
     private static final int REQUEST_SCAN_CODE = 0;
     private static final int REQUEST_CONTACTPICKER = 1;
+    private static final int REQUEST_CALENDAR_EVENT = 2;
+    long event_id;
 
     NFCForegroundUtil nfcForegroundUtil;
 
@@ -52,6 +58,7 @@ public class MainActivity extends Activity {
         this.addContactsListener();
         this.addCalendarListener();
         this.addGetAllFromServerListener();
+        this.addViewCalendarListener();
         //nfcForegroundUtil = new NFCForegroundUtil(this);
         //resolveIntent(getIntent());
     }
@@ -78,6 +85,16 @@ public class MainActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
+
+        long prev_id = getLastEventId(getContentResolver());
+
+        // if prev_id == mEventId, means there is new events created
+        // and we need to insert new events into local sqlite database.
+        if (prev_id == event_id) {
+            // do database insert
+
+        }
+
 //        nfcForegroundUtil.enableForeground();
 //
 //        if (!nfcForegroundUtil.getNfc().isEnabled()){
@@ -178,6 +195,47 @@ public class MainActivity extends Activity {
         intent.putExtra("title", "Entrega/recogida");
         intent.putExtra("description", "Entrega recogida de lo que sea");
         intent.putExtra(CalendarContract.Attendees.ATTENDEE_EMAIL, "trevor@example.com");
+        event_id = getNewEventId(getApplicationContext().getContentResolver());
+        startActivityForResult(intent, REQUEST_CALENDAR_EVENT);
+    }
+
+    private void addCalendarEventNoFeedback () {
+
+        Calendar cal = Calendar.getInstance();
+        ContentValues calEvent = new ContentValues();
+        calEvent.put(CalendarContract.Events.CALENDAR_ID, 1); // XXX pick)
+        calEvent.put(CalendarContract.Events.TITLE, "Entrega/recogida");
+        calEvent.put(CalendarContract.Events.DTSTART, cal.getTimeInMillis());
+        calEvent.put(CalendarContract.Events.DTEND, cal.getTimeInMillis() + 60 * 60 * 1000);
+        calEvent.put(CalendarContract.Events.DESCRIPTION, "Entrega recogida de lo que sea");
+        calEvent.put(CalendarContract.Events.EVENT_TIMEZONE, cal.getTimeZone().getDisplayName());
+        Uri uri = getContentResolver().insert(CalendarContract.Events.CONTENT_URI, calEvent);
+
+        // The returned Uri contains the content-retriever URI for
+        // the newly-inserted event, including its id
+        int id = Integer.parseInt(uri.getLastPathSegment());
+        Toast.makeText(getApplicationContext(), "Created Calendar Event " + id,
+                Toast.LENGTH_SHORT).show();
+    }
+
+    private void addViewCalendarListener() {
+        Button contacts = (Button) findViewById(R.id.viewCalendarEvent);
+        contacts.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        viewCalendarEvent();
+
+                    }
+                }
+        );
+    }
+
+    private void viewCalendarEvent(){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon();
+        uri.appendPath(Long.toString(event_id));
+        intent.setData(uri.build());
         startActivity(intent);
     }
 
@@ -227,6 +285,14 @@ public class MainActivity extends Activity {
                 // Handle cancel
             }
         }
+
+        if (requestCode == REQUEST_CALENDAR_EVENT) {
+            if (resultCode == RESULT_OK) {
+                String a = "";
+                a.toString();
+            }
+        }
+
     }
 
     @Override
@@ -263,6 +329,20 @@ public class MainActivity extends Activity {
 //            return rootView;
 //        }
 //    }
+
+    public static long getNewEventId(ContentResolver cr) {
+        Cursor cursor = cr.query(CalendarContract.Events.CONTENT_URI, new String [] {"MAX(_id) as max_id"}, null, null, "_id");
+        cursor.moveToFirst();
+        long max_val = cursor.getLong(cursor.getColumnIndex("max_id"));
+        return max_val+1;
+    }
+
+    public static long getLastEventId(ContentResolver cr) {
+        Cursor cursor = cr.query(CalendarContract.Events.CONTENT_URI, new String [] {"MAX(_id) as max_id"}, null, null, "_id");
+        cursor.moveToFirst();
+        long max_val = cursor.getLong(cursor.getColumnIndex("max_id"));
+        return max_val;
+    }
 
 
 }

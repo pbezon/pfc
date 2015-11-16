@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textPersonName"
-            android:id="@+id/nameInput"
+            android:id="@+id/nameEdit"
             android:background="@android:drawable/editbox_background_normal"
             android:layout_above="@+id/scannedCodeFragment"
             android:layout_alignParentLeft="true"
@@ -39,7 +39,7 @@
         android:layout_height="match_parent">
 
         <Spinner
-            android:id="@+id/addFragmentSpinner"
+            android:id="@+id/typeEdit"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:textColor="@color/holo_blue"
@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:inputType="textMultiLine"
-            android:id="@+id/descriptionInput"
+            android:id="@+id/descriptionEdit"
             android:background="@android:drawable/editbox_background_normal"
             android:layout_column="1"
             android:hint="Description" />
@@ -67,8 +67,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView7"
+            android:layout_column="0"
+            android:background="@android:drawable/ic_menu_info_details" />
+
         <EditText
-            android:id="@+id/scannedCodeFragment"
+            android:id="@+id/editStatusDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/holo_blue"
@@ -78,7 +85,8 @@
             android:layout_alignRight="@+id/imageView"
             android:layout_alignLeft="@+id/imageView"
             android:singleLine="true"
-            android:layout_column="1" />
+            android:layout_column="1"
+            android:background="@android:drawable/editbox_background_normal" />
     </TableRow>
 
     <TableRow
@@ -95,8 +103,8 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:id="@+id/imageView"
-            android:clickable="true"
+            android:id="@+id/imageViewEdit"
+            android:clickable="false"
             android:cropToPadding="false"
             android:scaleType="center"
             android:src="@android:drawable/ic_menu_crop"
@@ -109,12 +117,82 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
-            android:id="@+id/saveButton"
-            android:layout_column="1" />
+            android:id="@+id/imageView4"
+            android:layout_column="0"
+            android:background="@android:drawable/ic_menu_month" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/editCalendarDescription"
+            android:layout_column="1"
+            android:background="@android:drawable/editbox_background_normal"
+            android:hint="No event created - touch to add -" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/editCalendarReminder"
+            android:layout_column="1"
+            android:background="@android:drawable/editbox_background_normal"
+            android:hint="-" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView5"
+            android:layout_column="0"
+            android:background="@android:drawable/ic_menu_my_calendar" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:ems="10"
+            android:id="@+id/editContactName"
+            android:layout_column="1"
+            android:background="@android:drawable/editbox_background_normal"
+            android:hint="No contact assigned" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView6"
+            android:layout_column="0"
+            android:background="@android:drawable/ic_menu_call" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/editContactPhone"
+            android:layout_column="1"
+            android:background="@android:drawable/editbox_background_normal"
+            android:hint="-" />
     </TableRow>
 
 

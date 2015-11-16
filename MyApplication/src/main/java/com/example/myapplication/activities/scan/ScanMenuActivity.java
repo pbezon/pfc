@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import com.example.myapplication.R;
 import com.example.myapplication.activities.display.DisplayResults;
-import com.example.myapplication.activities.library.ProductManagementActivity;
+import com.example.myapplication.activities.library.AddActivity;
+import com.example.myapplication.activities.library.EditActivity;
+import com.example.myapplication.activities.library.TabsProductManagementActivity;
 
 public class ScanMenuActivity extends Activity {
 
@@ -47,16 +49,19 @@ public class ScanMenuActivity extends Activity {
     }
 
     private void setUpButtonListeners() {
+        // tabbed
+//        this.addAddTabListener();
+//        this.addSearchListener();
+//        this.addRemoveTabListener();
+//        this.addReturnTabListener();
+//        this.addWithdrawTabListener();
+
         this.addAddListener();
         this.addSearchListener();
-        this.addRemoveListener();
-        this.addReturnListener();
-        this.addWithdrawListener();
-
     }
 
-    private void addSearchListener() {
-        Button find = (Button) findViewById(R.id.searchButton);
+    private void addAddListener() {
+        Button find = (Button) findViewById(R.id.addButton);
         try {
             //comportamiento FIND
             find.setOnClickListener(
@@ -64,7 +69,7 @@ public class ScanMenuActivity extends Activity {
                         @Override
                         public void onClick(View view) {
                             //lanzamos intent
-                            Intent displayResults = new Intent(getBaseContext(), DisplayResults.class);
+                            Intent displayResults = new Intent(getBaseContext(), AddActivity.class);
                             displayResults.putExtra("ID", result);
                             //arrancamos intent
                             startActivity(displayResults);
@@ -78,7 +83,30 @@ public class ScanMenuActivity extends Activity {
 
     }
 
-    private void addAddListener() {
+    private void addSearchListener() {
+        Button find = (Button) findViewById(R.id.searchButton);
+        try {
+            //comportamiento FIND
+            find.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //lanzamos intent
+                            Intent displayResults = new Intent(getBaseContext(), EditActivity.class);
+                            displayResults.putExtra("ID", result);
+                            //arrancamos intent
+                            startActivity(displayResults);
+                        }
+                    }
+            );
+        } catch (Exception e) {
+            Log.e("tag", e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
+
+    private void addAddTabListener() {
         Button add = (Button) findViewById(R.id.addButton);
 
         try {
@@ -88,7 +116,7 @@ public class ScanMenuActivity extends Activity {
                         @Override
                         public void onClick(View view) {
                             //lanzamos intent
-                            Intent productManagementActivity = new Intent(getBaseContext(), ProductManagementActivity.class);
+                            Intent productManagementActivity = new Intent(getBaseContext(), TabsProductManagementActivity.class);
                             productManagementActivity.putExtra("ID", result);
                             productManagementActivity.putExtra("PRODUCT_ACTION", 0);
                             //esperamos resultado
@@ -103,7 +131,7 @@ public class ScanMenuActivity extends Activity {
 
     }
 
-    private void addRemoveListener() {
+    private void addRemoveTabListener() {
         Button remove = (Button) findViewById(R.id.removeButton);
         try {
             //comportamiento SCAN
@@ -112,7 +140,7 @@ public class ScanMenuActivity extends Activity {
                         @Override
                         public void onClick(View view) {
                             //lanzamos intent
-                            Intent productManagementActivity = new Intent(getBaseContext(), ProductManagementActivity.class);
+                            Intent productManagementActivity = new Intent(getBaseContext(), TabsProductManagementActivity.class);
                             productManagementActivity.putExtra("ID", result);
                             productManagementActivity.putExtra("PRODUCT_ACTION", 1);
                             //esperamos resultado
@@ -129,7 +157,7 @@ public class ScanMenuActivity extends Activity {
 
     }
 
-    private void addWithdrawListener() {
+    private void addWithdrawTabListener() {
         Button withdraw = (Button) findViewById(R.id.withdrawButton);
         try {
             //comportamiento SCAN
@@ -138,7 +166,7 @@ public class ScanMenuActivity extends Activity {
                         @Override
                         public void onClick(View view) {
                             //lanzamos intent
-                            Intent productManagementActivity = new Intent(getBaseContext(), ProductManagementActivity.class);
+                            Intent productManagementActivity = new Intent(getBaseContext(), TabsProductManagementActivity.class);
                             productManagementActivity.putExtra("ID", result);
                             productManagementActivity.putExtra("PRODUCT_ACTION", 2);
                             //esperamos resultado
@@ -152,7 +180,7 @@ public class ScanMenuActivity extends Activity {
         }
     }
 
-    private void addReturnListener() {
+    private void addReturnTabListener() {
         Button scan = (Button) findViewById(R.id.returnButton);
 
         try {
@@ -163,7 +191,7 @@ public class ScanMenuActivity extends Activity {
                         @Override
                         public void onClick(View view) {
                             //lanzamos intent
-                            Intent productManagementActivity = new Intent(getBaseContext(), ProductManagementActivity.class);
+                            Intent productManagementActivity = new Intent(getBaseContext(), TabsProductManagementActivity.class);
                             productManagementActivity.putExtra("ID", result);
                             productManagementActivity.putExtra("PRODUCT_ACTION", 3);
                             //esperamos resultado

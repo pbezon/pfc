@@ -1,17 +1,14 @@
 package com.example.myapplication.activities.library;
 
 import android.app.Activity;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -30,8 +27,6 @@ import com.example.myapplication.service.ProductService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Created by Snapster on 15/06/2015.
@@ -61,16 +56,12 @@ public class AddFragment extends Fragment {
 
         id = (TextView) rootView.findViewById(R.id.scannedCodeFragment);
         id.setText(this.getArguments().getString("scannedCode"));
-        name = (TextView) rootView.findViewById(R.id.addFragmentName);
-        description = (TextView) rootView.findViewById(R.id.addFragmentDescription);
+//        name = (TextView) rootView.findViewById(R.id.addFragmentName);
+//        description = (TextView) rootView.findViewById(R.id.addFragmentDescription);
         photo = (ImageView) rootView.findViewById(R.id.imageView);
         type = (Spinner) rootView.findViewById(R.id.addFragmentSpinner);
-
+//        this.addSaveButtonListener(rootView);
         this.addCameraButtonListener(rootView);
-        this.addSaveButtonListener(rootView);
-        this.addContactsListener(rootView);
-
-
         return rootView;
     }
 
@@ -104,8 +95,6 @@ public class AddFragment extends Fragment {
                         } else {
                             Toast.makeText(getActivity().getApplicationContext(), "ERROR!!", Toast.LENGTH_LONG).show();
                         }
-
-
                     }
                 }
 
@@ -146,29 +135,31 @@ public class AddFragment extends Fragment {
                 }
                 break;
             case REQUEST_CONTACTPICKER:
-                String x = "x";
-                x.toString();
-                uriContact = data.getData();
-                retrieveContactName();
-                retrieveContactNumber();
-                retrieveContactPhoto();
+                if(resultCode ==  Activity.RESULT_OK) {
+                    String x = "x";
+                    x.toString();
+                    uriContact = data.getData();
+//                    retrieveContactName();
+//                    retrieveContactNumber();
+//                    retrieveContactPhoto();
+                }
                 break;
         }
     }
 
-    private void addContactsListener(View rootView) {
-        Button contacts = (Button) rootView.findViewById(R.id.readContacts);
-        contacts.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(Intent.ACTION_PICK,
-                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
-                        startActivityForResult(intent, REQUEST_CONTACTPICKER);
-                    }
-                }
-        );
-    }
+//    private void addContactsListener(View rootView) {
+//        Button contacts = (Button) rootView.findViewById(R.id.readContacts);
+//        contacts.setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Intent intent = new Intent(Intent.ACTION_PICK,
+//                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+//                        startActivityForResult(intent, REQUEST_CONTACTPICKER);
+//                    }
+//                }
+//        );
+//    }
 
     public void drawPhoto() {
         Uri selectedImage = imageUri;
@@ -185,7 +176,7 @@ public class AddFragment extends Fragment {
             //cogemos la foto pero no la pintamos por no romper cosas en memoria
             BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
 
-            options.inSampleSize = calculateInSampleSize(options, 100, 100);
+            options.inSampleSize = calculateInSampleSize(options, 150, 150);
             options.inJustDecodeBounds = false;
             Bitmap actuallyUsableBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
 
@@ -207,10 +198,8 @@ public class AddFragment extends Fragment {
         int inSampleSize = 1;
 
         if (height > reqHeight || width > reqWidth) {
-
             final int halfHeight = height / 2;
             final int halfWidth = width / 2;
-
             // Calculate the largest inSampleSize value that is a power of 2 and keeps both
             // height and width larger than the requested height and width.
             while ((halfHeight / inSampleSize) > reqHeight
@@ -222,67 +211,67 @@ public class AddFragment extends Fragment {
         return inSampleSize;
     }
 
-    private void retrieveContactPhoto() {
-        Bitmap photo = null;
-        try {
-            InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(getActivity().getContentResolver(),
-                    ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contactID)));
-            if (inputStream != null) {
-                photo = BitmapFactory.decodeStream(inputStream);
-                ImageView imageView = (ImageView) getActivity().findViewById(R.id.img_contact);
-                imageView.setImageBitmap(photo);
-            }
-            if(inputStream != null)
-                inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//    private void retrieveContactPhoto() {
+//        Bitmap photo = null;
+//        try {
+//            InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(getActivity().getContentResolver(),
+//                    ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contactID)));
+//            if (inputStream != null) {
+//                photo = BitmapFactory.decodeStream(inputStream);
+//                ImageView imageView = (ImageView) getActivity().findViewById(R.id.img_contact);
+//                imageView.setImageBitmap(photo);
+//            }
+//            if(inputStream != null)
+//                inputStream.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
-    }
+//    private void retrieveContactNumber() {
+//        String contactNumber = null;
+//        // getting contacts ID
+//        Cursor cursorID = getActivity().getContentResolver().query(uriContact,
+//                new String[]{ContactsContract.Contacts._ID}, null, null, null);
+//        if (cursorID.moveToFirst()) {
+//            contactID = cursorID.getString(cursorID.getColumnIndex(ContactsContract.Contacts._ID));
+//        }
+//
+//        cursorID.close();
+//        Log.d(TAG, "Contact ID: " + contactID);
+//        // Using the contact ID now we will get contact phone number
+//        Cursor cursorPhone = getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+//                new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER},
+//                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ? AND " +
+//                        ContactsContract.CommonDataKinds.Phone.TYPE + " = " +
+//                        ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE,
+//                new String[]{contactID},
+//                null);
+//        if (cursorPhone.moveToFirst()) {
+//            contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//        }
+//        cursorPhone.close();
+//
+//        Log.d(TAG, "Contact Phone Number: " + contactNumber);
+//
+//        ((TextView)getActivity().findViewById(R.id.contactPhone)).setText(contactNumber);
+//    }
 
-    private void retrieveContactNumber() {
-        String contactNumber = null;
-        // getting contacts ID
-        Cursor cursorID = getActivity().getContentResolver().query(uriContact,
-                new String[]{ContactsContract.Contacts._ID}, null, null, null);
-        if (cursorID.moveToFirst()) {
-            contactID = cursorID.getString(cursorID.getColumnIndex(ContactsContract.Contacts._ID));
-        }
-
-        cursorID.close();
-        Log.d(TAG, "Contact ID: " + contactID);
-        // Using the contact ID now we will get contact phone number
-        Cursor cursorPhone = getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER},
-                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ? AND " +
-                        ContactsContract.CommonDataKinds.Phone.TYPE + " = " +
-                        ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE,
-                new String[]{contactID},
-                null);
-        if (cursorPhone.moveToFirst()) {
-            contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-        }
-        cursorPhone.close();
-
-        Log.d(TAG, "Contact Phone Number: " + contactNumber);
-
-        ((TextView)getActivity().findViewById(R.id.contactPhone)).setText(contactNumber);
-    }
-
-    private void retrieveContactName() {
-        String contactName = null;
-        // querying contact data store
-        Cursor cursor = getActivity().getContentResolver().query(uriContact, null, null, null, null);
-        if (cursor.moveToFirst()) {
-
-            // DISPLAY_NAME = The display name for the contact.
-            // HAS_PHONE_NUMBER =   An indicator of whether this contact has at least one phone number.
-
-            contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-        }
-        cursor.close();
-        Log.d(TAG, "Contact Name: " + contactName);
-        ((TextView)getActivity().findViewById(R.id.contactName)).setText(contactName);
-
-    }
+//    private void retrieveContactName() {
+//        String contactName = null;
+//        // querying contact data store
+//        Cursor cursor = getActivity().getContentResolver().query(uriContact, null, null, null, null);
+//        if (cursor.moveToFirst()) {
+//
+//            // DISPLAY_NAME = The display name for the contact.
+//            // HAS_PHONE_NUMBER =   An indicator of whether this contact has at least one phone number.
+//
+//            contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+//        }
+//        cursor.close();
+//        Log.d(TAG, "Contact Name: " + contactName);
+//        ((TextView)getActivity().findViewById(R.id.contactName)).setText(contactName);
+//
+//    }
 }

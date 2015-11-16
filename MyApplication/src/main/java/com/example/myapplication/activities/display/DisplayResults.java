@@ -3,6 +3,7 @@ package com.example.myapplication.activities.display;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,11 +17,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
-import com.example.myapplication.fragments.FragmentDetails;
+import com.example.myapplication.activities.library.EditActivity;
+import com.example.myapplication.adapters.ProductAdapter;
 import com.example.myapplication.pojo.Product;
 import com.example.myapplication.service.ProductService;
-import com.example.myapplication.adapters.ProductAdapter;
-import com.example.myapplication.adapters.ProductHistoryCardAdapter;
 
 public class DisplayResults extends ListActivity {
 
@@ -40,14 +40,12 @@ public class DisplayResults extends ListActivity {
         try {
             Product item = (Product) getListAdapter().getItem(position);
             Toast.makeText(this, item.getName() + " selected", Toast.LENGTH_LONG).show();
-            Fragment fragment = new FragmentDetails();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("item", item);
-            fragment.setArguments(bundle);
+            Intent intent = new Intent(getBaseContext(), EditActivity.class);
 
-            getFragmentManager().beginTransaction().replace(R.id.flipContainer,fragment).commit();
-//            this.flipCard(position);
-        } catch (Exception e){
+            intent.putExtra("ID", item.get_id());
+            startActivity(intent);
+
+        } catch (Exception e) {
             Log.e(e.getMessage(), e.getMessage());
         }
     }

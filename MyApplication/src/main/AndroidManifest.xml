@@ -30,7 +30,8 @@
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,7 +57,7 @@
         <activity
             android:name=".activities.scan.ScanMenuActivity"
             android:label="@string/title_activity_scan_menu"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light">
             <intent-filter>
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
             </intent-filter>
@@ -68,11 +69,32 @@
         <activity
             android:name=".activities.display.DisplayResults"
             android:label="@string/title_activity_display_results"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
-            android:name=".activities.library.ProductManagementActivity"
+            android:name=".activities.library.TabsProductManagementActivity"
             android:label="@string/product_management"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
+
+        <activity
+            android:name=".activities.library.EditActivity"
+            android:label="Add Item"
+            android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
+        <activity
+            android:name=".activities.library.AddActivity"
+            android:label="Add Item"
+            android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
+        <activity
+            android:name=".activities.library.RemoveActivity"
+            android:label="Add Item"
+            android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
+        <activity
+            android:name=".activities.library.ReturnActivity"
+            android:label="Add Item"
+            android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
+        <activity
+            android:name=".activities.library.WithdrawActivity"
+            android:label="Add Item"
+            android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
     </application>
 
 </manifest>

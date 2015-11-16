@@ -13,7 +13,7 @@ import com.example.myapplication.adapters.TabsPagerAdapter;
 /**
  * Created by Snapster on 17/04/2015.
  */
-public class ProductManagementActivity extends FragmentActivity implements ActionBar.TabListener {
+public class TabsProductManagementActivity extends FragmentActivity implements ActionBar.TabListener {
 
     private ViewPager viewPager;
     private ActionBar actionBar;

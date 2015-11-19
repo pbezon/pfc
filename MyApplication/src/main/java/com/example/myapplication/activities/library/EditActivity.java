@@ -51,6 +51,8 @@ public class EditActivity extends Activity {
     private Uri imageUri;
     String scannedId;
 
+    Uri calendarEvent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +70,27 @@ public class EditActivity extends Activity {
         editCalendarDescription =  (TextView) findViewById(R.id.editCalendarDescription);
 
         addCameraButtonListener();
+        addViewCalendarEventListener();
         fillForm();
+    }
+
+    private void addViewCalendarEventListener() {
+        ImageView calendarImage = (ImageView) findViewById(R.id.editViewCalendarEvent);
+        calendarImage.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        viewCalendarEvent();
+
+                    }
+                }
+        );
+    }
+
+    private void viewCalendarEvent(){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(calendarEvent);
+        startActivity(intent);
     }
 
     @Override
@@ -93,6 +115,7 @@ public class EditActivity extends Activity {
         editContactPhone.setText(this.retrieveContactNumber(p.getContactUri()));
         Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon();
         uri.appendPath(p.getCalendarEventId());
+        calendarEvent = uri.build();
 
         Cursor query = getContentResolver().query(uri.build(), new String[]{CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART, CalendarContract.Events.DTEND}, null, null, null);
         if (query!= null && query.getCount()>0 && query.moveToFirst()) {

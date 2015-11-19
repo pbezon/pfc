@@ -57,7 +57,7 @@ public class ProductService {
         History nowStatus = new History();
         nowStatus.setInDate("01/01/01");
         nowStatus.setOutDate("01/01/02");
-        nowStatus.setName("Available");
+        nowStatus.setName("Taken");
         nowStatus.setWho("Dude");
         p.setCurrentStatus(nowStatus);
         p.getProductHistory().add(nowStatus);

@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -142,7 +144,6 @@ public class MainActivity extends Activity {
                     public void onClick(View view) {
                         //lanzamos intent
                         Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                        intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
                         if (MainActivity.isIntentAvailable(getApplicationContext(), intent)) {
                             //esperamos resultado
                             startActivityForResult(intent, REQUEST_SCAN_CODE);
@@ -344,5 +345,30 @@ public class MainActivity extends Activity {
         return max_val;
     }
 
+
+//    btnGenerate_QR_Code = (Button) findViewById(R.id.button1);
+//    edQR_Field = (EditText) findViewById(R.id.editText1);
+//
+//    btnGenerate_QR_Code.setOnClickListener(new OnClickListener() {
+//
+//        @Override
+//        public void onClick(View v) {
+//
+//            String input = edQR_Field.getText().toString();
+//
+//            Intent intent = new Intent(
+//                    "com.google.zxing.client.android.ENCODE");
+//
+//            intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
+//            intent.putExtra("ENCODE_DATA", input);
+//            intent.putExtra("ENCODE_FORMAT", "QR_CODE");
+//            intent.putExtra("ENCODE_SHOW_CONTENTS", false);
+//            startActivityForResult(intent, 0);
+//
+//            Toast.makeText(MainActivity.this, input, Toast.LENGTH_SHORT)
+//                    .show();
+//
+//        }
+//    });
 
 }

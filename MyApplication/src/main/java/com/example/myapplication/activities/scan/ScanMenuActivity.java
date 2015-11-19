@@ -18,6 +18,8 @@ import com.example.myapplication.R;
 import com.example.myapplication.activities.display.DisplayResults;
 import com.example.myapplication.activities.library.AddActivity;
 import com.example.myapplication.activities.library.EditActivity;
+import com.example.myapplication.activities.library.RemoveActivity;
+import com.example.myapplication.activities.library.RemoveFragment;
 import com.example.myapplication.activities.library.TabsProductManagementActivity;
 
 public class ScanMenuActivity extends Activity {
@@ -58,6 +60,7 @@ public class ScanMenuActivity extends Activity {
 
         this.addAddListener();
         this.addSearchListener();
+        this.addRemoveListener();
     }
 
     private void addAddListener() {
@@ -70,6 +73,29 @@ public class ScanMenuActivity extends Activity {
                         public void onClick(View view) {
                             //lanzamos intent
                             Intent displayResults = new Intent(getBaseContext(), AddActivity.class);
+                            displayResults.putExtra("ID", result);
+                            //arrancamos intent
+                            startActivity(displayResults);
+                        }
+                    }
+            );
+        } catch (Exception e) {
+            Log.e("tag", e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
+
+    private void addRemoveListener() {
+        Button find = (Button) findViewById(R.id.removeButton);
+        try {
+            //comportamiento FIND
+            find.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //lanzamos intent
+                            Intent displayResults = new Intent(getBaseContext(), RemoveActivity.class);
                             displayResults.putExtra("ID", result);
                             //arrancamos intent
                             startActivity(displayResults);

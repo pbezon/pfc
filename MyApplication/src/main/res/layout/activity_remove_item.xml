@@ -30,7 +30,8 @@
             android:layout_above="@+id/scannedCodeFragment"
             android:layout_alignParentLeft="true"
             android:layout_column="1"
-            android:hint="Name" />
+            android:hint="Name"
+            android:enabled="false" />
 
     </TableRow>
 
@@ -46,7 +47,8 @@
             android:entries="@array/productTypes"
             android:layout_above="@+id/textView7"
             android:layout_alignLeft="@+id/scannedCodeFragment"
-            android:layout_column="1" />
+            android:layout_column="1"
+            android:enabled="false" />
     </TableRow>
 
     <TableRow
@@ -60,7 +62,8 @@
             android:id="@+id/descriptionEdit"
             android:background="@android:drawable/editbox_background_normal"
             android:layout_column="1"
-            android:hint="Description" />
+            android:hint="Description"
+            android:enabled="false" />
     </TableRow>
 
     <TableRow
@@ -132,7 +135,8 @@
             android:id="@+id/editCalendarDescription"
             android:layout_column="1"
             android:background="@android:drawable/editbox_background_normal"
-            android:hint="No event created - touch to add -" />
+            android:hint="No event created - touch to add -"
+            android:enabled="false" />
 
     </TableRow>
 
@@ -148,7 +152,8 @@
             android:id="@+id/editCalendarReminder"
             android:layout_column="1"
             android:background="@android:drawable/editbox_background_normal"
-            android:hint="-" />
+            android:hint="-"
+            android:enabled="false" />
     </TableRow>
 
     <TableRow
@@ -187,7 +192,8 @@
             android:id="@+id/editContactName"
             android:layout_column="1"
             android:background="@android:drawable/editbox_background_normal"
-            android:hint="No contact assigned" />
+            android:hint="No contact assigned"
+            android:enabled="false" />
     </TableRow>
 
     <TableRow
@@ -209,7 +215,22 @@
             android:id="@+id/editContactPhone"
             android:layout_column="1"
             android:background="@android:drawable/editbox_background_normal"
-            android:hint="-" />
+            android:hint="-"
+            android:enabled="false" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Are you sure you wanna delete? It cannot be undone"
+            android:id="@+id/textView2"
+            android:layout_column="1"
+            android:textColor="#ff0000" />
     </TableRow>
 
 

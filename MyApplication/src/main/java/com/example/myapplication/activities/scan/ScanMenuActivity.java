@@ -75,6 +75,7 @@ public class ScanMenuActivity extends Activity {
                             Intent displayResults = new Intent(getBaseContext(), AddActivity.class);
                             displayResults.putExtra("ID", result);
                             //arrancamos intent
+                            displayResults.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             startActivity(displayResults);
                         }
                     }

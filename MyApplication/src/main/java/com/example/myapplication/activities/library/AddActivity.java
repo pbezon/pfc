@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -98,6 +99,8 @@ public class AddActivity extends Activity {
                         String inputName = name.getText().toString();
                         String inputDescription = name.getText().toString();
                         String inputType = type.getSelectedItem().toString();
+                        CheckBox dateCheck = (CheckBox) findViewById(R.id.dateCheckBox);
+                        boolean addDate = dateCheck.isChecked();
 
                         Product p = new Product();
                         p.set_id(inputId);
@@ -116,6 +119,7 @@ public class AddActivity extends Activity {
                         if (response) {
                             Toast.makeText(getApplicationContext(), "OK!!", Toast.LENGTH_LONG).show();
                             Intent scanMenu = new Intent(getBaseContext(), ScanMenuActivity.class);
+                            scanMenu.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             scanMenu.putExtra("SCAN_RESULT", scannedId);
                             //arrancamos intent
                             startActivity(scanMenu);

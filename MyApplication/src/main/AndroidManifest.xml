@@ -74,7 +74,14 @@
             android:name=".activities.library.TabsProductManagementActivity"
             android:label="@string/product_management"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
-
+        <activity
+            android:name=".activities.scan.ManualInputActivity"
+            android:label="Manual Input"
+            android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
+        <activity
+            android:name=".activities.settings.SettingsActivity"
+            android:label="Settings"
+            android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
             android:name=".activities.library.EditActivity"
             android:label="Add Item"

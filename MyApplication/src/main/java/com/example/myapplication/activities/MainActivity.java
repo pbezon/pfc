@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
@@ -16,18 +17,27 @@ import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
 import com.example.myapplication.activities.display.DisplayResults;
+import com.example.myapplication.activities.scan.ManualInputActivity;
 import com.example.myapplication.activities.scan.ScanMenuActivity;
+import com.example.myapplication.activities.settings.SettingsActivity;
 import com.example.myapplication.nfc.NFCForegroundUtil;
 
 import java.util.Calendar;
@@ -42,6 +52,8 @@ public class MainActivity extends Activity {
     private static final int REQUEST_CALENDAR_EVENT = 2;
     long event_id;
 
+    PopupWindow popupWindow;
+
     NFCForegroundUtil nfcForegroundUtil;
 
     public static boolean isIntentAvailable(Context ctx, Intent intent) {
@@ -55,18 +67,33 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_menu);
         this.addScanListener();
-        this.addContactsListener();
-        this.addCalendarListener();
+//        this.addContactsListener();
+//        this.addCalendarListener();
         this.addGetAllFromServerListener();
-        this.addViewCalendarListener();
+//        this.addViewCalendarListener();
         //nfcForegroundUtil = new NFCForegroundUtil(this);
         //resolveIntent(getIntent());
+
+        this.addSettingsListener();
+    }
+
+    private void addSettingsListener() {
+        ImageButton getAll = (ImageButton) findViewById(R.id.settingsImageButton);
+        getAll.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //lanzamos intent
+                        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                    }
+                }
+        );
     }
 
     private void addGetAllFromServerListener() {
-        Button getAll = (Button) findViewById(R.id.getAllFromServer);
+        ImageButton getAll = (ImageButton) findViewById(R.id.collectionImageButton);
         getAll.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -136,28 +163,36 @@ public class MainActivity extends Activity {
     }
 
     public void addScanListener() {
-        Button scan = (Button) findViewById(R.id.scan);
+        final ImageButton scan = (ImageButton) findViewById(R.id.scanImageButton);
         //comportamiento SCAN
         scan.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //lanzamos intent
-                        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                        if (MainActivity.isIntentAvailable(getApplicationContext(), intent)) {
-                            //esperamos resultado
-                            startActivityForResult(intent, REQUEST_SCAN_CODE);
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        if (!preferences.getBoolean("manualScan", false)) {
+                            //lanzamos intent
+                            Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+                            if (MainActivity.isIntentAvailable(getApplicationContext(), intent)) {
+                                //esperamos resultado
+                                startActivityForResult(intent, REQUEST_SCAN_CODE);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Install zxing application for camera scanning", Toast.LENGTH_LONG).show();
+                                intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setData(Uri.parse("market://details?id=com.google.zxing.client.android"));
+                                startActivity(intent);
+                            }
                         } else {
-                            Toast.makeText(getApplicationContext(), "Install zxing application for camera scanning", Toast.LENGTH_LONG).show();
-                            intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse("market://details?id=com.google.zxing.client.android"));
+                            Toast.makeText(getApplicationContext(), "Manual input..", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(getApplicationContext(), ManualInputActivity.class);
                             startActivity(intent);
                         }
-
                     }
                 }
         );
     }
+
+
 
     private void addContactsListener() {
         Button contacts = (Button) findViewById(R.id.readContacts);

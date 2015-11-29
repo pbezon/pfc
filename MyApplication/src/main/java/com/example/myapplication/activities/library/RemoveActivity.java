@@ -107,7 +107,7 @@ public class RemoveActivity extends Activity {
         Product p = product.get(0);
         nameEdit.setText(p.getName());
         descriptionEdit.setText(p.getDescription());
-        editStatusDescription.setText(p.getCurrentStatus().getName());
+        editStatusDescription.setText(p.getCurrentStatus().getCurrentStatus());
         editContactName.setText(this.retrieveContactName(p.getContactUri()));
         editContactPhone.setText(this.retrieveContactNumber(p.getContactUri()));
         Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon();

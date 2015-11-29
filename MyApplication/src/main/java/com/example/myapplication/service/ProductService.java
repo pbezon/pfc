@@ -50,21 +50,19 @@ public class ProductService {
         p.set_id("123456");
         p.setName("fakeProductName");
         p.setDescription("fakeProductDescription");
-        p.setDiscontinued(false);
-        p.setUnitprice(123);
         p.setCalendarEventId("4771");
         p.setContactUri("content://com.android.contacts/data/36");
         History nowStatus = new History();
-        nowStatus.setInDate("01/01/01");
-        nowStatus.setOutDate("01/01/02");
-        nowStatus.setName("Taken");
-        nowStatus.setWho("Dude");
+//        nowStatus.setInDate("01/01/01");
+//        nowStatus.setOutDate("01/01/02");
+        nowStatus.setCurrentStatus("Taken");
+        nowStatus.setContactId("Dude");
         p.setCurrentStatus(nowStatus);
         p.getProductHistory().add(nowStatus);
         p.getProductHistory().add(nowStatus);
         ArrayList<Product> result = new ArrayList<Product>();
         result.add(p);
-//        result.add(p);
+        result.add(p);
         return result;
 
     }
@@ -130,12 +128,12 @@ public class ProductService {
         Product p = new Product();
         p.set_id("123456");
         p.setDescription("fakeProduct");
-        p.setDiscontinued(false);
-        p.setUnitprice(123);
+//        p.setDiscontinued(false);
+//        p.setUnitprice(123);
         History nowStatus = new History();
-        nowStatus.setOutDate(new Date().toString());
-        nowStatus.setName("Key");
-        nowStatus.setWho("Dude");
+//        nowStatus.setOutDate(new Date().toString());
+        nowStatus.setCurrentStatus("Taken");
+        nowStatus.setContactId("Dude");
         p.setCurrentStatus(nowStatus);
         p.getProductHistory().add(nowStatus);
         return p;

@@ -15,12 +15,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
-import com.example.myapplication.activities.display.DisplayResults;
 import com.example.myapplication.activities.library.AddActivity;
 import com.example.myapplication.activities.library.EditActivity;
 import com.example.myapplication.activities.library.RemoveActivity;
-import com.example.myapplication.activities.library.RemoveFragment;
-import com.example.myapplication.activities.library.TabsProductManagementActivity;
 
 public class ScanMenuActivity extends Activity {
 
@@ -132,115 +129,6 @@ public class ScanMenuActivity extends Activity {
         }
 
     }
-
-    private void addAddTabListener() {
-        Button add = (Button) findViewById(R.id.addButton);
-
-        try {
-            //comportamiento SCAN
-            add.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            //lanzamos intent
-                            Intent productManagementActivity = new Intent(getBaseContext(), TabsProductManagementActivity.class);
-                            productManagementActivity.putExtra("ID", result);
-                            productManagementActivity.putExtra("PRODUCT_ACTION", 0);
-                            //esperamos resultado
-                            startActivity(productManagementActivity);
-                        }
-                    }
-            );
-        } catch (Exception e) {
-            Log.e("tag", e.getMessage());
-            e.printStackTrace();
-        }
-
-    }
-
-    private void addRemoveTabListener() {
-        Button remove = (Button) findViewById(R.id.removeButton);
-        try {
-            //comportamiento SCAN
-            remove.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            //lanzamos intent
-                            Intent productManagementActivity = new Intent(getBaseContext(), TabsProductManagementActivity.class);
-                            productManagementActivity.putExtra("ID", result);
-                            productManagementActivity.putExtra("PRODUCT_ACTION", 1);
-                            //esperamos resultado
-                            startActivity(productManagementActivity);
-
-                        }
-                    }
-            );
-
-        } catch (Exception e) {
-            Log.e("tag", e.getMessage());
-            e.printStackTrace();
-        }
-
-    }
-
-    private void addWithdrawTabListener() {
-        Button withdraw = (Button) findViewById(R.id.withdrawButton);
-        try {
-            //comportamiento SCAN
-            withdraw.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            //lanzamos intent
-                            Intent productManagementActivity = new Intent(getBaseContext(), TabsProductManagementActivity.class);
-                            productManagementActivity.putExtra("ID", result);
-                            productManagementActivity.putExtra("PRODUCT_ACTION", 2);
-                            //esperamos resultado
-                            startActivity(productManagementActivity);
-                        }
-                    }
-            );
-        } catch (Exception e) {
-            Log.e("tag", e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    private void addReturnTabListener() {
-        Button scan = (Button) findViewById(R.id.returnButton);
-
-        try {
-            //comportamiento SCAN
-
-            scan.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            //lanzamos intent
-                            Intent productManagementActivity = new Intent(getBaseContext(), TabsProductManagementActivity.class);
-                            productManagementActivity.putExtra("ID", result);
-                            productManagementActivity.putExtra("PRODUCT_ACTION", 3);
-                            //esperamos resultado
-                            startActivity(productManagementActivity);
-
-                        }
-                    }
-            );
-        } catch (Exception e) {
-            Log.e("tag", e.getMessage());
-            e.printStackTrace();
-        }
-
-    }
-
-
-
-
-
-
-
-
 
     /*
      * NFC STUFF

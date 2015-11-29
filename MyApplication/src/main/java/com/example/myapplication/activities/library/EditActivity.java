@@ -57,6 +57,9 @@ public class EditActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
+
+        overridePendingTransition(R.animator.slide_in, R.animator.slide_out);
+
         scannedId = this.getIntent().getStringExtra("ID");
 
         nameEdit = (TextView) findViewById(R.id.nameEdit);
@@ -72,6 +75,13 @@ public class EditActivity extends Activity {
         addCameraButtonListener();
         addViewCalendarEventListener();
         fillForm();
+    }
+
+    //TODO cambiar la cosa esta porque no termina de funcionar bien
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.animator.slide_right_in,0);
     }
 
     private void addViewCalendarEventListener() {
@@ -110,7 +120,7 @@ public class EditActivity extends Activity {
         Product p = product.get(0);
         nameEdit.setText(p.getName());
         descriptionEdit.setText(p.getDescription());
-        editStatusDescription.setText(p.getCurrentStatus().getName());
+        editStatusDescription.setText(p.getCurrentStatus().getCurrentStatus());
         editContactName.setText(this.retrieveContactName(p.getContactUri()));
         editContactPhone.setText(this.retrieveContactNumber(p.getContactUri()));
         Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon();

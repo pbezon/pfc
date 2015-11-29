@@ -29,8 +29,7 @@ public class ManualInputActivity extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent mainManu = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(mainManu);
+                        finish();
                     }
                 }
         );
@@ -48,7 +47,7 @@ public class ManualInputActivity extends Activity {
                         if (codeView != null && codeView.getText() != null && !codeView.getText().toString().isEmpty()) {
                             String code = codeView.getText().toString();
                             Intent menuIntent = new Intent(getApplicationContext(), ScanMenuActivity.class);
-                            menuIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                            menuIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             menuIntent.putExtra("SCAN_RESULT", code);
                             startActivity(menuIntent);
                         }

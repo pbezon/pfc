@@ -4,49 +4,31 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
-public class History implements Serializable{
+public class History implements Serializable {
 
-    @JsonProperty("Out Date")
-    private String outDate;
-    @JsonProperty("In Date")
-    private String inDate;
-    @JsonProperty("Status")
+    @JsonProperty("calendarEvent")
+    String calendarUri;
+    @JsonProperty("status")
     private int status;
-    @JsonProperty("Who")
-    private String who;
-    @JsonProperty("Name")
-    private String name;
+    @JsonProperty("contactId")
+    private String contactId;
 
-    public String getOutDate() {
-        return outDate;
+    private String currentStatus;
+
+    public String getCalendarUri() {
+        return calendarUri;
     }
 
-    public void setOutDate(String outDate) {
-        this.outDate = outDate;
+    public void setCalendarUri(String calendarUri) {
+        this.calendarUri = calendarUri;
     }
 
-    public String getInDate() {
-        return inDate;
+    public String getContactId() {
+        return contactId;
     }
 
-    public void setInDate(String inDate) {
-        this.inDate = inDate;
-    }
-
-    public String getWho() {
-        return who;
-    }
-
-    public void setWho(String who) {
-        this.who = who;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setContactId(String contactId) {
+        this.contactId = contactId;
     }
 
     public int getStatus() {
@@ -55,5 +37,13 @@ public class History implements Serializable{
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getCurrentStatus() {
+        return currentStatus;
+    }
+
+    public void setCurrentStatus(String currentStatus) {
+        this.currentStatus = currentStatus;
     }
 }

@@ -15,12 +15,8 @@ public class Product implements Serializable {
     private String _id;
     @JsonProperty("name")
     private String name;
-    @JsonProperty("price")
-    private Integer unitprice;
     @JsonProperty("description")
     private String description;
-    @JsonProperty("discontinued")
-    private Boolean discontinued;
     @JsonProperty("history")
     private List<History> productHistory;
     @JsonProperty("currentStatus")
@@ -33,7 +29,7 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
-        return "_id:" + _id + ", name:" + name + ", unitPrice:" + unitprice + ",discontinued:" + discontinued.toString();
+        return "_id:" + _id + ", name:" + name + ", description:" + description;
     }
 
     public String get__v() {
@@ -60,28 +56,12 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public Integer getUnitprice() {
-        return unitprice;
-    }
-
-    public void setUnitprice(Integer unitprice) {
-        this.unitprice = unitprice;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Boolean getDiscontinued() {
-        return discontinued;
-    }
-
-    public void setDiscontinued(Boolean discontinued) {
-        this.discontinued = discontinued;
     }
 
     public List<History> getProductHistory() {

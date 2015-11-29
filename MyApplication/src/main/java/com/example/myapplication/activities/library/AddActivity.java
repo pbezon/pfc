@@ -118,11 +118,12 @@ public class AddActivity extends Activity {
                         boolean response = ProductService.getInstance().add(p);
                         if (response) {
                             Toast.makeText(getApplicationContext(), "OK!!", Toast.LENGTH_LONG).show();
-                            Intent scanMenu = new Intent(getBaseContext(), ScanMenuActivity.class);
-                            scanMenu.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                            scanMenu.putExtra("SCAN_RESULT", scannedId);
-                            //arrancamos intent
-                            startActivity(scanMenu);
+                            finish();
+//                            Intent scanMenu = new Intent(getBaseContext(), ScanMenuActivity.class);
+//                            scanMenu.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                            scanMenu.putExtra("SCAN_RESULT", scannedId);
+//                            //arrancamos intent
+//                            startActivity(scanMenu);
                         } else {
                             Toast.makeText(getApplicationContext(), "ERROR!!", Toast.LENGTH_LONG).show();
                         }

@@ -18,6 +18,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.activities.library.AddActivity;
 import com.example.myapplication.activities.library.EditActivity;
 import com.example.myapplication.activities.library.RemoveActivity;
+import com.example.myapplication.activities.library.ReturnActivity;
 
 public class ScanMenuActivity extends Activity {
 
@@ -58,6 +59,31 @@ public class ScanMenuActivity extends Activity {
         this.addAddListener();
         this.addSearchListener();
         this.addRemoveListener();
+        this.addReturnListener();
+    }
+
+
+    private void addReturnListener() {
+        Button find = (Button) findViewById(R.id.returnButton);
+        try {
+            //comportamiento FIND
+            find.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //lanzamos intent
+                            Intent returnActivity = new Intent(getBaseContext(), ReturnActivity.class);
+                            returnActivity.putExtra("ID", result);
+                            //arrancamos intent
+                            startActivity(returnActivity);
+                        }
+                    }
+            );
+        } catch (Exception e) {
+            Log.e("tag", e.getMessage());
+            e.printStackTrace();
+        }
+
     }
 
     private void addAddListener() {

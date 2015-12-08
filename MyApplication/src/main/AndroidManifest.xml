@@ -80,7 +80,7 @@
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
             android:name=".activities.library.EditActivity"
-            android:label="Add Item"
+            android:label="Edit Item"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
             android:name=".activities.library.AddActivity"
@@ -88,15 +88,15 @@
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
             android:name=".activities.library.RemoveActivity"
-            android:label="Add Item"
+            android:label="Remove Item"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
             android:name=".activities.library.ReturnActivity"
-            android:label="Add Item"
+            android:label="Return Item"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
             android:name=".activities.library.WithdrawActivity"
-            android:label="Add Item"
+            android:label="Withdraw Item"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
     </application>
 

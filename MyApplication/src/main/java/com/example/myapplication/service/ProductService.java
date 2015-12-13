@@ -22,7 +22,7 @@ public class ProductService {
 
     private ApiProxy apiProxy;
     private ObjectMapper productMapper;
-    private final String url = "http://192.168.1.42:80801";
+    private final String url = "http://192.168.1.42:8081";
     private final String getRest = "/";
     private final String updateRest = "/update/";
     private final String deleteRest = "/delete/";

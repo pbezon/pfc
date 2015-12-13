@@ -3,12 +3,33 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Switch
+    <TextView
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Scan configuration"
+        android:id="@+id/textView3" />
+
+    <Switch
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Manual input"
         android:id="@+id/switch2"
         android:checked="false" />
+
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NFC"
+        android:id="@+id/switch1"
+        android:checked="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Server Configuration"
+        android:id="@+id/textView" />
 
     <EditText
         android:layout_width="match_parent"
@@ -17,7 +38,8 @@
         android:ems="10"
         android:id="@+id/editText4"
         android:layout_gravity="center_horizontal"
-        android:hint="Server Ip" />
+        android:hint="Server Ip"
+        android:text="192.168.1.42" />
 
     <EditText
         android:layout_width="match_parent"
@@ -25,12 +47,7 @@
         android:inputType="number"
         android:ems="10"
         android:id="@+id/editText5"
-        android:hint="Server Port" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button" />
+        android:hint="Server Port"
+        android:text="8081" />
 
 </LinearLayout>

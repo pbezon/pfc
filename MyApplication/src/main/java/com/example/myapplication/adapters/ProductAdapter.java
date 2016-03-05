@@ -46,7 +46,7 @@ public class ProductAdapter extends ArrayAdapter<Product> implements Filterable 
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
         nameText.setText(values.get(position).getName());
         descText.setText(values.get(position).getDescription());
-        status.setText(values.get(position).getCurrentStatus().getCurrentStatus());
+        status.setText(values.get(position).getCurrentStatus().getStatus());
         imageView.setImageResource(R.drawable.ic_action_search);
         //http://www.vogella.com/tutorials/AndroidListView/article.html
         return rowView;
@@ -92,8 +92,8 @@ public class ProductAdapter extends ArrayAdapter<Product> implements Filterable 
                     for (Product p : localCopy) {
                         if (p.getName().toLowerCase().contains(constraint)
                                 || p.getDescription().toLowerCase().contains(constraint)
-                                || (p.getProductHistory() != null && p.getCurrentStatus().getCurrentStatus() != null
-                                && p.getCurrentStatus().getCurrentStatus().toLowerCase().contains(constraint))) {
+                                || (p.getCurrentStatus().getStatus() != null
+                                    && p.getCurrentStatus().getStatus().toLowerCase().contains(constraint))) {
                             filteredResult.add(p);
                         }
                     }

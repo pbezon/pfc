@@ -1,29 +1,28 @@
 package com.example.myapplication.service;
 
-import com.example.myapplication.pojo.History;
+import android.os.AsyncTask;
+
 import com.example.myapplication.pojo.Product;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.example.myapplication.pojo.Status;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Snapster on 21/03/2015.
  */
 public class ProductService {
 
-    private ApiProxy apiProxy;
+    private getTask getTask;
     private ObjectMapper productMapper;
-    private final String url = "http://192.168.1.42:8081";
+    private final String url = "http://192.168.1.81:8081";
     private final String getRest = "/";
+    private final String newRest = "/new";
     private final String updateRest = "/update/";
     private final String deleteRest = "/delete/";
     private final String returnRest = "/return/";
@@ -33,15 +32,15 @@ public class ProductService {
 
     private List<Product> dummyList = new ArrayList<Product>();
 
-    private ProductService (){
-        apiProxy = new ApiProxy();
+    private ProductService() {
+        getTask = new getTask();
         productMapper = new ObjectMapper();
     }
 
-    public static ProductService getInstance (){
+    public static ProductService getInstance() {
         if (instance == null)
             instance = new ProductService();
-        return  instance;
+        return instance;
     }
 
 
@@ -50,16 +49,10 @@ public class ProductService {
         p.set_id("123456");
         p.setName("fakeProductName");
         p.setDescription("fakeProductDescription");
-        p.setCalendarEventId("4771");
-        p.setContactUri("content://com.android.contacts/data/36");
-        History nowStatus = new History();
-//        nowStatus.setInDate("01/01/01");
-//        nowStatus.setOutDate("01/01/02");
-        nowStatus.setCurrentStatus("Taken");
-        nowStatus.setContactId("Dude");
+        Status nowStatus = new Status();
         p.setCurrentStatus(nowStatus);
-        p.getProductHistory().add(nowStatus);
-        p.getProductHistory().add(nowStatus);
+        p.getCurrentStatus().setCalendarEventId("4771");
+        p.getCurrentStatus().setContactUri("content://com.android.contacts/data/36");
         ArrayList<Product> result = new ArrayList<Product>();
         result.add(p);
         result.add(p);
@@ -67,31 +60,24 @@ public class ProductService {
 
     }
 
-    private Product realGetProduct(String id) {
+    public List<Product> realGetProduct(String id) {
+
+        String urlString = url + getRest + id; // URL to call
+        AsyncTask<String, Void, Product[]> response = getTask.execute(urlString);
+
+        List<Product> result = new ArrayList<Product>();
         try {
-            String response;
-            String urlString = url + getRest + id; // URL to call
-            String resultToDisplay = "";
-            BufferedInputStream in = null;
-            // HTTP Get
-            try {
-                RestTemplate template = new RestTemplate();
-                template.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                Product[] p = template.getForObject(urlString, Product[].class);
-                p.toString();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+            Product[] products = response.get();
+            for (Product p : products) {
+                result.add(p);
             }
-            response = resultToDisplay;
-            return productMapper.readValue(response, Product.class);
-        } catch (JsonMappingException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return null;
+        return result;
+
     }
 
     public Boolean updateProduct(Product product) {
@@ -102,7 +88,7 @@ public class ProductService {
             template.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             return template.postForObject(urlString, product, Boolean.class);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+//            System.out.println(e.getMessage());
         }
         return false;
     }
@@ -115,7 +101,7 @@ public class ProductService {
 //            template.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             return template.postForObject(urlString, null, Boolean.class);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+//            System.out.println(e.getMessage());
         }
         return false;
     }
@@ -130,17 +116,22 @@ public class ProductService {
         p.setDescription("fakeProduct");
 //        p.setDiscontinued(false);
 //        p.setUnitprice(123);
-        History nowStatus = new History();
+        Status nowStatus = new Status();
 //        nowStatus.setOutDate(new Date().toString());
-        nowStatus.setCurrentStatus("Taken");
-        nowStatus.setContactId("Dude");
+        nowStatus.setStatus("Taken");
+        nowStatus.setContactUri("Dude");
         p.setCurrentStatus(nowStatus);
-        p.getProductHistory().add(nowStatus);
         return p;
     }
 
-    public boolean add(Product p) {
-        dummyList.add(p);
-        return true;
+    public Boolean add(Product p) {
+        String urlString = url+newRest; // URL to call
+        try {
+            return new putTask().execute(urlString, p).get();
+        } catch (InterruptedException e) {
+            return false;
+        } catch (ExecutionException e) {
+            return false;
+        }
     }
 }

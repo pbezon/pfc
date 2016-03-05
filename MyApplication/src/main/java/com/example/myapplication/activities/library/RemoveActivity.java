@@ -107,11 +107,11 @@ public class RemoveActivity extends Activity {
         Product p = product.get(0);
         nameEdit.setText(p.getName());
         descriptionEdit.setText(p.getDescription());
-        editStatusDescription.setText(p.getCurrentStatus().getCurrentStatus());
-        editContactName.setText(this.retrieveContactName(p.getContactUri()));
-        editContactPhone.setText(this.retrieveContactNumber(p.getContactUri()));
+        editStatusDescription.setText(p.getCurrentStatus().getStatus());
+        editContactName.setText(this.retrieveContactName(p.getCurrentStatus().getContactUri()));
+        editContactPhone.setText(this.retrieveContactNumber(p.getCurrentStatus().getContactUri()));
         Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon();
-        uri.appendPath(p.getCalendarEventId());
+        uri.appendPath(p.getCurrentStatus().getCalendarEventId());
         calendarEvent = uri.build();
 
         Cursor query = getContentResolver().query(uri.build(), new String[]{CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART, CalendarContract.Events.DTEND}, null, null, null);

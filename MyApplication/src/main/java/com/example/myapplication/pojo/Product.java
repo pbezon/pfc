@@ -1,31 +1,32 @@
 package com.example.myapplication.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Product implements Serializable {
 
     @JsonIgnore
     private String __v;
-    @JsonProperty("id")
+    @JsonProperty("_id")
     private String _id;
     @JsonProperty("name")
     private String name;
     @JsonProperty("description")
     private String description;
-    @JsonProperty("history")
-    private List<History> productHistory;
     @JsonProperty("currentStatus")
-    protected History currentStatus;
-    @JsonProperty("bitmap")
+    protected Status currentStatus;
+    @JsonProperty("photo")
     protected byte[] photo;
-    protected String contactUri;
-    protected String calendarEventId;
-
+    @JsonProperty("insertDate")
+    protected Date insertDate;
+    @JsonProperty("type")
+    protected String type;
 
     @Override
     public String toString() {
@@ -64,21 +65,11 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    public List<History> getProductHistory() {
-        if (productHistory == null)
-            productHistory = new ArrayList<History>();
-        return productHistory;
-    }
-
-    public void setProductHistory(List<History> productHistory) {
-        this.productHistory = productHistory;
-    }
-
-    public History getCurrentStatus() {
+    public Status getCurrentStatus() {
         return currentStatus;
     }
 
-    public void setCurrentStatus(History currentStatus) {
+    public void setCurrentStatus(Status currentStatus) {
         this.currentStatus = currentStatus;
     }
 
@@ -90,19 +81,19 @@ public class Product implements Serializable {
         this.photo = photo;
     }
 
-    public String getContactUri() {
-        return contactUri;
+    public Date getInsertDate() {
+        return insertDate;
     }
 
-    public void setContactUri(String contactUri) {
-        this.contactUri = contactUri;
+    public void setInsertDate(Date insertDate) {
+        this.insertDate = insertDate;
     }
 
-    public String getCalendarEventId() {
-        return calendarEventId;
+    public String getType() {
+        return type;
     }
 
-    public void setCalendarEventId(String calendarEventId) {
-        this.calendarEventId = calendarEventId;
+    public void setType(String type) {
+        this.type = type;
     }
 }

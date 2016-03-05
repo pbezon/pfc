@@ -1,27 +1,16 @@
 package com.example.myapplication.activities.display;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.PaintDrawable;
-import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -42,7 +31,7 @@ public class DisplayResults extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_results);
 
-        ProductAdapter productAdapter = new ProductAdapter(this, ProductService.getInstance().getProduct(""));
+        ProductAdapter productAdapter = new ProductAdapter(this, ProductService.getInstance().realGetProduct(""));
         setListAdapter(productAdapter);
 
         addFilterListener(productAdapter);

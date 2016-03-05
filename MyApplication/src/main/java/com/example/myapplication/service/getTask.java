@@ -3,37 +3,34 @@ package com.example.myapplication.service;
 import android.os.AsyncTask;
 
 import com.example.myapplication.pojo.Product;
+import com.fasterxml.jackson.databind.JavaType;
 
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Snapster on 30/09/2014.
  */
-public class ApiProxy extends AsyncTask<String, Void, String> {
+public class getTask extends AsyncTask<String, Void, Product[]> {
 
 
     @Override
-    protected String doInBackground(String... params) {
+    protected Product[] doInBackground(String... params) {
         String urlString = params[0]; // URL to call
-        String resultToDisplay = "";
         BufferedInputStream in = null;
+        Product[] p;
 
         // HTTP Get
-        try {
-            RestTemplate template = new RestTemplate();
-            template.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            Product[] p = template.getForObject(urlString, Product[].class);
-            p.toString();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return e.getMessage();
-        }
 
-        return resultToDisplay;
+        RestTemplate template = new RestTemplate();
+//        JavaType listType = productMapper.getTypeFactory().constructCollectionType(List.class, Product.class);
+        template.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        p = template.getForObject(urlString, Product[].class);
+        return p;
     }
 
     protected String getASCIIContent(BufferedInputStream in) throws IllegalStateException, IOException {

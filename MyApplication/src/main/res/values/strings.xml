@@ -60,6 +60,6 @@
     <string name="status">Status</string>
     <string name="inDate">Return Date</string>
     <string name="outDate">Withdraw Date</string>
-    <string name="contactId">Who</string>
+    <string name="contactUri">Who</string>
 
 </resources>

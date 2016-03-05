@@ -93,7 +93,7 @@ public class ReturnActivity extends Activity {
 
     private void addCalendarListener() {
         ImageView calendarImage = (ImageView) findViewById(R.id.editViewCalendarEvent);
-        String calendarUri = item.getCurrentStatus().getCalendarUri();
+        String calendarUri = item.getCurrentStatus().getCalendarEventId();
 
         //TODO quitar!!!
         calendarUri = null;
@@ -157,7 +157,7 @@ public class ReturnActivity extends Activity {
 
                         Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon();
                         uri.appendPath(Long.toString(event_id));
-                        item.getCurrentStatus().setCalendarUri(uri.build().toString());
+                        item.getCurrentStatus().setCalendarEventId(uri.build().toString());
                     }
                 } else {
                     event_id = -1;
@@ -170,11 +170,11 @@ public class ReturnActivity extends Activity {
 
         nameEdit.setText(item.getName());
         descriptionEdit.setText(item.getDescription());
-        editStatusDescription.setText(item.getCurrentStatus().getCurrentStatus());
-        editContactName.setText(this.retrieveContactName(item.getContactUri()));
-        editContactPhone.setText(this.retrieveContactNumber(item.getContactUri()));
+        editStatusDescription.setText(item.getCurrentStatus().getStatus());
+        editContactName.setText(this.retrieveContactName(item.getCurrentStatus().getContactUri()));
+        editContactPhone.setText(this.retrieveContactNumber(item.getCurrentStatus().getContactUri()));
         Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon();
-        uri.appendPath(item.getCalendarEventId());
+        uri.appendPath(item.getCurrentStatus().getCalendarEventId());
         calendarEvent = uri.build();
 
         Cursor query = getContentResolver().query(uri.build(), new String[]{CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART, CalendarContract.Events.DTEND}, null, null, null);

@@ -106,14 +106,18 @@ public class AddActivity extends Activity {
                         p.set_id(inputId);
                         p.setName(inputName);
                         p.setDescription(inputDescription);
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        if (photo != null && photo.getDrawable() != null)
+                        p.setType(inputType);
+
+                        if (photo != null && photo.getDrawable() != null) {
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
                             try {
                                 ((BitmapDrawable) photo.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.PNG, 100, stream);
                             } catch (Exception e) {
                                 Log.e("tag", e.getMessage());
                             }
-                        p.setPhoto(stream.toByteArray());
+                            p.setPhoto(stream.toByteArray());
+                        }
+
 
                         boolean response = ProductService.getInstance().add(p);
                         if (response) {

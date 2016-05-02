@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/background">
 
     <TableLayout
         android:orientation="vertical"
@@ -213,6 +214,23 @@
                 android:layout_column="1"
                 android:background="@android:drawable/editbox_background_normal"
                 android:hint="-" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="40dp"
+                android:id="@+id/editAddViewContact"
+                android:clickable="false"
+                android:cropToPadding="false"
+                android:scaleType="center"
+                android:src="@android:drawable/ic_menu_search"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_column="1" />
         </TableRow>
 
 

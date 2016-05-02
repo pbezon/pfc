@@ -3,7 +3,7 @@
 
     <string name="app_name">My Stuff Manager</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_edit">Edit</string>
     <string name="scan">Scan</string>
     <string name="title_activity_scan_menu">ScanMenuActivity</string>
     <string name="Contacts">Contacts</string>

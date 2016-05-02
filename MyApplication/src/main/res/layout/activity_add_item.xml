@@ -7,7 +7,8 @@
     android:columnOrderPreserved="false"
     android:stretchColumns="1"
     android:shrinkColumns="1"
-    android:paddingTop="15dp">
+    android:paddingTop="15dp"
+    android:background="@drawable/background">
 
     <TableRow
         android:layout_width="wrap_content"

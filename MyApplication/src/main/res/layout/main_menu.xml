@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/background">
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="220dp"
         android:id="@+id/scanImageButton"
-        android:background="@drawable/save"
-        android:layout_marginTop="112dp"
-        android:layout_alignParentTop="true"
+        android:background="@drawable/takotagscan"
+        android:layout_marginTop="47dp"
+        android:layout_below="@+id/loadingPanel"
         android:layout_centerHorizontal="true" />
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="140dp"
+        android:layout_height="130dp"
         android:id="@+id/collectionImageButton"
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="34dp"
         android:background="@drawable/collection"
         android:layout_below="@+id/scanImageButton"
-        android:layout_toLeftOf="@+id/scanImageButton" />
+        android:layout_toRightOf="@+id/loadingPanel"
+        android:layout_marginLeft="48dp" />
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:id="@+id/settingsImageButton"
-        android:layout_marginRight="63dp"
         android:background="@drawable/settings"
         android:layout_alignTop="@+id/collectionImageButton"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="43dp" />
+        android:layout_marginRight="34dp" />
 
     <RelativeLayout
         android:id="@+id/loadingPanel"

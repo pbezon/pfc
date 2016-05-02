@@ -1,34 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/background">
 
     <EditText
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:id="@+id/editText3"
         android:layout_weight="1"
         android:background="@android:drawable/editbox_background_normal"
-        android:layout_marginTop="88dp"
         android:hint="Please type code"
+        android:textColor="@color/holo_blue"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
+        android:layout_marginTop="104dp"
         android:layout_alignParentRight="true" />
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ok"
         android:id="@+id/okButton"
-        android:layout_marginLeft="89dp"
-        android:layout_centerVertical="true"
+        android:background="@drawable/oktick"
+        android:layout_marginTop="138dp"
+        android:layout_marginLeft="71dp"
+        android:layout_below="@+id/editText3"
         android:layout_alignParentLeft="true" />
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cancel"
         android:id="@+id/cancelButton"
+        android:background="@drawable/canceltick"
+        android:layout_marginLeft="36dp"
         android:layout_alignTop="@+id/okButton"
-        android:layout_toRightOf="@+id/okButton"
-        android:layout_marginLeft="33dp" />
+        android:layout_toRightOf="@+id/okButton" />
 </RelativeLayout>

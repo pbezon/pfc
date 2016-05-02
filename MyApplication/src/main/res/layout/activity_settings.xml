@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/background">
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,15 +15,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Manual input"
-        android:id="@+id/switch2"
+        android:id="@+id/settingsManualSwitch"
         android:checked="false" />
 
     <Switch
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="NFC"
-        android:id="@+id/switch1"
+        android:id="@+id/settingsNfcSwitch"
         android:checked="false" />
+
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Offline Mode"
+        android:id="@+id/settingsOfflineSwitch"
+        android:checked="false"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"

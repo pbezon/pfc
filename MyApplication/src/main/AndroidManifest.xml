@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.myapplication"
+    package="es.uc3m.manager"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -24,11 +24,11 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/takotagicon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activities.MainActivity"
+            android:name="es.uc3m.manager.activities.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light">
@@ -42,7 +42,7 @@
                 android:resource="@xml/nfc_tech_filter" />
         </activity>
         <activity
-            android:name=".activities.scan.ScanMenuActivity"
+            android:name="es.uc3m.manager.activities.scan.ScanMenuActivity"
             android:label="@string/title_activity_scan_menu"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light">
             <!--<intent-filter>-->
@@ -54,35 +54,35 @@
                 <!--android:resource="@xml/nfc_tech_filter" />-->
         </activity>
         <activity
-            android:name=".activities.display.DisplayResults"
+            android:name="es.uc3m.manager.activities.display.DisplayResults"
             android:label="@string/title_activity_display_results"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
-            android:name=".activities.scan.ManualInputActivity"
+            android:name="es.uc3m.manager.activities.scan.ManualInputActivity"
             android:label="Manual Input"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
-            android:name=".activities.settings.SettingsActivity"
+            android:name="es.uc3m.manager.activities.settings.SettingsActivity"
             android:label="Settings"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
-            android:name=".activities.library.EditActivity"
+            android:name="es.uc3m.manager.activities.library.EditActivity"
             android:label="Edit Item"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
-            android:name=".activities.library.AddActivity"
+            android:name="es.uc3m.manager.activities.library.AddActivity"
             android:label="Add Item"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
-            android:name=".activities.library.RemoveActivity"
+            android:name="es.uc3m.manager.activities.library.RemoveActivity"
             android:label="Remove Item"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
-            android:name=".activities.library.ReturnActivity"
+            android:name="es.uc3m.manager.activities.library.ReturnActivity"
             android:label="Return Item"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
-            android:name=".activities.library.WithdrawActivity"
+            android:name="es.uc3m.manager.activities.library.WithdrawActivity"
             android:label="Withdraw Item"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
     </application>

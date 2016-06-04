@@ -2,34 +2,26 @@ package es.uc3m.manager.activities.library;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.List;
+
 import es.uc3m.manager.R;
 import es.uc3m.manager.pojo.Product;
 import es.uc3m.manager.service.ProductService;
 import es.uc3m.manager.util.CalendarUtils;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.text.DateFormat;
-import java.util.Calendar;
+import es.uc3m.manager.util.ContactUtils;
 
 /**
  * Created by Snapster on 15/06/2015.
@@ -38,9 +30,10 @@ public class ReturnActivity extends Activity {
 
 
     private static final int REQUEST_CALENDAR_EVENT = 2;
-    String scannedId;
-    Uri calendarEvent;
-    long event_id;
+    private static final int REQUEST_CONTACTPICKER = 3;
+    private String scannedId;
+    private Uri calendarEvent;
+    private long event_id;
     private TextView nameEdit;
     private TextView descriptionEdit;
     private ImageView imageViewEdit;
@@ -53,26 +46,6 @@ public class ReturnActivity extends Activity {
     private Uri imageUri;
     private Product item;
 
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +55,6 @@ public class ReturnActivity extends Activity {
         overridePendingTransition(R.animator.slide_in, R.animator.slide_out);
 
         scannedId = this.getIntent().getStringExtra("ID");
-
-        //nos traemos el producto
-        item = ProductService.getInstance().getProduct(scannedId).get(0);
 
         nameEdit = (TextView) findViewById(R.id.nameEdit);
         descriptionEdit = (TextView) findViewById(R.id.descriptionEdit);
@@ -96,9 +66,10 @@ public class ReturnActivity extends Activity {
         editContactPhone = (TextView) findViewById(R.id.editContactPhone);
         editCalendarDescription = (TextView) findViewById(R.id.editCalendarDescription);
 
-        addCameraButtonListener();
-        addCalendarListener();
+
         fillForm();
+        addCalendarListener();
+        addContactsListener();
     }
 
     //TODO cambiar la cosa esta porque no termina de funcionar bien
@@ -113,7 +84,7 @@ public class ReturnActivity extends Activity {
         String calendarUri = item.getCurrentStatus().getCalendarEventId();
 
         //TODO quitar!!!
-        calendarUri = null;
+//        calendarUri = null;
 
 
         if (calendarUri != null && !calendarUri.isEmpty())
@@ -162,9 +133,6 @@ public class ReturnActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case 1:
-                if (resultCode == Activity.RESULT_OK) {
-                    drawPhoto();
-                }
                 break;
             case REQUEST_CALENDAR_EVENT:
                 if (resultCode == 0) {
@@ -180,161 +148,75 @@ public class ReturnActivity extends Activity {
                     event_id = -1;
                 }
                 break;
+            case REQUEST_CONTACTPICKER:
+                if (resultCode == RESULT_OK) {
+                    Uri contentUri = data.getData();
+                    item.getCurrentStatus().setContactUri(contentUri.toString());
+                    String contactId = contentUri.getLastPathSegment();
+                    //final String[] projection = new String[]{ContactsContract.CommonDataKinds.Email.ADDRESS};
+                    final Cursor cursor = getContentResolver().query(
+                            ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Email.CONTACT_ID + "=?",
+                            new String[]{contactId},
+                            null
+                    );
+
+                    while (cursor.moveToNext()) {
+                        String email = cursor.getString(
+                                cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                        String emailType = cursor.getString(
+                                cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE));
+                    }
+                    fillForm();
+                }
+                break;
+            default:
+                fillForm();
         }
     }
 
     private void fillForm() {
 
-        nameEdit.setText(item.getName());
-        descriptionEdit.setText(item.getDescription());
-        editStatusDescription.setText(item.getCurrentStatus().getStatus());
-        editContactName.setText(this.retrieveContactName(item.getCurrentStatus().getContactUri()));
-        editContactPhone.setText(this.retrieveContactNumber(item.getCurrentStatus().getContactUri()));
-        Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon();
-        uri.appendPath(item.getCurrentStatus().getCalendarEventId());
-        calendarEvent = uri.build();
-
-        Cursor query = getContentResolver().query(uri.build(), new String[]{CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART, CalendarContract.Events.DTEND}, null, null, null);
-        if (query != null && query.getCount() > 0 && query.moveToFirst()) {
-            editCalendarDescription.setText(query.getString(0));
-            editCalendarReminder.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(new Long(query.getString(1))) + " - " + DateFormat.getDateInstance(DateFormat.SHORT).format(new Long(query.getString(2))));
+        List<Product> product = ProductService.getInstance().getProduct(scannedId);
+        if (product == null || product.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "The item does not exist...", Toast.LENGTH_LONG).show();
+            finish();
+        } else {
+            Product p = product.get(0);
+            item = p;
+            nameEdit.setText(p.getName());
+            descriptionEdit.setText(p.getDescription());
+            editStatusDescription.setText(p.getCurrentStatus().getStatus());
+            editContactName.setText(ContactUtils.retrieveContactName(p.getCurrentStatus().getContactUri(), getContentResolver()));
+            editContactPhone.setText(ContactUtils.retrieveContactNumber(p.getCurrentStatus().getContactUri(), getContentResolver()));
+            String calendarUri = p.getCurrentStatus().getCalendarEventId();
+            if (calendarUri != null && !calendarUri.isEmpty()) {
+                Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon();
+                uri.appendPath(calendarUri);
+                calendarEvent = uri.build();
+                Cursor query = getContentResolver().query(uri.build(), new String[]{CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART, CalendarContract.Events.DTEND}, null, null, null);
+                if (query != null && query.getCount() > 0 && query.moveToFirst()) {
+                    editCalendarDescription.setText(query.getString(0));
+                    editCalendarReminder.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(new Long(query.getString(1))) + " - " + DateFormat.getDateInstance(DateFormat.SHORT).format(new Long(query.getString(2))));
+                }
+                query.close();
+            }
         }
-        query.close();
     }
 
-    private void addSaveButtonListener() {
-        Button save = (Button) findViewById(R.id.saveButton);
-        save.setOnClickListener(
+    private void addContactsListener() {
+        ImageView contacts = (ImageView) findViewById(R.id.editAddViewContact);
+        contacts.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String inputId = scannedId;
-                        String inputName = nameEdit.getText().toString();
-                        String inputDescription = descriptionEdit.getText().toString();
-                        String inputType = typeEdit.getSelectedItem().toString();
-
-                        Product p = new Product();
-                        p.set_id(inputId);
-                        p.setName(inputName);
-                        p.setDescription(inputDescription);
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        if (imageViewEdit != null && imageViewEdit.getDrawable() != null)
-                            try {
-                                ((BitmapDrawable) imageViewEdit.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.PNG, 100, stream);
-                            } catch (Exception e) {
-                                Log.e("tag", e.getMessage());
-                            }
-                        p.setPhoto(stream.toByteArray());
-
-                        boolean response = ProductService.getInstance().add(p);
-                        if (response) {
-                            Toast.makeText(getApplicationContext(), "UPDATED OK!!", Toast.LENGTH_LONG).show();
-
-                        } else {
-                            Toast.makeText(getApplicationContext(), "ERROR!!", Toast.LENGTH_LONG).show();
-                        }
+                        Intent intent = new Intent(Intent.ACTION_PICK,
+                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                        startActivityForResult(intent, REQUEST_CONTACTPICKER);
                     }
                 }
-
         );
-    }
-
-    public void drawPhoto() {
-        Uri selectedImage = imageUri;
-        getContentResolver().notifyChange(selectedImage, null);
-        ImageView imageView = (ImageView) findViewById(R.id.imageViewEdit);
-
-        try {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-
-            AssetFileDescriptor fileDescriptor = null;
-            fileDescriptor = getContentResolver().openAssetFileDescriptor(imageUri, "r");
-
-            //cogemos la foto pero no la pintamos por no romper cosas en memoria
-            BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
-
-            options.inSampleSize = calculateInSampleSize(options, 150, 150);
-            options.inJustDecodeBounds = false;
-            Bitmap actuallyUsableBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
-
-            imageView.setImageBitmap(actuallyUsableBitmap);
-            imageView.setRotation(90);
-
-            Toast.makeText(getApplicationContext(), selectedImage.toString(), Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Failed to load", Toast.LENGTH_SHORT).show();
-            Log.e("Camera", e.toString());
-        }
-
-    }
-
-    private String retrieveContactNumber(String uriContact) {
-        String contactNumber = null;
-        String contactID = null;
-        // getting contacts ID
-        Cursor cursorID = getContentResolver().query(Uri.parse(uriContact),
-                new String[]{ContactsContract.Contacts._ID}, null, null, null);
-        if (cursorID.moveToFirst()) {
-            contactID = cursorID.getString(cursorID.getColumnIndex(ContactsContract.Contacts._ID));
-        }
-
-        cursorID.close();
-        Log.d("TAG", "Contact ID: " + contactID);
-        // Using the contact ID now we will get contact phone number
-        Cursor cursorPhone = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER},
-                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ? AND " +
-                        ContactsContract.CommonDataKinds.Phone.TYPE + " = " +
-                        ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE,
-                new String[]{contactID},
-                null);
-        if (cursorPhone.moveToFirst()) {
-            contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-        }
-        cursorPhone.close();
-
-        Log.d("TAG", "Contact Phone Number: " + contactNumber);
-
-        return contactNumber;
-    }
-
-    private String retrieveContactName(String uriContact) {
-        String contactName = null;
-        // querying contact data store
-        Cursor cursor = getContentResolver().query(Uri.parse(uriContact), null, null, null, null);
-        if (cursor.moveToFirst()) {
-
-            // DISPLAY_NAME = The display name for the contact.
-            // HAS_PHONE_NUMBER =   An indicator of whether this contact has at least one phone number.
-
-            contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-        }
-        cursor.close();
-        Log.d("TAG", "Contact Name: " + contactName);
-        return contactName;
-
-    }
-
-    public void addCameraButtonListener() {
-        try {
-            imageViewEdit.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            //lanzamos intent
-                            Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                            File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
-                            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-                            imageUri = Uri.fromFile(photo);
-                            startActivityForResult(intent, 1);
-                        }
-                    }
-            );
-        } catch (Exception e) {
-            Log.e("tag", e.getMessage());
-            e.printStackTrace();
-        }
     }
 
 }

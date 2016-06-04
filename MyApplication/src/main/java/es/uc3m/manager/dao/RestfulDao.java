@@ -67,17 +67,17 @@ public class RestfulDao {
 
     }
 
-    public Boolean updateProduct(Product product) {
+    public Product updateProduct(Product product) {
         String urlString = url + updateRest; // URL to call
         // HTTP post
         try {
             RestTemplate template = new RestTemplate();
             template.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            return template.postForObject(urlString, product, Boolean.class);
+            return template.postForObject(urlString, product, Product.class);
         } catch (Exception e) {
-//            System.out.println(e.getMessage());
+            System.out.println(e.getMessage());
         }
-        return false;
+        return new Product();
     }
 
     public Boolean deleteProduct(String productId) {

@@ -21,6 +21,9 @@ public class ProxyDao {
 
     public List<Product> getProduct(String id) {
         if (Constants.OFFLINE) {
+            if (id == null || id.isEmpty()) {
+                return new ArrayList<Product>(dummyList.values());
+            }
             Product p = dummyList.get(id);
             if (p != null) return Collections.singletonList(p);
             return new ArrayList<Product>();
@@ -29,9 +32,10 @@ public class ProxyDao {
         }
     }
 
-    public Boolean updateProduct(Product product) {
+    public Product updateProduct(Product product) {
         if (Constants.OFFLINE) {
-            return dummyList.put(product.get_id(), product) != null;
+            dummyList.put(product.get_id(), product);
+            return dummyList.get(product.get_id());
         } else {
             return restfulDao.updateProduct(product);
         }
@@ -46,21 +50,37 @@ public class ProxyDao {
     }
 
     public Product returnProduct(Product product) {
-        restfulDao.returnProduct(product);
-        List<Product> productList = restfulDao.getProduct(product.get_id());
-        if (productList != null && !productList.isEmpty()) {
-            return productList.get(0);
+        if (Constants.OFFLINE) {
+            product.getCurrentStatus().setStatus("Available");
+            dummyList.put(product.get_id(), product);
+            return dummyList.get(product.get_id());
+        } else {
+            restfulDao.returnProduct(product);
+            List<Product> productList = restfulDao.getProduct(product.get_id());
+            if (productList != null && !productList.isEmpty()) {
+                return productList.get(0);
+            }
+            return product;
         }
-        return product;
     }
 
     public Product withdrawProduct(String id) {
-        restfulDao.withdrawProduct(id);
-        List<Product> product = restfulDao.getProduct(id);
-        if (product != null && !product.isEmpty()) {
-            return product.get(0);
+        if (Constants.OFFLINE) {
+            Product product = dummyList.get(id);
+            if (product != null) {
+                product.getCurrentStatus().setStatus("Taken");
+                dummyList.put(id, product);
+                return dummyList.get(id);
+            }
+            return new Product();
+        } else {
+            restfulDao.withdrawProduct(id);
+            List<Product> product = restfulDao.getProduct(id);
+            if (product != null && !product.isEmpty()) {
+                return product.get(0);
+            }
+            return new Product();
         }
-        return new Product();
     }
 
     public Boolean add(Product p) {

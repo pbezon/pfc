@@ -12,7 +12,7 @@
                 </shape>
             </item>
             <item>
-                <bitmap android:gravity="center|right" android:src="@android:drawable/ic_input_add" />
+                <bitmap android:gravity="center|right" android:src="@android:drawable/ic_menu_zoom" />
                 <!--ic_ab_back_holo_dark-->
             </item>
         </layer-list>

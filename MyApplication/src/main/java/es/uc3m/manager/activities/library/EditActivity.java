@@ -25,14 +25,18 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.net.URI;
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import es.uc3m.manager.R;
 import es.uc3m.manager.pojo.Product;
 import es.uc3m.manager.service.ProductService;
 import es.uc3m.manager.util.CalendarUtils;
+import es.uc3m.manager.util.ContactUtils;
+import es.uc3m.manager.util.PhotoUtils;
 
 /**
  * Created by Snapster on 15/06/2015.
@@ -52,6 +56,10 @@ public class EditActivity extends Activity {
     private TextView editCalendarDescription;
     private Uri imageUri;
     private long event_id;
+    private final int ACTIVITY_TAKE_PHOTO = 1;
+    private final int ACTIVITY_ADD_CALENDAR = 2;
+    private final int ACTIVITY_ADD_CONTACT = 3;
+    Product product;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,26 +163,45 @@ public class EditActivity extends Activity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case 1:
+            case ACTIVITY_TAKE_PHOTO:
                 if (resultCode == Activity.RESULT_OK) {
                     drawPhoto();
                 }
                 break;
+            case ACTIVITY_ADD_CONTACT:
+                if (resultCode == RESULT_OK) {
+                    Uri contentUri = data.getData();
+                    product.getCurrentStatus().setContactUri(contentUri.toString());
+                    fillForm();
+                }
         }
     }
 
     private void fillForm() {
-        List<Product> product = ProductService.getInstance().getProduct(scannedId);
-        if (product != null && !product.isEmpty()) {
-            Product p = product.get(0);
-            nameEdit.setText(p.getName());
-            descriptionEdit.setText(p.getDescription());
-            editStatusDescription.setText(p.getCurrentStatus().getStatus());
-            editContactName.setText(this.retrieveContactName(p.getCurrentStatus().getContactUri()));
-            editContactPhone.setText(this.retrieveContactNumber(p.getCurrentStatus().getContactUri()));
-            if (p.getCurrentStatus().getCalendarEventId() != null) {
+        List<Product> items;
+        if (product != null) {
+            items = Collections.singletonList(product);
+        } else {
+            items = ProductService.getInstance().getProduct(scannedId);
+        }
+        if (items == null || items.isEmpty()){
+            Toast.makeText(getApplicationContext(), "The item does not exist...", Toast.LENGTH_LONG).show();
+            finish();
+        } else {
+            product = items.get(0);
+            nameEdit.setText(product.getName());
+            descriptionEdit.setText(product.getDescription());
+            editStatusDescription.setText(product.getCurrentStatus().getStatus());
+            editContactName.setText(ContactUtils.retrieveContactName(product.getCurrentStatus().getContactUri(), getContentResolver()));
+            editContactPhone.setText(ContactUtils.retrieveContactNumber(product.getCurrentStatus().getContactUri(), getContentResolver()));
+            File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
+            if (photo != null) {
+                imageUri = Uri.fromFile(photo);
+                PhotoUtils.drawPhoto(imageUri, getContentResolver(), (ImageView) findViewById(R.id.imageViewEdit), getApplicationContext());
+            }
+            if (product.getCurrentStatus().getCalendarEventId() != null) {
                 Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon();
-                uri.appendPath(p.getCurrentStatus().getCalendarEventId());
+                uri.appendPath(product.getCurrentStatus().getCalendarEventId());
                 calendarEvent = uri.build();
                 Cursor query = getContentResolver().query(uri.build(), new String[]{CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART, CalendarContract.Events.DTEND}, null, null, null);
                 if (query != null && query.getCount() > 0 && query.moveToFirst()) {
@@ -193,26 +220,10 @@ public class EditActivity extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String inputId = scannedId;
-                        String inputName = nameEdit.getText().toString();
-                        String inputDescription = descriptionEdit.getText().toString();
-                        String inputType = typeEdit.getSelectedItem().toString();
-
-                        Product p = new Product();
-                        p.set_id(inputId);
-                        p.setName(inputName);
-                        p.setDescription(inputDescription);
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        if (imageViewEdit != null && imageViewEdit.getDrawable() != null)
-                            try {
-                                ((BitmapDrawable) imageViewEdit.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.PNG, 100, stream);
-                            } catch (Exception e) {
-                                Log.e("tag", e.getMessage());
-                            }
-                        p.setPhoto(stream.toByteArray());
-                        boolean response = ProductService.getInstance().add(p);
+                        boolean response = ProductService.getInstance().edit(product);
                         if (response) {
                             Toast.makeText(getApplicationContext(), "UPDATED OK!!", Toast.LENGTH_LONG).show();
+                            finish();
                         } else {
                             Toast.makeText(getApplicationContext(), "ERROR!!", Toast.LENGTH_LONG).show();
                         }
@@ -249,7 +260,7 @@ public class EditActivity extends Activity {
             //cogemos la foto pero no la pintamos por no romper cosas en memoria
             BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
 
-            options.inSampleSize = calculateInSampleSize(options, 150, 150);
+            options.inSampleSize = PhotoUtils.calculateInSampleSize(options, 150, 150);
             options.inJustDecodeBounds = false;
             Bitmap actuallyUsableBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
 
@@ -264,56 +275,6 @@ public class EditActivity extends Activity {
 
     }
 
-    private String retrieveContactNumber(String uriContact) {
-        if(uriContact == null) {
-            return "";
-        }
-        String contactNumber = null;
-        String contactID = null;
-        // getting contacts ID
-        Cursor cursorID = getContentResolver().query(Uri.parse(uriContact),
-                new String[]{ContactsContract.Contacts._ID}, null, null, null);
-        if (cursorID.moveToFirst()) {
-            contactID = cursorID.getString(cursorID.getColumnIndex(ContactsContract.Contacts._ID));
-        }
-        cursorID.close();
-        Log.d("TAG", "Contact ID: " + contactID);
-        // Using the contact ID now we will get contact phone number
-        Cursor cursorPhone = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER},
-                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ? AND " +
-                        ContactsContract.CommonDataKinds.Phone.TYPE + " = " +
-                        ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE,
-                new String[]{contactID},
-                null);
-        if (cursorPhone.moveToFirst()) {
-            contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-        }
-        cursorPhone.close();
-        Log.d("TAG", "Contact Phone Number: " + contactNumber);
-        return contactNumber;
-    }
-
-    private String retrieveContactName(String uriContact) {
-        if (uriContact == null) {
-            return "";
-        }
-        String contactName = null;
-        // querying contact data store
-        Cursor cursor = getContentResolver().query(Uri.parse(uriContact), null, null, null, null);
-        if (cursor.moveToFirst()) {
-
-            // DISPLAY_NAME = The display name for the contact.
-            // HAS_PHONE_NUMBER =   An indicator of whether this contact has at least one phone number.
-
-            contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-        }
-        cursor.close();
-        Log.d("TAG", "Contact Name: " + contactName);
-        return contactName;
-
-    }
-
     public void addCameraButtonListener() {
         try {
             imageViewEdit.setOnClickListener(
@@ -325,7 +286,7 @@ public class EditActivity extends Activity {
                             File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
                             imageUri = Uri.fromFile(photo);
-                            startActivityForResult(intent, 1);
+                            startActivityForResult(intent, ACTIVITY_TAKE_PHOTO);
                         }
                     }
             );
@@ -333,28 +294,6 @@ public class EditActivity extends Activity {
             Log.e("tag", e.getMessage());
             e.printStackTrace();
         }
-    }
-
-
-    private static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
     }
 
 
@@ -366,7 +305,7 @@ public class EditActivity extends Activity {
                     public void onClick(View view) {
                         Intent intent = new Intent(Intent.ACTION_PICK,
                                 ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
-                        startActivityForResult(intent, 888);
+                        startActivityForResult(intent, ACTIVITY_ADD_CONTACT);
                     }
                 }
         );

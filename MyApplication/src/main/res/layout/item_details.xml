@@ -136,7 +136,7 @@
                 android:id="@+id/editCalendarDescription"
                 android:layout_column="1"
                 android:background="@android:drawable/editbox_background_normal"
-                android:hint="No event created - touch to add -" />
+                android:hint="No event created" />
 
         </TableRow>
 
@@ -166,7 +166,7 @@
                 android:clickable="false"
                 android:cropToPadding="false"
                 android:scaleType="center"
-                android:src="@android:drawable/ic_menu_search"
+                android:src="@android:drawable/ic_menu_month"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_column="1" />
@@ -227,7 +227,7 @@
                 android:clickable="false"
                 android:cropToPadding="false"
                 android:scaleType="center"
-                android:src="@android:drawable/ic_menu_search"
+                android:src="@android:drawable/ic_menu_my_calendar"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_column="1" />

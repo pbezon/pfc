@@ -30,7 +30,7 @@ public class ProductService {
         return dao.getProduct(id);
     }
 
-    public Boolean updateProduct(Product product) {
+    public Product updateProduct(Product product) {
         return dao.updateProduct(product);
     }
 
@@ -50,6 +50,10 @@ public class ProductService {
         Status initialStatus = new Status();
         initialStatus.setStatus("Available");
         p.setCurrentStatus(initialStatus);
+        return dao.add(p);
+    }
+
+    public Boolean edit(Product p) {
         return dao.add(p);
     }
 }

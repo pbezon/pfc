@@ -6,7 +6,6 @@ import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,15 +22,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.net.URI;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
 import es.uc3m.manager.R;
+import es.uc3m.manager.activities.settings.SettingsActivity;
 import es.uc3m.manager.pojo.Product;
 import es.uc3m.manager.service.ProductService;
 import es.uc3m.manager.util.CalendarUtils;
@@ -43,8 +41,8 @@ import es.uc3m.manager.util.PhotoUtils;
  */
 public class EditActivity extends Activity {
 
-    String scannedId;
-    Uri calendarEvent;
+    private String scannedId;
+    private Uri calendarEvent;
     private TextView nameEdit;
     private TextView descriptionEdit;
     private ImageView imageViewEdit;
@@ -55,11 +53,10 @@ public class EditActivity extends Activity {
     private TextView editContactPhone;
     private TextView editCalendarDescription;
     private Uri imageUri;
-    private long event_id;
     private final int ACTIVITY_TAKE_PHOTO = 1;
     private final int ACTIVITY_ADD_CALENDAR = 2;
     private final int ACTIVITY_ADD_CONTACT = 3;
-    Product product;
+    private Product product;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +85,8 @@ public class EditActivity extends Activity {
         editContactPhone.setEnabled(false);
         editCalendarDescription = (TextView) findViewById(R.id.editCalendarDescription);
         editCalendarDescription.setEnabled(false);
+        findViewById(R.id.editViewCalendarEvent).setEnabled(false);
+        findViewById(R.id.editAddViewContact).setEnabled(false);
 
         addCameraButtonListener();
         addViewCalendarEventListener();
@@ -115,6 +114,8 @@ public class EditActivity extends Activity {
         editContactName.setEnabled(true);
         editContactPhone.setEnabled(true);
         editCalendarDescription.setEnabled(true);
+        findViewById(R.id.editViewCalendarEvent).setEnabled(true);
+        findViewById(R.id.editAddViewContact).setEnabled(true);
         findViewById(R.id.editOk).setVisibility(View.VISIBLE);
         findViewById(R.id.editCancel).setVisibility(View.VISIBLE);
         return true;
@@ -194,7 +195,7 @@ public class EditActivity extends Activity {
             editStatusDescription.setText(product.getCurrentStatus().getStatus());
             editContactName.setText(ContactUtils.retrieveContactName(product.getCurrentStatus().getContactUri(), getContentResolver()));
             editContactPhone.setText(ContactUtils.retrieveContactNumber(product.getCurrentStatus().getContactUri(), getContentResolver()));
-            File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
+            File photo = new File(Environment.getExternalStorageDirectory() + SettingsActivity.PATH, product.get_id());
             if (photo != null) {
                 imageUri = Uri.fromFile(photo);
                 PhotoUtils.drawPhoto(imageUri, getContentResolver(), (ImageView) findViewById(R.id.imageViewEdit), getApplicationContext());
@@ -206,7 +207,7 @@ public class EditActivity extends Activity {
                 Cursor query = getContentResolver().query(uri.build(), new String[]{CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART, CalendarContract.Events.DTEND}, null, null, null);
                 if (query != null && query.getCount() > 0 && query.moveToFirst()) {
                     editCalendarDescription.setText(query.getString(0));
-                    editCalendarReminder.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(new Long(query.getString(1))) + " - " + DateFormat.getDateInstance(DateFormat.SHORT).format(new Long(query.getString(2))));
+                    editCalendarReminder.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(Long.valueOf(query.getString(1))) + " - " + DateFormat.getDateInstance(DateFormat.SHORT).format(Long.valueOf(query.getString(2))));
                 }
                 query.close();
             }
@@ -245,7 +246,7 @@ public class EditActivity extends Activity {
         );
     }
 
-    public void drawPhoto() {
+    private void drawPhoto() {
         Uri selectedImage = imageUri;
         getContentResolver().notifyChange(selectedImage, null);
         ImageView imageView = (ImageView) findViewById(R.id.imageViewEdit);
@@ -254,13 +255,13 @@ public class EditActivity extends Activity {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
 
-            AssetFileDescriptor fileDescriptor = null;
+            AssetFileDescriptor fileDescriptor;
             fileDescriptor = getContentResolver().openAssetFileDescriptor(imageUri, "r");
 
             //cogemos la foto pero no la pintamos por no romper cosas en memoria
             BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
 
-            options.inSampleSize = PhotoUtils.calculateInSampleSize(options, 150, 150);
+            options.inSampleSize = PhotoUtils.calculateInSampleSize(options);
             options.inJustDecodeBounds = false;
             Bitmap actuallyUsableBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
 
@@ -275,7 +276,7 @@ public class EditActivity extends Activity {
 
     }
 
-    public void addCameraButtonListener() {
+    private void addCameraButtonListener() {
         try {
             imageViewEdit.setOnClickListener(
                     new View.OnClickListener() {
@@ -322,7 +323,7 @@ public class EditActivity extends Activity {
         intent.putExtra("title", "Entrega/recogida");
         intent.putExtra("description", "Entrega recogida de lo que sea");
         intent.putExtra(CalendarContract.Attendees.ATTENDEE_EMAIL, "trevor@example.com");
-        event_id = CalendarUtils.getNewEventId(getApplicationContext().getContentResolver());
+        long event_id = CalendarUtils.getNewEventId(getApplicationContext().getContentResolver());
         startActivityForResult(intent, 99);
     }
 

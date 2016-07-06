@@ -11,16 +11,16 @@ import android.util.Log;
 /**
  * Created by Snapster on 19/02/14.
  */
-public class NFCForegroundUtil {
+class NFCForegroundUtil {
 
 
-    private NfcAdapter nfc;
+    private final NfcAdapter nfc;
 
 
-    private Activity activity;
-    private IntentFilter intentFiltersArray[];
-    private PendingIntent intent;
-    private String techListsArray[][];
+    private final Activity activity;
+    private final IntentFilter[] intentFiltersArray;
+    private final PendingIntent intent;
+    private final String[][] techListsArray;
 
     public NFCForegroundUtil(Activity activity) {
         super();

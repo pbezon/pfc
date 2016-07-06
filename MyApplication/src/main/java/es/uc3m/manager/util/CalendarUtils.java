@@ -12,6 +12,7 @@ public class CalendarUtils {
 
     public static long getNewEventId(ContentResolver cr) {
         Cursor cursor = cr.query(CalendarContract.Events.CONTENT_URI, new String[]{"MAX(_id) as max_id"}, null, null, "_id");
+        assert cursor != null;
         cursor.moveToFirst();
         long max_val = cursor.getLong(cursor.getColumnIndex("max_id"));
         cursor.close();
@@ -26,7 +27,7 @@ public class CalendarUtils {
             query = cr.query(uri.build(), new String[]{CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART, CalendarContract.Events.DTEND}, null, null, null);
             if (query != null && query.getCount() > 0 && query.moveToFirst()) {
                 String name = query.getString(0);
-                String date = DateFormat.getDateInstance(DateFormat.SHORT).format(new Long(query.getString(1)));
+                String date = DateFormat.getDateInstance(DateFormat.SHORT).format(Long.valueOf(query.getString(1)));
                 if (name != null && !name.isEmpty() && date != null && !date.isEmpty())
                     return true;
             }
@@ -76,7 +77,7 @@ public class CalendarUtils {
         event.put("hasAlarm", 1);
 
         Uri eventUri = cr.insert(Uri.parse(eventUriStr), event);
-        long eventID = Long.parseLong(eventUri.getLastPathSegment());
+        long eventID = Long.parseLong(eventUri != null ? eventUri.getLastPathSegment() : null);
 
         if (isRemind) {
             String reminderUriString = "content://com.android.calendar/reminders";

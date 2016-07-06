@@ -12,7 +12,7 @@ import es.uc3m.manager.pojo.Status;
 public class ProductService {
 
     private static ProductService instance;
-    private ProxyDao dao;
+    private final ProxyDao dao;
 
     private ProductService() {
         dao = new ProxyDao();

@@ -36,9 +36,7 @@ public class ReturnActivity extends Activity {
     private long event_id;
     private TextView nameEdit;
     private TextView descriptionEdit;
-    private ImageView imageViewEdit;
     private TextView editCalendarReminder;
-    private Spinner typeEdit;
     private TextView editStatusDescription;
     private TextView editContactName;
     private TextView editContactPhone;
@@ -58,9 +56,9 @@ public class ReturnActivity extends Activity {
 
         nameEdit = (TextView) findViewById(R.id.nameEdit);
         descriptionEdit = (TextView) findViewById(R.id.descriptionEdit);
-        imageViewEdit = (ImageView) findViewById(R.id.imageViewEdit);
+        ImageView imageViewEdit = (ImageView) findViewById(R.id.imageViewEdit);
         editCalendarReminder = (TextView) findViewById(R.id.editCalendarReminder);
-        typeEdit = (Spinner) findViewById(R.id.typeEdit);
+        Spinner typeEdit = (Spinner) findViewById(R.id.typeEdit);
         editStatusDescription = (TextView) findViewById(R.id.editStatusDescription);
         editContactName = (TextView) findViewById(R.id.editContactName);
         editContactPhone = (TextView) findViewById(R.id.editContactPhone);
@@ -138,7 +136,6 @@ public class ReturnActivity extends Activity {
                 if (resultCode == 0) {
                     if (CalendarUtils.isEvent(getContentResolver(), event_id)) {
                         String a = "";
-                        a.toString();
 
                         Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon();
                         uri.appendPath(Long.toString(event_id));
@@ -168,6 +165,7 @@ public class ReturnActivity extends Activity {
                         String emailType = cursor.getString(
                                 cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE));
                     }
+                    cursor.close();
                     fillForm();
                 }
                 break;
@@ -198,7 +196,7 @@ public class ReturnActivity extends Activity {
                 Cursor query = getContentResolver().query(uri.build(), new String[]{CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART, CalendarContract.Events.DTEND}, null, null, null);
                 if (query != null && query.getCount() > 0 && query.moveToFirst()) {
                     editCalendarDescription.setText(query.getString(0));
-                    editCalendarReminder.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(new Long(query.getString(1))) + " - " + DateFormat.getDateInstance(DateFormat.SHORT).format(new Long(query.getString(2))));
+                    editCalendarReminder.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(Long.valueOf(query.getString(1))) + " - " + DateFormat.getDateInstance(DateFormat.SHORT).format(Long.valueOf(query.getString(2))));
                 }
                 query.close();
             }

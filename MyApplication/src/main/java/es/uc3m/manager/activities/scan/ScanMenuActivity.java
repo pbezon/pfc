@@ -2,7 +2,6 @@ package es.uc3m.manager.activities.scan;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -22,11 +21,10 @@ import es.uc3m.manager.activities.library.ReturnActivity;
 import es.uc3m.manager.activities.library.WithdrawActivity;
 import es.uc3m.manager.pojo.Product;
 import es.uc3m.manager.service.ProductService;
-import es.uc3m.manager.util.ImageButtonUtils;
 
 public class ScanMenuActivity extends Activity {
 
-    public static final String TAG = "ScanMenuActivity";
+    private static final String TAG = "ScanMenuActivity";
     private static final int REQUEST_SCAN_CODE = 0;
     private Product product;
 
@@ -63,10 +61,7 @@ public class ScanMenuActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     /*
@@ -145,24 +140,37 @@ public class ScanMenuActivity extends Activity {
     private void setUpButtonDisabler(boolean existsItem) {
         if (!existsItem) {
             findViewById(R.id.menuFind).setEnabled(false);
+            findViewById(R.id.menuFind).setBackground(getResources().getDrawable(R.drawable.findedit_disabled));
             findViewById(R.id.menuWithdraw).setEnabled(false);
+            findViewById(R.id.menuWithdraw).setBackground(getResources().getDrawable(R.drawable.withdraw_disabled));
             findViewById(R.id.menuReturn).setEnabled(false);
+            findViewById(R.id.menuReturn).setBackground(getResources().getDrawable(R.drawable.return_disabled));
             findViewById(R.id.menuAdd).setEnabled(true);
+            findViewById(R.id.menuAdd).setBackground(getResources().getDrawable(R.drawable.add));
             findViewById(R.id.removeButton).setEnabled(false);
+//            findViewById(R.id.removeButton).setBackground(getResources().getDrawable(R.drawable.re));
         } else {
             if (product.getCurrentStatus().getStatus().equalsIgnoreCase("Taken")) {
                 findViewById(R.id.menuFind).setEnabled(true);
+                findViewById(R.id.menuFind).setBackground(getResources().getDrawable(R.drawable.findedit));
                 findViewById(R.id.menuWithdraw).setEnabled(false);
+                findViewById(R.id.menuWithdraw).setBackground(getResources().getDrawable(R.drawable.withdraw_disabled));
                 findViewById(R.id.menuReturn).setEnabled(true);
+                findViewById(R.id.menuReturn).setBackground(getResources().getDrawable(R.drawable.returnicon));
                 findViewById(R.id.menuAdd).setEnabled(false);
+                findViewById(R.id.menuAdd).setBackground(getResources().getDrawable(R.drawable.add_disabled));
                 findViewById(R.id.removeButton).setEnabled(false);
             }
 
             if (product.getCurrentStatus().getStatus().equalsIgnoreCase("Available")) {
                 findViewById(R.id.menuFind).setEnabled(true);
+                findViewById(R.id.menuFind).setBackground(getResources().getDrawable(R.drawable.findedit));
                 findViewById(R.id.menuWithdraw).setEnabled(true);
+                findViewById(R.id.menuWithdraw).setBackground(getResources().getDrawable(R.drawable.withdraw));
                 findViewById(R.id.menuReturn).setEnabled(false);
+                findViewById(R.id.menuReturn).setBackground(getResources().getDrawable(R.drawable.return_disabled));
                 findViewById(R.id.menuAdd).setEnabled(false);
+                findViewById(R.id.menuAdd).setBackground(getResources().getDrawable(R.drawable.add_disabled));
                 findViewById(R.id.removeButton).setEnabled(true);
             }
         }

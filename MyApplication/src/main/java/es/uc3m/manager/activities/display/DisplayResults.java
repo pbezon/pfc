@@ -16,8 +16,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.Collections;
-
 import es.uc3m.manager.R;
 import es.uc3m.manager.activities.library.EditActivity;
 import es.uc3m.manager.adapters.ProductAdapter;
@@ -110,10 +108,7 @@ public class DisplayResults extends ListActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
 //    private void flipCard(Integer position) {

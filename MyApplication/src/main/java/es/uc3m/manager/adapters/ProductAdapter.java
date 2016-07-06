@@ -109,10 +109,9 @@ public class ProductAdapter extends ArrayAdapter<Product> implements Filterable 
         return filter;
     }
 
-    protected void cloneItems(List<Product> items) {
+    private void cloneItems(List<Product> items) {
         originalValues = new ArrayList<Product>();
-        for (Iterator iterator = items.iterator(); iterator.hasNext(); ) {
-            Product p = (Product) iterator.next();
+        for (Product p : items) {
             originalValues.add(p);
         }
     }

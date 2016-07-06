@@ -9,7 +9,7 @@ import android.widget.ImageButton;
 /**
  * Created by Snapster on 5/29/2016.
  */
-public class ImageButtonUtils {
+class ImageButtonUtils {
 
     /**
      * Sets the image button to the given state and grays-out the icon.
@@ -34,7 +34,7 @@ public class ImageButtonUtils {
      *
      * @return a mutated version of the given drawable with a color filter applied.
      */
-    public static Drawable convertDrawableToGrayScale(Drawable drawable) {
+    private static Drawable convertDrawableToGrayScale(Drawable drawable) {
         if (drawable == null)
             return null;
 

@@ -6,18 +6,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.uc3m.manager.activities.MainActivity;
 import es.uc3m.manager.activities.contacts.Constants;
 import es.uc3m.manager.pojo.Product;
-import es.uc3m.manager.pojo.Status;
 
 /**
  * Created by Snapster on 5/1/2016.
  */
 public class ProxyDao {
 
-    private RestfulDao restfulDao = new RestfulDao();
-    private Map<String, Product> dummyList = new HashMap<String, Product>();
+    private final RestfulDao restfulDao = new RestfulDao();
+    private final Map<String, Product> dummyList = new HashMap<String, Product>();
 
     public List<Product> getProduct(String id) {
         if (Constants.OFFLINE) {

@@ -7,6 +7,7 @@ import java.io.Serializable;
 public class Status implements Serializable {
 
     @JsonProperty("calendarEventId")
+    private
     String calendarEventId;
     @JsonProperty("status")
     private String status;

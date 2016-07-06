@@ -22,11 +22,11 @@ public class PhotoUtils {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
 
-            AssetFileDescriptor fileDescriptor = null;
+            AssetFileDescriptor fileDescriptor;
             fileDescriptor = contentResolver.openAssetFileDescriptor(selectedImage, "r");
             //cogemos la foto pero no la pintamos por no romper cosas en memoria
             BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
-            options.inSampleSize = calculateInSampleSize(options, 150, 150);
+            options.inSampleSize = calculateInSampleSize(options);
             options.inJustDecodeBounds = false;
             Bitmap actuallyUsableBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
             imageView.setImageBitmap(actuallyUsableBitmap);
@@ -40,19 +40,19 @@ public class PhotoUtils {
 
     }
 
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    public static int calculateInSampleSize(BitmapFactory.Options options) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
 
-        if (height > reqHeight || width > reqWidth) {
+        if (height > 150 || width > 150) {
             final int halfHeight = height / 2;
             final int halfWidth = width / 2;
             // Calculate the largest inSampleSize value that is a power of 2 and keeps both
             // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
+            while ((halfHeight / inSampleSize) > 150
+                    && (halfWidth / inSampleSize) > 150) {
                 inSampleSize *= 2;
             }
         }

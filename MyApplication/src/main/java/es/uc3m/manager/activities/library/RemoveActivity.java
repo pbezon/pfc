@@ -27,12 +27,9 @@ import es.uc3m.manager.util.ContactUtils;
 public class RemoveActivity extends Activity {
 
     private String scannedId;
-    private Uri calendarEvent;
     private TextView nameEdit;
     private TextView descriptionEdit;
-    private ImageView imageViewEdit;
     private TextView editCalendarReminder;
-    private Spinner typeEdit;
     private TextView editStatusDescription;
     private TextView editContactName;
     private TextView editContactPhone;
@@ -49,9 +46,9 @@ public class RemoveActivity extends Activity {
 
         nameEdit = (TextView) findViewById(R.id.nameEdit);
         descriptionEdit = (TextView) findViewById(R.id.descriptionEdit);
-        imageViewEdit = (ImageView) findViewById(R.id.imageViewEdit);
+        ImageView imageViewEdit = (ImageView) findViewById(R.id.imageViewEdit);
         editCalendarReminder = (TextView) findViewById(R.id.editCalendarReminder);
-        typeEdit = (Spinner) findViewById(R.id.typeEdit);
+        Spinner typeEdit = (Spinner) findViewById(R.id.typeEdit);
         editStatusDescription = (TextView) findViewById(R.id.editStatusDescription);
         editContactName = (TextView) findViewById(R.id.editContactName);
         editContactPhone = (TextView) findViewById(R.id.editContactPhone);
@@ -103,11 +100,11 @@ public class RemoveActivity extends Activity {
             if (calendarUri != null && !calendarUri.isEmpty()) {
                 Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon();
                 uri.appendPath(calendarUri);
-                calendarEvent = uri.build();
+                Uri calendarEvent = uri.build();
                 Cursor query = getContentResolver().query(uri.build(), new String[]{CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART, CalendarContract.Events.DTEND}, null, null, null);
                 if (query != null && query.getCount() > 0 && query.moveToFirst()) {
                     editCalendarDescription.setText(query.getString(0));
-                    editCalendarReminder.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(new Long(query.getString(1))) + " - " + DateFormat.getDateInstance(DateFormat.SHORT).format(new Long(query.getString(2))));
+                    editCalendarReminder.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(Long.valueOf(query.getString(1))) + " - " + DateFormat.getDateInstance(DateFormat.SHORT).format(Long.valueOf(query.getString(2))));
                 }
                 query.close();
             }

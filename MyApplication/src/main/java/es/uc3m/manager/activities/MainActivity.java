@@ -19,6 +19,7 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
@@ -27,9 +28,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 
 import es.uc3m.manager.R;
 import es.uc3m.manager.activities.contacts.Constants;
@@ -38,22 +44,17 @@ import es.uc3m.manager.activities.scan.ManualInputActivity;
 import es.uc3m.manager.activities.scan.ScanMenuActivity;
 import es.uc3m.manager.activities.settings.SettingsActivity;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-
 public class MainActivity extends Activity {
 
-    public static final String MIME_TEXT_PLAIN = "text/plain";
-    public static final String TAG = "ScanMenuActivity";
+    private static final String MIME_TEXT_PLAIN = "text/plain";
+    private static final String TAG = "ScanMenuActivity";
     private static final int REQUEST_SCAN_CODE = 0;
     private static final int REQUEST_CONTACTPICKER = 1;
     private static final int REQUEST_CALENDAR_EVENT = 2;
-    long event_id;
+    private long event_id;
     private NfcAdapter mNfcAdapter;
 
-    public static boolean isIntentAvailable(Context ctx, Intent intent) {
+    private static boolean isIntentAvailable(Context ctx, Intent intent) {
         final PackageManager mgr = ctx.getPackageManager();
         List<ResolveInfo> list =
                 mgr.queryIntentActivities(intent,
@@ -65,21 +66,22 @@ public class MainActivity extends Activity {
         Cursor cursor = cr.query(CalendarContract.Events.CONTENT_URI, new String[]{"MAX(_id) as max_id"}, null, null, "_id");
         cursor.moveToFirst();
         long max_val = cursor.getLong(cursor.getColumnIndex("max_id"));
+        cursor.close();
         return max_val + 1;
     }
 
     public static long getLastEventId(ContentResolver cr) {
         Cursor cursor = cr.query(CalendarContract.Events.CONTENT_URI, new String[]{"MAX(_id) as max_id"}, null, null, "_id");
         cursor.moveToFirst();
-        long max_val = cursor.getLong(cursor.getColumnIndex("max_id"));
-        return max_val;
+        cursor.close();
+        return cursor.getLong(cursor.getColumnIndex("max_id"));
     }
 
     /**
      * @param activity The corresponding {@link Activity} requesting the foreground dispatch.
      * @param adapter  The {@link NfcAdapter} used for the foreground dispatch.
      */
-    public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
+    private static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
@@ -105,13 +107,14 @@ public class MainActivity extends Activity {
      * @param activity The corresponding {@link Activity } requesting to stop the foreground dispatch.
      * @param adapter  The {@link NfcAdapter} used for the foreground dispatch.
      */
-    public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
+    private static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         adapter.disableForegroundDispatch(activity);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupFolder();
         Constants.OFFLINE = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("offline", false);
         setContentView(R.layout.main_menu);
         this.addScanListener();
@@ -120,6 +123,19 @@ public class MainActivity extends Activity {
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         handleIntent(getIntent());
+    }
+
+    private void setupFolder() {
+        File photoFolder = null;
+        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+            photoFolder = new File(Environment.getExternalStorageDirectory() + SettingsActivity.PATH);
+        } else {
+            /* save the folder in internal memory of phone */
+            photoFolder = new File("/data/data" + SettingsActivity.PATH);
+        }
+        if (!photoFolder.exists()) {
+            photoFolder.mkdir();
+        }
     }
 
     private void addSettingsListener() {
@@ -197,7 +213,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void addScanListener() {
+    private void addScanListener() {
         final ImageButton scan = (ImageButton) findViewById(R.id.scanImageButton);
         //comportamiento SCAN
         scan.setOnClickListener(
@@ -331,6 +347,7 @@ public class MainActivity extends Activity {
                     String emailType = cursor.getString(
                             cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE));
                 }
+                cursor.close();
             }
         }
 
@@ -409,6 +426,9 @@ public class MainActivity extends Activity {
         startActivity(menuIntent);
     }
 
+    /**
+     * NFC Reader
+     */
     private class NdefReaderTask extends AsyncTask<Tag, Void, String> {
         @Override
         protected String doInBackground(Tag... params) {

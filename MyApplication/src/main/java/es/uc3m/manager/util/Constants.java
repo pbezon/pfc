@@ -5,7 +5,7 @@ package es.uc3m.manager.util;
  */
 public class Constants {
 
-    public static enum PRODUCT_ACTION {
+    public enum PRODUCT_ACTION {
         WITHDRAW(0), RETURN(1), ADD(0), REMOVE(3);
 
         private final int value;

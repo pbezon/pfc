@@ -8,6 +8,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -17,16 +18,11 @@ import es.uc3m.manager.pojo.Status;
 /**
  * Created by Snapster on 5/1/2016.
  */
-public class RestfulDao {
+class RestfulDao {
 
     private final String url = "http://192.168.1.81:8082";
-    private final String getRest = "/";
-    private final String newRest = "/new";
-    private final String updateRest = "/update/";
-    private final String deleteRest = "/delete/";
     private final String returnRest = "/return/";
     private final String withdrawRest = "/withdraw/";
-    private GetTask getTask;
     private ObjectMapper productMapper;
 
 
@@ -47,17 +43,16 @@ public class RestfulDao {
     }
 
     public List<Product> realGetProduct(String id) {
-        getTask = new GetTask();
+        GetTask getTask = new GetTask();
 
+        String getRest = "/";
         String urlString = url + getRest + id; // URL to call
         AsyncTask<String, Void, Product[]> response = getTask.execute(urlString);
 
         List<Product> result = new ArrayList<Product>();
         try {
             Product[] products = response.get();
-            for (Product p : products) {
-                result.add(p);
-            }
+            Collections.addAll(result, products);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -68,6 +63,7 @@ public class RestfulDao {
     }
 
     public Product updateProduct(Product product) {
+        String updateRest = "/update/";
         String urlString = url + updateRest; // URL to call
         // HTTP post
         try {
@@ -81,6 +77,7 @@ public class RestfulDao {
     }
 
     public Boolean deleteProduct(String productId) {
+        String deleteRest = "/delete/";
         String urlString = url + deleteRest + productId; // URL to call
         // HTTP post
         try {
@@ -112,6 +109,7 @@ public class RestfulDao {
     }
 
     public Boolean add(Product p) {
+        String newRest = "/new";
         String urlString = url + newRest; // URL to call
         try {
             return new PutTask().execute(urlString, p).get();

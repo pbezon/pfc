@@ -26,7 +26,7 @@ import es.uc3m.manager.activities.scan.ScanMenuActivity;
 /**
  * This class contains static utility methods.
  */
-public class Utils {
+class Utils {
 
     // Prevents instantiation.
     private Utils() {
@@ -74,7 +74,7 @@ public class Utils {
      * Uses static final constants to detect if the device's platform version is Gingerbread or
      * later.
      */
-    public static boolean hasGingerbread() {
+    private static boolean hasGingerbread() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD;
     }
 
@@ -82,7 +82,7 @@ public class Utils {
      * Uses static final constants to detect if the device's platform version is Honeycomb or
      * later.
      */
-    public static boolean hasHoneycomb() {
+    private static boolean hasHoneycomb() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
     }
 

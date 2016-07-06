@@ -13,7 +13,7 @@ import es.uc3m.manager.pojo.Product;
 /**
  * Created by Snapster on 30/09/2014.
  */
-public class GetTask extends AsyncTask<String, Void, Product[]> {
+class GetTask extends AsyncTask<String, Void, Product[]> {
 
 
     @Override
@@ -32,7 +32,7 @@ public class GetTask extends AsyncTask<String, Void, Product[]> {
     }
 
     protected String getASCIIContent(BufferedInputStream in) throws IllegalStateException, IOException {
-        StringBuffer out = new StringBuffer();
+        StringBuilder out = new StringBuilder();
         int n = 1;
         while (n > 0) {
             byte[] b = new byte[4096];

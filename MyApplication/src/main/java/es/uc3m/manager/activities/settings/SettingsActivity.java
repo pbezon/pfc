@@ -7,6 +7,8 @@ import android.preference.PreferenceManager;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import java.io.File;
+
 import es.uc3m.manager.R;
 import es.uc3m.manager.activities.contacts.Constants;
 
@@ -15,7 +17,9 @@ import es.uc3m.manager.activities.contacts.Constants;
  */
 public class SettingsActivity extends Activity {
 
-    SharedPreferences preferences;
+    private SharedPreferences preferences;
+
+    public static final String PATH = File.separator + "StuffManager" ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +39,7 @@ public class SettingsActivity extends Activity {
                     if (buttonView.equals(findViewById(R.id.settingsOfflineSwitch))) {
                         editor.putBoolean("offline", true);
                     }
-                    editor.commit();
+                    editor.apply();
                 } else {
                     // The toggle is disabled
                     SharedPreferences.Editor editor = preferences.edit();
@@ -45,7 +49,7 @@ public class SettingsActivity extends Activity {
                     if (buttonView.equals(findViewById(R.id.settingsOfflineSwitch))) {
                         editor.putBoolean("offline", false);
                     }
-                    editor.commit();
+                    editor.apply();
                 }
 
             }
@@ -60,13 +64,13 @@ public class SettingsActivity extends Activity {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putBoolean("offline", true);
                     Constants.OFFLINE = true;
-                    editor.commit();
+                    editor.apply();
                 } else {
                     // The toggle is disabled
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putBoolean("offline", false);
                     Constants.OFFLINE = false;
-                    editor.commit();
+                    editor.apply();
                 }
 
             }

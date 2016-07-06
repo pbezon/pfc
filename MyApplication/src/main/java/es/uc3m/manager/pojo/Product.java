@@ -12,13 +12,13 @@ import java.util.Date;
 public class Product implements Serializable {
 
     @JsonProperty("currentStatus")
-    protected Status currentStatus;
+    private Status currentStatus;
     @JsonProperty("photo")
-    protected byte[] photo;
+    private byte[] photo;
     @JsonProperty("insertDate")
-    protected Date insertDate;
+    private Date insertDate;
     @JsonProperty("type")
-    protected String type;
+    private String type;
     @JsonIgnore
     private String __v;
     @JsonProperty("_id")

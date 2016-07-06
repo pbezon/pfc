@@ -14,9 +14,9 @@ import java.util.ArrayList;
 /**
  * Created by Snapster on 16/04/2015.
  */
-public class ProductAdapter extends ArrayAdapter<Product> {
+class ProductAdapter extends ArrayAdapter<Product> {
 
-    private ArrayList<Product> items;
+    private final ArrayList<Product> items;
 
     public ProductAdapter(Context context, int textViewResourceId, ArrayList<Product> items) {
         super(context, textViewResourceId, items);
@@ -25,15 +25,14 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View v = convertView;
-//        if (v == null) {
+        //        if (v == null) {
 //            LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //            v = vi.inflate(R.layout.product_row, null);
 //        }
         Product o = items.get(position);
         if (o != null) {
-            TextView tt = (TextView) v.findViewById(R.id.toptext);
-            TextView bt = (TextView) v.findViewById(R.id.bottomtext);
+            TextView tt = (TextView) convertView.findViewById(R.id.toptext);
+            TextView bt = (TextView) convertView.findViewById(R.id.bottomtext);
             if (tt != null) {
                 tt.setText("Name: " + o.getName());
             }
@@ -41,7 +40,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
                 bt.setText("Description: " + o.getDescription());
             }
         }
-        return v;
+        return convertView;
     }
 
 }

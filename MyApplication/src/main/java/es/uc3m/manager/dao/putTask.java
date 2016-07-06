@@ -2,8 +2,6 @@ package es.uc3m.manager.dao;
 
 import android.os.AsyncTask;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,7 +13,7 @@ import es.uc3m.manager.pojo.Product;
 /**
  * Created by Snapster on 30/09/2014.
  */
-public class PutTask extends AsyncTask<Object, Void, Boolean> {
+class PutTask extends AsyncTask<Object, Void, Boolean> {
 
 
     @Override
@@ -25,10 +23,7 @@ public class PutTask extends AsyncTask<Object, Void, Boolean> {
             RestTemplate template = new RestTemplate();
             template.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             Product response = template.postForObject(urlString, params[1], Product.class);
-            if (response != null) {
-                return true;
-            }
-            return false;
+            return response != null;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -36,7 +31,7 @@ public class PutTask extends AsyncTask<Object, Void, Boolean> {
     }
 
     protected String getASCIIContent(BufferedInputStream in) throws IllegalStateException, IOException {
-        StringBuffer out = new StringBuffer();
+        StringBuilder out = new StringBuilder();
         int n = 1;
         while (n > 0) {
             byte[] b = new byte[4096];

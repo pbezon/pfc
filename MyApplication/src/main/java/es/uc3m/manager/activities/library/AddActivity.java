@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,6 +22,7 @@ import java.io.File;
 import java.util.Date;
 
 import es.uc3m.manager.R;
+import es.uc3m.manager.activities.settings.SettingsActivity;
 import es.uc3m.manager.pojo.Product;
 import es.uc3m.manager.service.ProductService;
 import es.uc3m.manager.util.PhotoUtils;
@@ -32,7 +32,6 @@ import es.uc3m.manager.util.PhotoUtils;
  */
 public class AddActivity extends Activity {
 
-    private String scannedId;
     private TextView id;
     private TextView name;
     private TextView description;
@@ -46,7 +45,7 @@ public class AddActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
         id = (TextView) findViewById(R.id.scannedCodeFragment);
-        scannedId = this.getIntent().getStringExtra("ID");
+        String scannedId = this.getIntent().getStringExtra("ID");
         id.setText(scannedId);
         photo = (ImageView) findViewById(R.id.imageView);
         type = (Spinner) findViewById(R.id.addFragmentSpinner);
@@ -69,7 +68,7 @@ public class AddActivity extends Activity {
         }
     }
 
-    public void addCameraButtonListener() {
+    private void addCameraButtonListener() {
         try {
             photo.setOnClickListener(
                     new View.OnClickListener() {
@@ -77,7 +76,7 @@ public class AddActivity extends Activity {
                         public void onClick(View view) {
                             //lanzamos intent
                             Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                            File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
+                            File photo = new File(Environment.getExternalStorageDirectory() + SettingsActivity.PATH, id.getText().toString());
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
                             imageUri = Uri.fromFile(photo);
                             startActivityForResult(intent, 1);

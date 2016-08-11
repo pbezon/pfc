@@ -1,4 +1,4 @@
-package es.uc3m.manager.activities.library;
+package es.uc3m.manager.activities.actions;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -30,7 +30,7 @@ import java.util.List;
 
 import es.uc3m.manager.R;
 import es.uc3m.manager.activities.settings.SettingsActivity;
-import es.uc3m.manager.pojo.Product;
+import es.uc3m.manager.pojo.Item;
 import es.uc3m.manager.service.ProductService;
 import es.uc3m.manager.util.CalendarUtils;
 import es.uc3m.manager.util.ContactUtils;
@@ -41,6 +41,9 @@ import es.uc3m.manager.util.PhotoUtils;
  */
 public class EditActivity extends Activity {
 
+    private final int ACTIVITY_TAKE_PHOTO = 1;
+    private final int ACTIVITY_ADD_CALENDAR = 2;
+    private final int ACTIVITY_ADD_CONTACT = 3;
     private String scannedId;
     private Uri calendarEvent;
     private TextView nameEdit;
@@ -53,10 +56,8 @@ public class EditActivity extends Activity {
     private TextView editContactPhone;
     private TextView editCalendarDescription;
     private Uri imageUri;
-    private final int ACTIVITY_TAKE_PHOTO = 1;
-    private final int ACTIVITY_ADD_CALENDAR = 2;
-    private final int ACTIVITY_ADD_CONTACT = 3;
-    private Product product;
+    private Item item;
+    private Item initialItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +119,8 @@ public class EditActivity extends Activity {
         findViewById(R.id.editAddViewContact).setEnabled(true);
         findViewById(R.id.editOk).setVisibility(View.VISIBLE);
         findViewById(R.id.editCancel).setVisibility(View.VISIBLE);
+
+        initialItem = new Item(this.item);
         return true;
     }
 
@@ -172,44 +175,46 @@ public class EditActivity extends Activity {
             case ACTIVITY_ADD_CONTACT:
                 if (resultCode == RESULT_OK) {
                     Uri contentUri = data.getData();
-                    product.getCurrentStatus().setContactUri(contentUri.toString());
+                    item.getCurrentStatus().setContactUri(contentUri.toString());
                     fillForm();
                 }
         }
     }
 
     private void fillForm() {
-        List<Product> items;
-        if (product != null) {
-            items = Collections.singletonList(product);
+        List<Item> items;
+        if (item != null) {
+            items = Collections.singletonList(item);
         } else {
             items = ProductService.getInstance().getProduct(scannedId);
         }
-        if (items == null || items.isEmpty()){
+        if (items == null || items.isEmpty()) {
             Toast.makeText(getApplicationContext(), "The item does not exist...", Toast.LENGTH_LONG).show();
             finish();
         } else {
-            product = items.get(0);
-            nameEdit.setText(product.getName());
-            descriptionEdit.setText(product.getDescription());
-            editStatusDescription.setText(product.getCurrentStatus().getStatus());
-            editContactName.setText(ContactUtils.retrieveContactName(product.getCurrentStatus().getContactUri(), getContentResolver()));
-            editContactPhone.setText(ContactUtils.retrieveContactNumber(product.getCurrentStatus().getContactUri(), getContentResolver()));
-            File photo = new File(Environment.getExternalStorageDirectory() + SettingsActivity.PATH, product.get_id());
+            item = items.get(0);
+            nameEdit.setText(item.getName());
+            descriptionEdit.setText(item.getDescription());
+            editStatusDescription.setText(item.getCurrentStatus().getStatus());
+            editContactName.setText(ContactUtils.getContactName(item.getCurrentStatus().getContactUri(), getContentResolver()));
+            editContactPhone.setText(ContactUtils.getContactNumber(item.getCurrentStatus().getContactUri(), getContentResolver()));
+            File photo = new File(Environment.getExternalStorageDirectory() + SettingsActivity.PATH, item.get_id());
             if (photo != null) {
                 imageUri = Uri.fromFile(photo);
                 PhotoUtils.drawPhoto(imageUri, getContentResolver(), (ImageView) findViewById(R.id.imageViewEdit), getApplicationContext());
             }
-            if (product.getCurrentStatus().getCalendarEventId() != null) {
+            if (item.getCurrentStatus().getCalendarEventId() != null) {
                 Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon();
-                uri.appendPath(product.getCurrentStatus().getCalendarEventId());
+                uri.appendPath(item.getCurrentStatus().getCalendarEventId());
                 calendarEvent = uri.build();
                 Cursor query = getContentResolver().query(uri.build(), new String[]{CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART, CalendarContract.Events.DTEND}, null, null, null);
                 if (query != null && query.getCount() > 0 && query.moveToFirst()) {
                     editCalendarDescription.setText(query.getString(0));
                     editCalendarReminder.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(Long.valueOf(query.getString(1))) + " - " + DateFormat.getDateInstance(DateFormat.SHORT).format(Long.valueOf(query.getString(2))));
                 }
-                query.close();
+                if (query != null) {
+                    query.close();
+                }
             }
         }
     }
@@ -221,7 +226,7 @@ public class EditActivity extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        boolean response = ProductService.getInstance().edit(product);
+                        boolean response = ProductService.getInstance().edit(item);
                         if (response) {
                             Toast.makeText(getApplicationContext(), "UPDATED OK!!", Toast.LENGTH_LONG).show();
                             finish();
@@ -236,6 +241,7 @@ public class EditActivity extends Activity {
     private void addCancelButtonListener() {
         ImageButton cancel = (ImageButton) findViewById(R.id.editCancel);
         cancel.setVisibility(View.INVISIBLE);
+        this.item = initialItem;
         cancel.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -257,18 +263,19 @@ public class EditActivity extends Activity {
 
             AssetFileDescriptor fileDescriptor;
             fileDescriptor = getContentResolver().openAssetFileDescriptor(imageUri, "r");
+            if (fileDescriptor != null) {
+                //cogemos la foto pero no la pintamos por no romper cosas en memoria
+                BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
 
-            //cogemos la foto pero no la pintamos por no romper cosas en memoria
-            BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
+                options.inSampleSize = PhotoUtils.calculateInSampleSize(options);
+                options.inJustDecodeBounds = false;
+                Bitmap actuallyUsableBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
 
-            options.inSampleSize = PhotoUtils.calculateInSampleSize(options);
-            options.inJustDecodeBounds = false;
-            Bitmap actuallyUsableBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
+                imageView.setImageBitmap(actuallyUsableBitmap);
+                imageView.setRotation(90);
 
-            imageView.setImageBitmap(actuallyUsableBitmap);
-            imageView.setRotation(90);
-
-            Toast.makeText(getApplicationContext(), selectedImage.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), selectedImage.toString(), Toast.LENGTH_LONG).show();
+            }
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Failed to load", Toast.LENGTH_SHORT).show();
             Log.e("Camera", e.toString());
@@ -323,7 +330,7 @@ public class EditActivity extends Activity {
         intent.putExtra("title", "Entrega/recogida");
         intent.putExtra("description", "Entrega recogida de lo que sea");
         intent.putExtra(CalendarContract.Attendees.ATTENDEE_EMAIL, "trevor@example.com");
-        long event_id = CalendarUtils.getNewEventId(getApplicationContext().getContentResolver());
+        long event_id = CalendarUtils.getCalendarMaxEventId(getApplicationContext().getContentResolver());
         startActivityForResult(intent, 99);
     }
 

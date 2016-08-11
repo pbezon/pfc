@@ -3,7 +3,7 @@ package es.uc3m.manager.service;
 import java.util.List;
 
 import es.uc3m.manager.dao.ProxyDao;
-import es.uc3m.manager.pojo.Product;
+import es.uc3m.manager.pojo.Item;
 import es.uc3m.manager.pojo.Status;
 
 /**
@@ -26,34 +26,34 @@ public class ProductService {
     }
 
 
-    public List<Product> getProduct(String id) {
+    public List<Item> getProduct(String id) {
         return dao.getProduct(id);
     }
 
-    public Product updateProduct(Product product) {
-        return dao.updateProduct(product);
+    public Item updateProduct(Item item) {
+        return dao.updateProduct(item);
     }
 
     public Boolean deleteProduct(String productId) {
         return dao.deleteProduct(productId);
     }
 
-    public Product returnProduct(Product product) {
-        return dao.returnProduct(product);
+    public Item returnProduct(Item item) {
+        return dao.returnProduct(item);
     }
 
-    public Product withdrawProduct(String id) {
+    public Item withdrawProduct(String id) {
         return dao.withdrawProduct(id);
     }
 
-    public Boolean add(Product p) {
+    public Boolean add(Item p) {
         Status initialStatus = new Status();
         initialStatus.setStatus("Available");
         p.setCurrentStatus(initialStatus);
         return dao.add(p);
     }
 
-    public Boolean edit(Product p) {
+    public Boolean edit(Item p) {
         return dao.add(p);
     }
 }

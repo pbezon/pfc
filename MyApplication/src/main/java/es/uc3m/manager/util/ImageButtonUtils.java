@@ -14,8 +14,8 @@ class ImageButtonUtils {
     /**
      * Sets the image button to the given state and grays-out the icon.
      *
-     * @param enabled The state of the button
-     * @param item The button item to modify
+     * @param enabled   The state of the button
+     * @param item      The button item to modify
      * @param iconResId The button's icon ID
      */
     public static void setImageButtonEnabled(Context ctxt, boolean enabled,

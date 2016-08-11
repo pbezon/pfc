@@ -9,12 +9,12 @@ import java.util.Date;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Product implements Serializable {
+public class Item implements Serializable {
 
     @JsonProperty("currentStatus")
     private Status currentStatus;
     @JsonProperty("photo")
-    private byte[] photo;
+    private String photo;
     @JsonProperty("insertDate")
     private Date insertDate;
     @JsonProperty("type")
@@ -31,6 +31,21 @@ public class Product implements Serializable {
     @Override
     public String toString() {
         return "_id:" + _id + ", name:" + name + ", description:" + description;
+    }
+
+    public Item (Item copy) {
+        this.currentStatus = copy.currentStatus;
+        this.photo = copy.photo;
+        this.insertDate = copy.insertDate;
+        this.type = copy.type;
+        this.__v = copy.__v;
+        this._id = copy._id;
+        this.name = copy.name;
+        this.description = copy.description;
+    }
+
+    public Item() {
+
     }
 
     public String get__v() {
@@ -75,11 +90,11 @@ public class Product implements Serializable {
         this.currentStatus = currentStatus;
     }
 
-    public byte[] getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
-    public void setPhoto(byte[] photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 

@@ -13,7 +13,6 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Are you sure you wanna delete? It cannot be undone"
         android:id="@+id/textView2"
-        android:layout_column="1"
         android:textColor="#ff0000" />
 
     <Button

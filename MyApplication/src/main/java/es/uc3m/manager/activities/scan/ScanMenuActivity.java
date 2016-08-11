@@ -14,19 +14,19 @@ import android.widget.Toast;
 import java.util.List;
 
 import es.uc3m.manager.R;
-import es.uc3m.manager.activities.library.AddActivity;
-import es.uc3m.manager.activities.library.EditActivity;
-import es.uc3m.manager.activities.library.RemoveActivity;
-import es.uc3m.manager.activities.library.ReturnActivity;
-import es.uc3m.manager.activities.library.WithdrawActivity;
-import es.uc3m.manager.pojo.Product;
+import es.uc3m.manager.activities.actions.AddActivity;
+import es.uc3m.manager.activities.actions.EditActivity;
+import es.uc3m.manager.activities.actions.RemoveActivity;
+import es.uc3m.manager.activities.actions.ReturnActivity;
+import es.uc3m.manager.activities.actions.WithdrawActivity;
+import es.uc3m.manager.pojo.Item;
 import es.uc3m.manager.service.ProductService;
 
 public class ScanMenuActivity extends Activity {
 
     private static final String TAG = "ScanMenuActivity";
     private static final int REQUEST_SCAN_CODE = 0;
-    private Product product;
+    private Item item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class ScanMenuActivity extends Activity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        setUpButtonDisabler(getItemScanned(product.get_id()));
+        setUpButtonDisabler(getItemScanned(item.get_id()));
     }
 
     /*
@@ -100,7 +100,7 @@ public class ScanMenuActivity extends Activity {
                         public void onClick(View view) {
                             //lanzamos intent
                             Intent returnActivity = new Intent(getBaseContext(), RemoveActivity.class);
-                            returnActivity.putExtra("ID", product.get_id());
+                            returnActivity.putExtra("ID", item.get_id());
                             //arrancamos intent
                             startActivity(returnActivity);
                         }
@@ -125,7 +125,7 @@ public class ScanMenuActivity extends Activity {
                         public void onClick(View view) {
                             //lanzamos intent
                             Intent returnActivity = new Intent(getBaseContext(), clazz);
-                            returnActivity.putExtra("ID", product.get_id());
+                            returnActivity.putExtra("ID", item.get_id());
                             //arrancamos intent
                             startActivity(returnActivity);
                         }
@@ -150,7 +150,7 @@ public class ScanMenuActivity extends Activity {
             findViewById(R.id.removeButton).setEnabled(false);
 //            findViewById(R.id.removeButton).setBackground(getResources().getDrawable(R.drawable.re));
         } else {
-            if (product.getCurrentStatus().getStatus().equalsIgnoreCase("Taken")) {
+            if (item.getCurrentStatus().getStatus().equalsIgnoreCase("Taken")) {
                 findViewById(R.id.menuFind).setEnabled(true);
                 findViewById(R.id.menuFind).setBackground(getResources().getDrawable(R.drawable.findedit));
                 findViewById(R.id.menuWithdraw).setEnabled(false);
@@ -162,7 +162,7 @@ public class ScanMenuActivity extends Activity {
                 findViewById(R.id.removeButton).setEnabled(false);
             }
 
-            if (product.getCurrentStatus().getStatus().equalsIgnoreCase("Available")) {
+            if (item.getCurrentStatus().getStatus().equalsIgnoreCase("Available")) {
                 findViewById(R.id.menuFind).setEnabled(true);
                 findViewById(R.id.menuFind).setBackground(getResources().getDrawable(R.drawable.findedit));
                 findViewById(R.id.menuWithdraw).setEnabled(true);
@@ -177,13 +177,13 @@ public class ScanMenuActivity extends Activity {
     }
 
     private boolean getItemScanned(String scannedCode) {
-        List<Product> items = ProductService.getInstance().getProduct(scannedCode);
-        if(!items.isEmpty()){
-            product = items.get(0);
+        List<Item> items = ProductService.getInstance().getProduct(scannedCode);
+        if (!items.isEmpty()) {
+            item = items.get(0);
             return true;
         } else {
-            product = new Product();
-            product.set_id(scannedCode);
+            item = new Item();
+            item.set_id(scannedCode);
             return false;
         }
     }

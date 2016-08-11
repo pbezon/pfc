@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import es.uc3m.manager.pojo.Product;
+import es.uc3m.manager.pojo.Item;
 import es.uc3m.manager.pojo.Status;
 
 /**
@@ -26,8 +26,8 @@ class RestfulDao {
     private ObjectMapper productMapper;
 
 
-    public List<Product> getProduct(String id) {
-        Product p = new Product();
+    public List<Item> getProduct(String id) {
+        Item p = new Item();
         p.set_id("123456");
         p.setName("fakeProductName");
         p.setDescription("fakeProductDescription");
@@ -35,24 +35,24 @@ class RestfulDao {
         p.setCurrentStatus(nowStatus);
         p.getCurrentStatus().setCalendarEventId("4771");
         p.getCurrentStatus().setContactUri("content://com.android.contacts/data/36");
-        ArrayList<Product> result = new ArrayList<Product>();
+        ArrayList<Item> result = new ArrayList<Item>();
         result.add(p);
         result.add(p);
         return result;
 
     }
 
-    public List<Product> realGetProduct(String id) {
+    public List<Item> realGetProduct(String id) {
         GetTask getTask = new GetTask();
 
         String getRest = "/";
         String urlString = url + getRest + id; // URL to call
-        AsyncTask<String, Void, Product[]> response = getTask.execute(urlString);
+        AsyncTask<String, Void, Item[]> response = getTask.execute(urlString);
 
-        List<Product> result = new ArrayList<Product>();
+        List<Item> result = new ArrayList<Item>();
         try {
-            Product[] products = response.get();
-            Collections.addAll(result, products);
+            Item[] items = response.get();
+            Collections.addAll(result, items);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -62,18 +62,18 @@ class RestfulDao {
 
     }
 
-    public Product updateProduct(Product product) {
+    public Item updateProduct(Item item) {
         String updateRest = "/update/";
         String urlString = url + updateRest; // URL to call
         // HTTP post
         try {
             RestTemplate template = new RestTemplate();
             template.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            return template.postForObject(urlString, product, Product.class);
+            return template.postForObject(urlString, item, Item.class);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return new Product();
+        return new Item();
     }
 
     public Boolean deleteProduct(String productId) {
@@ -90,16 +90,14 @@ class RestfulDao {
         return false;
     }
 
-    public Boolean returnProduct(Product product) {
+    public Boolean returnProduct(Item item) {
         return true;
     }
 
-    public Product withdrawProduct(String id) {
-        Product p = new Product();
+    public Item withdrawProduct(String id) {
+        Item p = new Item();
         p.set_id("123456");
         p.setDescription("fakeProduct");
-//        p.setDiscontinued(false);
-//        p.setUnitprice(123);
         Status nowStatus = new Status();
 //        nowStatus.setOutDate(new Date().toString());
         nowStatus.setStatus("Taken");
@@ -108,7 +106,7 @@ class RestfulDao {
         return p;
     }
 
-    public Boolean add(Product p) {
+    public Boolean add(Item p) {
         String newRest = "/new";
         String urlString = url + newRest; // URL to call
         try {

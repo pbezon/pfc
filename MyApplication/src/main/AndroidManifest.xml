@@ -54,7 +54,7 @@
                 <!--android:resource="@xml/nfc_tech_filter" />-->
         </activity>
         <activity
-            android:name="es.uc3m.manager.activities.display.DisplayResults"
+            android:name=".activities.collection.ListCollectionActivity"
             android:label="@string/title_activity_display_results"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
@@ -66,23 +66,23 @@
             android:label="Settings"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
-            android:name="es.uc3m.manager.activities.library.EditActivity"
+            android:name="es.uc3m.manager.activities.actions.EditActivity"
             android:label="Edit Item"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
-            android:name="es.uc3m.manager.activities.library.AddActivity"
+            android:name="es.uc3m.manager.activities.actions.AddActivity"
             android:label="Add Item"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
-            android:name="es.uc3m.manager.activities.library.RemoveActivity"
+            android:name="es.uc3m.manager.activities.actions.RemoveActivity"
             android:label="Remove Item"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
-            android:name="es.uc3m.manager.activities.library.ReturnActivity"
+            android:name="es.uc3m.manager.activities.actions.ReturnActivity"
             android:label="Return Item"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
         <activity
-            android:name="es.uc3m.manager.activities.library.WithdrawActivity"
+            android:name="es.uc3m.manager.activities.actions.WithdrawActivity"
             android:label="Withdraw Item"
             android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light" />
     </application>

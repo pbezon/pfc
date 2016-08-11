@@ -10,16 +10,15 @@ import android.widget.Switch;
 import java.io.File;
 
 import es.uc3m.manager.R;
-import es.uc3m.manager.activities.contacts.Constants;
+import es.uc3m.manager.util.Constants;
 
 /**
  * Created by Snapster on 11/19/2015.
  */
 public class SettingsActivity extends Activity {
 
+    public static final String PATH = File.separator + "StuffManager";
     private SharedPreferences preferences;
-
-    public static final String PATH = File.separator + "StuffManager" ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

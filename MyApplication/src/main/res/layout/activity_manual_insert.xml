@@ -7,7 +7,6 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:id="@+id/editText3"
-        android:layout_weight="1"
         android:background="@android:drawable/editbox_background_normal"
         android:hint="Please type code"
         android:textColor="@color/holo_blue"

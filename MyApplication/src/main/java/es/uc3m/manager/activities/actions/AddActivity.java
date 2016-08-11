@@ -1,9 +1,7 @@
-package es.uc3m.manager.activities.library;
+package es.uc3m.manager.activities.actions;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,13 +15,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Date;
 
 import es.uc3m.manager.R;
 import es.uc3m.manager.activities.settings.SettingsActivity;
-import es.uc3m.manager.pojo.Product;
+import es.uc3m.manager.pojo.Item;
 import es.uc3m.manager.service.ProductService;
 import es.uc3m.manager.util.PhotoUtils;
 
@@ -38,6 +35,7 @@ public class AddActivity extends Activity {
     private ImageView photo;
     private Spinner type;
     private Uri imageUri;
+    private final static int SCAN = 1;
 
 
     @Override
@@ -59,15 +57,22 @@ public class AddActivity extends Activity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case 1:
+            case SCAN:
                 if (resultCode == Activity.RESULT_OK) {
-                    PhotoUtils.
-                    drawPhoto(imageUri, getContentResolver(),(ImageView) findViewById(R.id.imageView), getApplicationContext() );
+                    PhotoUtils.drawPhoto(imageUri, getContentResolver(), (ImageView) findViewById(R.id.imageView), getApplicationContext());
                 }
                 break;
         }
     }
 
+
+    /*
+     * Private Methods
+     */
+
+    /**
+     * Method that adds the Camera Listener to the button
+     */
     private void addCameraButtonListener() {
         try {
             photo.setOnClickListener(
@@ -79,7 +84,7 @@ public class AddActivity extends Activity {
                             File photo = new File(Environment.getExternalStorageDirectory() + SettingsActivity.PATH, id.getText().toString());
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
                             imageUri = Uri.fromFile(photo);
-                            startActivityForResult(intent, 1);
+                            startActivityForResult(intent, SCAN);
                         }
                     }
             );
@@ -89,6 +94,9 @@ public class AddActivity extends Activity {
         }
     }
 
+    /**
+     * Method that adds the Save Listener to the button
+     */
     private void addSaveButtonListener() {
         Button save = (Button) findViewById(R.id.saveButton);
         save.setOnClickListener(
@@ -100,8 +108,8 @@ public class AddActivity extends Activity {
                         String inputDescription = description.getText().toString();
                         String inputType = type.getSelectedItem().toString();
                         CheckBox dateCheck = (CheckBox) findViewById(R.id.dateCheckBox);
-                        Product p = new Product();
-                        if(dateCheck.isChecked()) {
+                        Item p = new Item();
+                        if (dateCheck.isChecked()) {
                             p.setInsertDate(new Date());
                         }
                         p.set_id(inputId);
@@ -110,13 +118,7 @@ public class AddActivity extends Activity {
                         p.setType(inputType);
 
                         if (photo != null && photo.getDrawable() != null) {
-                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                            try {
-                                ((BitmapDrawable) photo.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.PNG, 100, stream);
-                            } catch (Exception e) {
-                                Log.e("tag", e.getMessage());
-                            }
-                            p.setPhoto(stream.toByteArray());
+                            p.setPhoto(inputId);
                         }
 
                         boolean response = ProductService.getInstance().add(p);

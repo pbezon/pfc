@@ -5,40 +5,23 @@ import android.os.AsyncTask;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-
-import es.uc3m.manager.pojo.Product;
+import es.uc3m.manager.pojo.Item;
 
 /**
  * Created by Snapster on 30/09/2014.
  */
-class GetTask extends AsyncTask<String, Void, Product[]> {
+class GetTask extends AsyncTask<String, Void, Item[]> {
 
 
     @Override
-    protected Product[] doInBackground(String... params) {
+    protected Item[] doInBackground(String... params) {
         String urlString = params[0]; // URL to call
-        BufferedInputStream in = null;
-        Product[] p;
-
+        Item[] p;
         // HTTP Get
-
         RestTemplate template = new RestTemplate();
-//        JavaType listType = productMapper.getTypeFactory().constructCollectionType(List.class, Product.class);
+//        JavaType listType = productMapper.getTypeFactory().constructCollectionType(List.class, Item.class);
         template.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        p = template.getForObject(urlString, Product[].class);
+        p = template.getForObject(urlString, Item[].class);
         return p;
-    }
-
-    protected String getASCIIContent(BufferedInputStream in) throws IllegalStateException, IOException {
-        StringBuilder out = new StringBuilder();
-        int n = 1;
-        while (n > 0) {
-            byte[] b = new byte[4096];
-            n = in.read(b);
-            if (n > 0) out.append(new String(b, 0, n));
-        }
-        return out.toString();
     }
 }

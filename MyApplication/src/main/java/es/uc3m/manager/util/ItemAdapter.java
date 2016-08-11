@@ -6,19 +6,19 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import es.uc3m.manager.R;
-import es.uc3m.manager.pojo.Product;
-
 import java.util.ArrayList;
+
+import es.uc3m.manager.R;
+import es.uc3m.manager.pojo.Item;
 
 /**
  * Created by Snapster on 16/04/2015.
  */
-class ProductAdapter extends ArrayAdapter<Product> {
+class ItemAdapter extends ArrayAdapter<Item> {
 
-    private final ArrayList<Product> items;
+    private final ArrayList<Item> items;
 
-    public ProductAdapter(Context context, int textViewResourceId, ArrayList<Product> items) {
+    public ItemAdapter(Context context, int textViewResourceId, ArrayList<Item> items) {
         super(context, textViewResourceId, items);
         this.items = items;
     }
@@ -29,7 +29,7 @@ class ProductAdapter extends ArrayAdapter<Product> {
 //            LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //            v = vi.inflate(R.layout.product_row, null);
 //        }
-        Product o = items.get(position);
+        Item o = items.get(position);
         if (o != null) {
             TextView tt = (TextView) convertView.findViewById(R.id.toptext);
             TextView bt = (TextView) convertView.findViewById(R.id.bottomtext);

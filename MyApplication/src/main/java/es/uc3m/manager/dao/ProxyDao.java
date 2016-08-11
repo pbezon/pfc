@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.uc3m.manager.activities.contacts.Constants;
-import es.uc3m.manager.pojo.Product;
+import es.uc3m.manager.pojo.Item;
+import es.uc3m.manager.util.Constants;
 
 /**
  * Created by Snapster on 5/1/2016.
@@ -15,27 +15,27 @@ import es.uc3m.manager.pojo.Product;
 public class ProxyDao {
 
     private final RestfulDao restfulDao = new RestfulDao();
-    private final Map<String, Product> dummyList = new HashMap<String, Product>();
+    private final Map<String, Item> dummyList = new HashMap<String, Item>();
 
-    public List<Product> getProduct(String id) {
+    public List<Item> getProduct(String id) {
         if (Constants.OFFLINE) {
             if (id == null || id.isEmpty()) {
-                return new ArrayList<Product>(dummyList.values());
+                return new ArrayList<Item>(dummyList.values());
             }
-            Product p = dummyList.get(id);
+            Item p = dummyList.get(id);
             if (p != null) return Collections.singletonList(p);
-            return new ArrayList<Product>();
+            return new ArrayList<Item>();
         } else {
             return restfulDao.realGetProduct(id);
         }
     }
 
-    public Product updateProduct(Product product) {
+    public Item updateProduct(Item item) {
         if (Constants.OFFLINE) {
-            dummyList.put(product.get_id(), product);
-            return dummyList.get(product.get_id());
+            dummyList.put(item.get_id(), item);
+            return dummyList.get(item.get_id());
         } else {
-            return restfulDao.updateProduct(product);
+            return restfulDao.updateProduct(item);
         }
     }
 
@@ -47,41 +47,41 @@ public class ProxyDao {
         }
     }
 
-    public Product returnProduct(Product product) {
+    public Item returnProduct(Item item) {
         if (Constants.OFFLINE) {
-            product.getCurrentStatus().setStatus("Available");
-            dummyList.put(product.get_id(), product);
-            return dummyList.get(product.get_id());
+            item.getCurrentStatus().setStatus("Available");
+            dummyList.put(item.get_id(), item);
+            return dummyList.get(item.get_id());
         } else {
-            restfulDao.returnProduct(product);
-            List<Product> productList = restfulDao.getProduct(product.get_id());
-            if (productList != null && !productList.isEmpty()) {
-                return productList.get(0);
+            restfulDao.returnProduct(item);
+            List<Item> itemList = restfulDao.getProduct(item.get_id());
+            if (itemList != null && !itemList.isEmpty()) {
+                return itemList.get(0);
             }
-            return product;
+            return item;
         }
     }
 
-    public Product withdrawProduct(String id) {
+    public Item withdrawProduct(String id) {
         if (Constants.OFFLINE) {
-            Product product = dummyList.get(id);
-            if (product != null) {
-                product.getCurrentStatus().setStatus("Taken");
-                dummyList.put(id, product);
+            Item item = dummyList.get(id);
+            if (item != null) {
+                item.getCurrentStatus().setStatus("Taken");
+                dummyList.put(id, item);
                 return dummyList.get(id);
             }
-            return new Product();
+            return new Item();
         } else {
             restfulDao.withdrawProduct(id);
-            List<Product> product = restfulDao.getProduct(id);
-            if (product != null && !product.isEmpty()) {
-                return product.get(0);
+            List<Item> item = restfulDao.getProduct(id);
+            if (item != null && !item.isEmpty()) {
+                return item.get(0);
             }
-            return new Product();
+            return new Item();
         }
     }
 
-    public Boolean add(Product p) {
+    public Boolean add(Item p) {
         if (Constants.OFFLINE) {
             dummyList.put(p.get_id(), p);
             return true;

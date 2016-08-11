@@ -10,13 +10,13 @@ import java.text.DateFormat;
 
 public class CalendarUtils {
 
-    public static long getNewEventId(ContentResolver cr) {
+    public static long getCalendarMaxEventId(ContentResolver cr) {
         Cursor cursor = cr.query(CalendarContract.Events.CONTENT_URI, new String[]{"MAX(_id) as max_id"}, null, null, "_id");
         assert cursor != null;
         cursor.moveToFirst();
         long max_val = cursor.getLong(cursor.getColumnIndex("max_id"));
         cursor.close();
-        return max_val + 1;
+        return max_val;
     }
 
     public static boolean isEvent(ContentResolver cr, Long eventId) {

@@ -24,15 +24,16 @@ public class PhotoUtils {
 
             AssetFileDescriptor fileDescriptor;
             fileDescriptor = contentResolver.openAssetFileDescriptor(selectedImage, "r");
-            //cogemos la foto pero no la pintamos por no romper cosas en memoria
-            BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
-            options.inSampleSize = calculateInSampleSize(options);
-            options.inJustDecodeBounds = false;
-            Bitmap actuallyUsableBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
-            imageView.setImageBitmap(actuallyUsableBitmap);
-            imageView.setRotation(90);
-
-            Toast.makeText(applicationContext, selectedImage.toString(), Toast.LENGTH_LONG).show();
+            if (fileDescriptor != null) {
+                //cogemos la foto pero no la pintamos por no romper cosas en memoria
+                BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
+                options.inSampleSize = calculateInSampleSize(options);
+                options.inJustDecodeBounds = false;
+                Bitmap actuallyUsableBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
+                imageView.setImageBitmap(actuallyUsableBitmap);
+                imageView.setRotation(90);
+                Toast.makeText(applicationContext, selectedImage.toString(), Toast.LENGTH_LONG).show();
+            }
         } catch (Exception e) {
             Toast.makeText(applicationContext, "Failed to load", Toast.LENGTH_SHORT).show();
             Log.e("Camera", e.toString());

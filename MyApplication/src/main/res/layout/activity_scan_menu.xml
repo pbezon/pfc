@@ -31,9 +31,6 @@
                 android:id="@+id/removeButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/addButton"
-                android:layout_alignRight="@+id/addButton"
-                android:layout_centerVertical="true"
                 android:text="Remove from collection!" />
 
         </LinearLayout>

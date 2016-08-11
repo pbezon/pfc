@@ -13,10 +13,7 @@ import android.util.Log;
  */
 class NFCForegroundUtil {
 
-
     private final NfcAdapter nfc;
-
-
     private final Activity activity;
     private final IntentFilter[] intentFiltersArray;
     private final PendingIntent intent;

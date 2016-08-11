@@ -12,23 +12,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import es.uc3m.manager.R;
-import es.uc3m.manager.pojo.Product;
+import es.uc3m.manager.pojo.Item;
 
 /**
  * Created by Snapster on 03/05/2015.
  */
-public class ProductAdapter extends ArrayAdapter<Product> implements Filterable {
+public class ItemAdapter extends ArrayAdapter<Item> implements Filterable {
 
     private final Context context;
-    private List<Product> values;
-    private List<Product> originalValues;
+    private List<Item> values;
+    private List<Item> originalValues;
     private Filter filter;
 
-    public ProductAdapter(Context context, List<Product> values) {
+    public ItemAdapter(Context context, List<Item> values) {
         super(context, R.layout.product_list_row_even, values);
         this.context = context;
         this.values = values;
@@ -71,7 +70,7 @@ public class ProductAdapter extends ArrayAdapter<Product> implements Filterable 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
-                values = (ArrayList<Product>) results.values;
+                values = (ArrayList<Item>) results.values;
                 notifyDataSetChanged();
 
             }
@@ -85,11 +84,11 @@ public class ProductAdapter extends ArrayAdapter<Product> implements Filterable 
                     results.values = originalValues;
                     results.count = originalValues.size();
                 } else {
-                    List<Product> filteredResult = new ArrayList<Product>();
-                    List<Product> localCopy = new ArrayList<Product>();
+                    List<Item> filteredResult = new ArrayList<Item>();
+                    List<Item> localCopy = new ArrayList<Item>();
                     localCopy.addAll(originalValues);
                     constraint = constraint.toString().toLowerCase();
-                    for (Product p : localCopy) {
+                    for (Item p : localCopy) {
                         if (p.getName().toLowerCase().contains(constraint)
                                 || p.getDescription().toLowerCase().contains(constraint)
                                 || (p.getCurrentStatus().getStatus() != null
@@ -109,9 +108,9 @@ public class ProductAdapter extends ArrayAdapter<Product> implements Filterable 
         return filter;
     }
 
-    private void cloneItems(List<Product> items) {
-        originalValues = new ArrayList<Product>();
-        for (Product p : items) {
+    private void cloneItems(List<Item> items) {
+        originalValues = new ArrayList<Item>();
+        for (Item p : items) {
             originalValues.add(p);
         }
     }

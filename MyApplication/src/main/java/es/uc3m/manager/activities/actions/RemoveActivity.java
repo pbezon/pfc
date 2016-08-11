@@ -1,4 +1,4 @@
-package es.uc3m.manager.activities.library;
+package es.uc3m.manager.activities.actions;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,7 +17,7 @@ import java.text.DateFormat;
 import java.util.List;
 
 import es.uc3m.manager.R;
-import es.uc3m.manager.pojo.Product;
+import es.uc3m.manager.pojo.Item;
 import es.uc3m.manager.service.ProductService;
 import es.uc3m.manager.util.ContactUtils;
 
@@ -35,7 +35,6 @@ public class RemoveActivity extends Activity {
     private TextView editContactPhone;
     private TextView editCalendarDescription;
     private Uri imageUri;
-
 
 
     @Override
@@ -85,17 +84,17 @@ public class RemoveActivity extends Activity {
 
 
     private void fillForm() {
-        List<Product> product = ProductService.getInstance().getProduct(scannedId);
-        if (product == null || product.isEmpty()){
+        List<Item> item = ProductService.getInstance().getProduct(scannedId);
+        if (item == null || item.isEmpty()) {
             Toast.makeText(getApplicationContext(), "The item does not exist...", Toast.LENGTH_LONG).show();
             finish();
         } else {
-            Product p = product.get(0);
+            Item p = item.get(0);
             nameEdit.setText(p.getName());
             descriptionEdit.setText(p.getDescription());
             editStatusDescription.setText(p.getCurrentStatus().getStatus());
-            editContactName.setText(ContactUtils.retrieveContactName(p.getCurrentStatus().getContactUri(), getContentResolver()));
-            editContactPhone.setText(ContactUtils.retrieveContactNumber(p.getCurrentStatus().getContactUri(), getContentResolver()));
+            editContactName.setText(ContactUtils.getContactName(p.getCurrentStatus().getContactUri(), getContentResolver()));
+            editContactPhone.setText(ContactUtils.getContactNumber(p.getCurrentStatus().getContactUri(), getContentResolver()));
             String calendarUri = p.getCurrentStatus().getCalendarEventId();
             if (calendarUri != null && !calendarUri.isEmpty()) {
                 Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon();
@@ -105,8 +104,9 @@ public class RemoveActivity extends Activity {
                 if (query != null && query.getCount() > 0 && query.moveToFirst()) {
                     editCalendarDescription.setText(query.getString(0));
                     editCalendarReminder.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(Long.valueOf(query.getString(1))) + " - " + DateFormat.getDateInstance(DateFormat.SHORT).format(Long.valueOf(query.getString(2))));
+                    query.close();
                 }
-                query.close();
+
             }
         }
     }

@@ -5,14 +5,15 @@ package es.uc3m.manager.util;
  */
 public class Constants {
 
-    public enum PRODUCT_ACTION {
+    public static boolean OFFLINE = false;
+
+    public enum ITEM_ACTION {
         WITHDRAW(0), RETURN(1), ADD(0), REMOVE(3);
 
         private final int value;
 
-        PRODUCT_ACTION(int value) {
+        ITEM_ACTION(int value) {
             this.value = value;
         }
     }
-
 }

@@ -38,11 +38,11 @@ import java.util.Calendar;
 import java.util.List;
 
 import es.uc3m.manager.R;
-import es.uc3m.manager.activities.contacts.Constants;
-import es.uc3m.manager.activities.display.DisplayResults;
+import es.uc3m.manager.activities.collection.ListCollectionActivity;
 import es.uc3m.manager.activities.scan.ManualInputActivity;
 import es.uc3m.manager.activities.scan.ScanMenuActivity;
 import es.uc3m.manager.activities.settings.SettingsActivity;
+import es.uc3m.manager.util.Constants;
 
 public class MainActivity extends Activity {
 
@@ -64,17 +64,23 @@ public class MainActivity extends Activity {
 
     public static long getNewEventId(ContentResolver cr) {
         Cursor cursor = cr.query(CalendarContract.Events.CONTENT_URI, new String[]{"MAX(_id) as max_id"}, null, null, "_id");
-        cursor.moveToFirst();
-        long max_val = cursor.getLong(cursor.getColumnIndex("max_id"));
-        cursor.close();
-        return max_val + 1;
+        if (cursor != null) {
+            cursor.moveToFirst();
+            long max_val = cursor.getLong(cursor.getColumnIndex("max_id"));
+            cursor.close();
+            return max_val + 1;
+        }
+        return -1;
     }
 
     public static long getLastEventId(ContentResolver cr) {
         Cursor cursor = cr.query(CalendarContract.Events.CONTENT_URI, new String[]{"MAX(_id) as max_id"}, null, null, "_id");
-        cursor.moveToFirst();
-        cursor.close();
-        return cursor.getLong(cursor.getColumnIndex("max_id"));
+        if (cursor != null) {
+            cursor.moveToFirst();
+            cursor.close();
+            return cursor.getLong(cursor.getColumnIndex("max_id"));
+        }
+        return -1;
     }
 
     /**
@@ -126,7 +132,7 @@ public class MainActivity extends Activity {
     }
 
     private void setupFolder() {
-        File photoFolder = null;
+        File photoFolder;
         if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
             photoFolder = new File(Environment.getExternalStorageDirectory() + SettingsActivity.PATH);
         } else {
@@ -158,7 +164,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         //lanzamos intent
-                        startActivity(new Intent(getApplicationContext(), DisplayResults.class));
+                        startActivity(new Intent(getApplicationContext(), ListCollectionActivity.class));
                     }
                 }
         );
@@ -271,7 +277,6 @@ public class MainActivity extends Activity {
 //    }
 
 
-
     private void addCalendarEventNoFeedback() {
 
         Calendar cal = Calendar.getInstance();
@@ -284,11 +289,13 @@ public class MainActivity extends Activity {
         calEvent.put(CalendarContract.Events.EVENT_TIMEZONE, cal.getTimeZone().getDisplayName());
         Uri uri = getContentResolver().insert(CalendarContract.Events.CONTENT_URI, calEvent);
 
-        // The returned Uri contains the content-retriever URI for
-        // the newly-inserted event, including its id
-        int id = Integer.parseInt(uri.getLastPathSegment());
-        Toast.makeText(getApplicationContext(), "Created Calendar Event " + id,
-                Toast.LENGTH_SHORT).show();
+        if (uri != null) {
+            // The returned Uri contains the content-retriever URI for
+            // the newly-inserted event, including its id
+            int id = Integer.parseInt(uri.getLastPathSegment());
+            Toast.makeText(getApplicationContext(), "Created Calendar Event " + id,
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
 //    private void addViewCalendarListener() {
@@ -341,13 +348,15 @@ public class MainActivity extends Activity {
                         null
                 );
 
-                while (cursor.moveToNext()) {
-                    String email = cursor.getString(
-                            cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-                    String emailType = cursor.getString(
-                            cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE));
+                if (cursor != null) {
+                    while (cursor.moveToNext()) {
+                        String email = cursor.getString(
+                                cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                        String emailType = cursor.getString(
+                                cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE));
+                    }
+                    cursor.close();
                 }
-                cursor.close();
             }
         }
 
@@ -368,7 +377,6 @@ public class MainActivity extends Activity {
         if (requestCode == REQUEST_CALENDAR_EVENT) {
             if (resultCode == RESULT_OK) {
                 String a = "";
-                a.toString();
             }
         }
 

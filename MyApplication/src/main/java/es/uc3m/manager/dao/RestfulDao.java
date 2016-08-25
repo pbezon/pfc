@@ -20,7 +20,7 @@ import es.uc3m.manager.pojo.Status;
  */
 class RestfulDao {
 
-    private final String url = "http://192.168.1.81:8082";
+    private String url = "http://192.168.1.81:8082";
     private final String returnRest = "/return/";
     private final String withdrawRest = "/withdraw/";
     private ObjectMapper productMapper;
@@ -116,5 +116,10 @@ class RestfulDao {
         } catch (ExecutionException e) {
             return false;
         }
+    }
+
+    public boolean reload(String ip, String port) {
+        url = "http://"+ip+":"+port;
+        return true;
     }
 }

@@ -12,41 +12,27 @@
         android:layout_height="fill_parent"
         android:layout_gravity="left|top">
 
-        <TextView
-            android:id="@+id/scanOk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:text="Scanned! What you wanna do?" />
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/scanOk"
-            android:orientation="vertical"
-            android:weightSum="1">
-
-            <Button
-                android:id="@+id/removeButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Remove from collection!" />
-
-        </LinearLayout>
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/scanOk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Scanned! What you wanna do?"
+                android:layout_above="@+id/menuFind"
+                android:layout_centerHorizontal="true" />
 
             <ImageButton
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:id="@+id/menuAdd"
                 android:background="@drawable/add"
+                android:layout_marginTop="38dp"
+                android:layout_marginRight="16dp"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_marginTop="71dp" />
+                android:layout_toLeftOf="@+id/menuFind" />
 
             <ImageButton
                 android:layout_width="150dp"
@@ -55,15 +41,16 @@
                 android:layout_gravity="right"
                 android:background="@drawable/findedit"
                 android:layout_alignTop="@+id/menuAdd"
-                android:layout_toRightOf="@+id/menuAdd" />
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="32dp" />
 
             <ImageButton
                 android:layout_width="150dp"
                 android:layout_height="145dp"
                 android:id="@+id/menuWithdraw"
-                android:layout_below="@+id/menuFind"
-                android:layout_alignParentLeft="true"
-                android:background="@drawable/withdraw" />
+                android:background="@drawable/withdraw"
+                android:layout_below="@+id/menuAdd"
+                android:layout_alignLeft="@+id/menuAdd" />
 
             <ImageButton
                 android:layout_width="150dp"
@@ -71,7 +58,16 @@
                 android:id="@+id/menuReturn"
                 android:background="@drawable/returnicon"
                 android:layout_below="@+id/menuFind"
-                android:layout_toRightOf="@+id/menuWithdraw" />
+                android:layout_alignLeft="@+id/menuFind" />
+
+            <ImageButton
+                android:id="@+id/removeButton"
+                android:layout_width="150dp"
+                android:layout_height="145dp"
+                android:background="@drawable/delete"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/menuWithdraw"
+                android:layout_centerHorizontal="true" />
         </RelativeLayout>
 
     </RelativeLayout>

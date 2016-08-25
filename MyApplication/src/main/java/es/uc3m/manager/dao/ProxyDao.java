@@ -90,4 +90,7 @@ public class ProxyDao {
         }
     }
 
+    public boolean reload(String ip, String port) {
+        return restfulDao.reload(ip, port);
+    }
 }

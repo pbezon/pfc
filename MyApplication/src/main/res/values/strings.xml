@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">My Stuff Manager</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_edit">Edit</string>
     <string name="scan">Scan</string>
     <string name="title_activity_scan_menu">ScanMenuActivity</string>
@@ -10,7 +9,6 @@
     <string name="activity_contacts_list">Contacts List</string>
     <string name="activity_contact_detail">Contact Detail</string>
     <string name="contacts_list_search_results_title">Contacts List Search for \"%s\"</string>
-    <string name="app_description">This is a sample app, demonstrating use of the Android system Contacts Provider.</string>
     <string name="imageview_description">Contact Thumbnail</string>
     <string name="address_button_description">View Address</string>
     <string name="menu_search">Search</string>
@@ -38,8 +36,8 @@
     <string name="no_intent_found">No application found to handle this action</string>
     <string name="addCalendarEvent">Add Calendar Event</string>
     <string name="title_activity_display_results">DisplayResults</string>
-    <string name="list">Lista</string>
-    <string name="search">Buscar</string>
+    <string name="list">List</string>
+    <string name="search">Search</string>
     <string name="back">Back</string>
     <string name="help">Help</string>
     <string name="scanedCode">Scanned code</string>
@@ -47,10 +45,12 @@
     <string name="save">Save</string>
     <string name="withdraw">Withdraw</string>
     <string name="product_management">Product Management</string>
-    <string-array name="productTypes">
-        <item>Llave</item>
-        <item>Libro</item>
-        <item>Pelicula</item>
+    <string-array name="itemTypes">
+        <item>Key</item>
+        <item>Book</item>
+        <item>Movie</item>
+        <item>Music</item>
+        <item>Serial</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -61,5 +61,7 @@
     <string name="inDate">Return Date</string>
     <string name="outDate">Withdraw Date</string>
     <string name="contactUri">Who</string>
+    <string name="reload">Reload Server</string>
+    <string name="itemTypesUpdateButton">Update Item Types</string>
 
 </resources>

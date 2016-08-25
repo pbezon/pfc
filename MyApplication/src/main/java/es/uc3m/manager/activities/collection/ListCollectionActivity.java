@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,7 +19,7 @@ import es.uc3m.manager.R;
 import es.uc3m.manager.activities.actions.EditActivity;
 import es.uc3m.manager.adapters.ItemAdapter;
 import es.uc3m.manager.pojo.Item;
-import es.uc3m.manager.service.ProductService;
+import es.uc3m.manager.service.ItemService;
 
 public class ListCollectionActivity extends ListActivity {
 
@@ -31,7 +30,7 @@ public class ListCollectionActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_results);
 
-        ItemAdapter itemAdapter = new ItemAdapter(this, ProductService.getInstance().getProduct(""));
+        ItemAdapter itemAdapter = new ItemAdapter(this, ItemService.getInstance().getProduct(""));
         setListAdapter(itemAdapter);
 
         addFilterListener(itemAdapter);
@@ -95,13 +94,6 @@ public class ListCollectionActivity extends ListActivity {
         } catch (Exception e) {
             Log.e(e.getMessage(), e.getMessage());
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.display_results, menu);
-        return true;
     }
 
     @Override

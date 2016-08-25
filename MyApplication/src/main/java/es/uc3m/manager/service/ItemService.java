@@ -9,18 +9,18 @@ import es.uc3m.manager.pojo.Status;
 /**
  * Created by Snapster on 21/03/2015.
  */
-public class ProductService {
+public class ItemService {
 
-    private static ProductService instance;
+    private static ItemService instance;
     private final ProxyDao dao;
 
-    private ProductService() {
+    private ItemService() {
         dao = new ProxyDao();
     }
 
-    public static ProductService getInstance() {
+    public static ItemService getInstance() {
         if (instance == null) {
-            instance = new ProductService();
+            instance = new ItemService();
         }
         return instance;
     }
@@ -55,5 +55,12 @@ public class ProductService {
 
     public Boolean edit(Item p) {
         return dao.add(p);
+    }
+
+    public boolean reload (String ip, String port) {
+        if (ip == null || ip.isEmpty() || port == null || port.isEmpty()) {
+            return false;
+        }
+        return dao.reload(ip, port);
     }
 }

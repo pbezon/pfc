@@ -49,9 +49,6 @@ public class MainActivity extends Activity {
     private static final String MIME_TEXT_PLAIN = "text/plain";
     private static final String TAG = "ScanMenuActivity";
     private static final int REQUEST_SCAN_CODE = 0;
-    private static final int REQUEST_CONTACTPICKER = 1;
-    private static final int REQUEST_CALENDAR_EVENT = 2;
-    private long event_id;
     private NfcAdapter mNfcAdapter;
 
     private static boolean isIntentAvailable(Context ctx, Intent intent) {
@@ -60,27 +57,6 @@ public class MainActivity extends Activity {
                 mgr.queryIntentActivities(intent,
                         PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
-    }
-
-    public static long getNewEventId(ContentResolver cr) {
-        Cursor cursor = cr.query(CalendarContract.Events.CONTENT_URI, new String[]{"MAX(_id) as max_id"}, null, null, "_id");
-        if (cursor != null) {
-            cursor.moveToFirst();
-            long max_val = cursor.getLong(cursor.getColumnIndex("max_id"));
-            cursor.close();
-            return max_val + 1;
-        }
-        return -1;
-    }
-
-    public static long getLastEventId(ContentResolver cr) {
-        Cursor cursor = cr.query(CalendarContract.Events.CONTENT_URI, new String[]{"MAX(_id) as max_id"}, null, null, "_id");
-        if (cursor != null) {
-            cursor.moveToFirst();
-            cursor.close();
-            return cursor.getLong(cursor.getColumnIndex("max_id"));
-        }
-        return -1;
     }
 
     /**
@@ -176,7 +152,6 @@ public class MainActivity extends Activity {
          * Call this before onPause, otherwise an IllegalArgumentException is thrown as well.
          */
         stopForegroundDispatch(this, mNfcAdapter);
-
         super.onPause();
     }
 
@@ -249,76 +224,6 @@ public class MainActivity extends Activity {
         );
     }
 
-//    private void addContactsListener() {
-//        Button contacts = (Button) findViewById(R.id.readContacts);
-//        contacts.setOnClickListener(
-//                new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Intent intent = new Intent(Intent.ACTION_PICK,
-//                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
-//                        startActivityForResult(intent, REQUEST_CONTACTPICKER);
-//                    }
-//                }
-//        );
-//    }
-//
-//    private void addCalendarListener() {
-//        Button contacts = (Button) findViewById(R.id.addCalendarEvent);
-//        contacts.setOnClickListener(
-//                new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        addCalendarEvent();
-//
-//                    }
-//                }
-//        );
-//    }
-
-
-    private void addCalendarEventNoFeedback() {
-
-        Calendar cal = Calendar.getInstance();
-        ContentValues calEvent = new ContentValues();
-        calEvent.put(CalendarContract.Events.CALENDAR_ID, 1); // XXX pick)
-        calEvent.put(CalendarContract.Events.TITLE, "Entrega/recogida");
-        calEvent.put(CalendarContract.Events.DTSTART, cal.getTimeInMillis());
-        calEvent.put(CalendarContract.Events.DTEND, cal.getTimeInMillis() + 60 * 60 * 1000);
-        calEvent.put(CalendarContract.Events.DESCRIPTION, "Entrega recogida de lo que sea");
-        calEvent.put(CalendarContract.Events.EVENT_TIMEZONE, cal.getTimeZone().getDisplayName());
-        Uri uri = getContentResolver().insert(CalendarContract.Events.CONTENT_URI, calEvent);
-
-        if (uri != null) {
-            // The returned Uri contains the content-retriever URI for
-            // the newly-inserted event, including its id
-            int id = Integer.parseInt(uri.getLastPathSegment());
-            Toast.makeText(getApplicationContext(), "Created Calendar Event " + id,
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
-//    private void addViewCalendarListener() {
-//        Button contacts = (Button) findViewById(R.id.viewCalendarEvent);
-//        contacts.setOnClickListener(
-//                new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        viewCalendarEvent();
-//
-//                    }
-//                }
-//        );
-//    }
-
-    private void viewCalendarEvent() {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon();
-        uri.appendPath(Long.toString(event_id));
-        intent.setData(uri.build());
-        startActivity(intent);
-    }
-
     @Override
     public void onNewIntent(Intent intent) {
         /**
@@ -335,30 +240,6 @@ public class MainActivity extends Activity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if (requestCode == REQUEST_CONTACTPICKER) {
-            if (resultCode == RESULT_OK) {
-                Uri contentUri = intent.getData();
-                String contactId = contentUri.getLastPathSegment();
-                //final String[] projection = new String[]{ContactsContract.CommonDataKinds.Email.ADDRESS};
-                final Cursor cursor = getContentResolver().query(
-                        ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                        null,
-                        ContactsContract.CommonDataKinds.Email.CONTACT_ID + "=?",
-                        new String[]{contactId},
-                        null
-                );
-
-                if (cursor != null) {
-                    while (cursor.moveToNext()) {
-                        String email = cursor.getString(
-                                cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-                        String emailType = cursor.getString(
-                                cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE));
-                    }
-                    cursor.close();
-                }
-            }
-        }
 
         if (requestCode == REQUEST_SCAN_CODE) {
             if (resultCode == RESULT_OK) {
@@ -373,20 +254,6 @@ public class MainActivity extends Activity {
                 // Handle cancel
             }
         }
-
-        if (requestCode == REQUEST_CALENDAR_EVENT) {
-            if (resultCode == RESULT_OK) {
-                String a = "";
-            }
-        }
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
     }
 
     @Override

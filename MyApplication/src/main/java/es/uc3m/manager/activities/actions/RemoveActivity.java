@@ -1,11 +1,9 @@
 package es.uc3m.manager.activities.actions;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.CalendarContract;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,45 +11,38 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DateFormat;
-import java.util.List;
+import java.io.File;
 
 import es.uc3m.manager.R;
+import es.uc3m.manager.activities.settings.SettingsActivity;
 import es.uc3m.manager.pojo.Item;
-import es.uc3m.manager.service.ProductService;
-import es.uc3m.manager.util.ContactUtils;
+import es.uc3m.manager.service.ItemService;
+import es.uc3m.manager.util.PhotoUtils;
+import es.uc3m.manager.util.SpinnerUtils;
 
 /**
  * Created by Snapster on 15/06/2015.
  */
 public class RemoveActivity extends Activity {
 
-    private String scannedId;
     private TextView nameEdit;
     private TextView descriptionEdit;
-    private TextView editCalendarReminder;
     private TextView editStatusDescription;
-    private TextView editContactName;
-    private TextView editContactPhone;
-    private TextView editCalendarDescription;
-    private Uri imageUri;
-
+    private ImageView photoView;
+    private Spinner typeEdit;
+    private Item item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remove_item);
-        scannedId = this.getIntent().getStringExtra("ID");
 
         nameEdit = (TextView) findViewById(R.id.nameEdit);
         descriptionEdit = (TextView) findViewById(R.id.descriptionEdit);
-        ImageView imageViewEdit = (ImageView) findViewById(R.id.imageViewEdit);
-        editCalendarReminder = (TextView) findViewById(R.id.editCalendarReminder);
-        Spinner typeEdit = (Spinner) findViewById(R.id.typeEdit);
+        typeEdit = (Spinner) findViewById(R.id.typeEdit);
         editStatusDescription = (TextView) findViewById(R.id.editStatusDescription);
-        editContactName = (TextView) findViewById(R.id.editContactName);
-        editContactPhone = (TextView) findViewById(R.id.editContactPhone);
-        editCalendarDescription = (TextView) findViewById(R.id.editCalendarDescription);
+        photoView = (ImageView) findViewById(R.id.imageViewEdit);
+        item = (Item) this.getIntent().getSerializableExtra("ITEM");
 
         findViewById(R.id.editViewCalendarEvent).setVisibility(View.INVISIBLE);
         findViewById(R.id.editAddViewContact).setVisibility(View.INVISIBLE);
@@ -66,49 +57,27 @@ public class RemoveActivity extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ProductService.getInstance().deleteProduct(scannedId);
+                        ItemService.getInstance().deleteProduct(item.get_id());
+                        Toast.makeText(getApplicationContext(), "Item deleted!", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 }
         );
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case 1:
-                break;
-        }
-    }
-
-
     private void fillForm() {
-        List<Item> item = ProductService.getInstance().getProduct(scannedId);
-        if (item == null || item.isEmpty()) {
+        if (item == null) {
             Toast.makeText(getApplicationContext(), "The item does not exist...", Toast.LENGTH_LONG).show();
             finish();
         } else {
-            Item p = item.get(0);
-            nameEdit.setText(p.getName());
-            descriptionEdit.setText(p.getDescription());
-            editStatusDescription.setText(p.getCurrentStatus().getStatus());
-            editContactName.setText(ContactUtils.getContactName(p.getCurrentStatus().getContactUri(), getContentResolver()));
-            editContactPhone.setText(ContactUtils.getContactNumber(p.getCurrentStatus().getContactUri(), getContentResolver()));
-            String calendarUri = p.getCurrentStatus().getCalendarEventId();
-            if (calendarUri != null && !calendarUri.isEmpty()) {
-                Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon();
-                uri.appendPath(calendarUri);
-                Uri calendarEvent = uri.build();
-                Cursor query = getContentResolver().query(uri.build(), new String[]{CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART, CalendarContract.Events.DTEND}, null, null, null);
-                if (query != null && query.getCount() > 0 && query.moveToFirst()) {
-                    editCalendarDescription.setText(query.getString(0));
-                    editCalendarReminder.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(Long.valueOf(query.getString(1))) + " - " + DateFormat.getDateInstance(DateFormat.SHORT).format(Long.valueOf(query.getString(2))));
-                    query.close();
-                }
-
+            nameEdit.setText(item.getName());
+            descriptionEdit.setText(item.getDescription());
+            editStatusDescription.setText(item.getCurrentStatus().getStatus());
+            typeEdit.setSelection(SpinnerUtils.getIndex(typeEdit, item.getType()));
+            if (item.getPhoto() != null && !item.getPhoto().isEmpty()) {
+                File photo = new File(Environment.getExternalStorageDirectory() + SettingsActivity.PATH, item.getPhoto());
+                PhotoUtils.drawPhoto(Uri.fromFile(photo), getContentResolver(), photoView, getApplicationContext());
             }
         }
     }
-
 }

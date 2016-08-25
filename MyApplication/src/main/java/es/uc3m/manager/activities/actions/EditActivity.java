@@ -31,10 +31,11 @@ import java.util.List;
 import es.uc3m.manager.R;
 import es.uc3m.manager.activities.settings.SettingsActivity;
 import es.uc3m.manager.pojo.Item;
-import es.uc3m.manager.service.ProductService;
+import es.uc3m.manager.service.ItemService;
 import es.uc3m.manager.util.CalendarUtils;
 import es.uc3m.manager.util.ContactUtils;
 import es.uc3m.manager.util.PhotoUtils;
+import es.uc3m.manager.util.SpinnerUtils;
 
 /**
  * Created by Snapster on 15/06/2015.
@@ -178,6 +179,7 @@ public class EditActivity extends Activity {
                     item.getCurrentStatus().setContactUri(contentUri.toString());
                     fillForm();
                 }
+                break;
         }
     }
 
@@ -186,7 +188,7 @@ public class EditActivity extends Activity {
         if (item != null) {
             items = Collections.singletonList(item);
         } else {
-            items = ProductService.getInstance().getProduct(scannedId);
+            items = ItemService.getInstance().getProduct(scannedId);
         }
         if (items == null || items.isEmpty()) {
             Toast.makeText(getApplicationContext(), "The item does not exist...", Toast.LENGTH_LONG).show();
@@ -198,6 +200,7 @@ public class EditActivity extends Activity {
             editStatusDescription.setText(item.getCurrentStatus().getStatus());
             editContactName.setText(ContactUtils.getContactName(item.getCurrentStatus().getContactUri(), getContentResolver()));
             editContactPhone.setText(ContactUtils.getContactNumber(item.getCurrentStatus().getContactUri(), getContentResolver()));
+            typeEdit.setSelection(SpinnerUtils.getIndex(typeEdit, item.getType()));
             File photo = new File(Environment.getExternalStorageDirectory() + SettingsActivity.PATH, item.get_id());
             if (photo != null) {
                 imageUri = Uri.fromFile(photo);
@@ -226,7 +229,7 @@ public class EditActivity extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        boolean response = ProductService.getInstance().edit(item);
+                        boolean response = ItemService.getInstance().edit(item);
                         if (response) {
                             Toast.makeText(getApplicationContext(), "UPDATED OK!!", Toast.LENGTH_LONG).show();
                             finish();

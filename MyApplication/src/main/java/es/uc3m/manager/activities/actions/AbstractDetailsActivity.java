@@ -27,9 +27,9 @@ import es.uc3m.manager.util.PhotoUtils;
 import es.uc3m.manager.util.SpinnerUtils;
 
 /**
- * Created by Snapster on 15/06/2015.
+ * Created by Snapster on 25-Aug-16.
  */
-public class WithdrawActivity extends Activity {
+public abstract class AbstractDetailsActivity extends Activity{
 
     private static final int REQUEST_CALENDAR_EVENT = 2;
     private static final int REQUEST_CONTACTPICKER = 3;
@@ -45,13 +45,11 @@ public class WithdrawActivity extends Activity {
     private Item item;
     private Spinner typeEdit;
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_withdraw_item);
-        //animation
-        overridePendingTransition(R.animator.slide_in, R.animator.slide_out);
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        setContentView(getLayoutResourceId());
+
         // item from previous activity
         item = (Item) this.getIntent().getSerializableExtra("ITEM");
         // get Buttons
@@ -69,13 +67,7 @@ public class WithdrawActivity extends Activity {
         // button listeners
         addCalendarListener();
         addContactsListener();
-    }
 
-    //TODO cambiar la cosa esta porque no termina de funcionar bien
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.animator.slide_right_in, 0);
     }
 
     @Override
@@ -260,4 +252,7 @@ public class WithdrawActivity extends Activity {
             }
         }
     }
+
+    protected abstract int getLayoutResourceId();
+
 }

@@ -21,7 +21,7 @@ import java.util.Date;
 import es.uc3m.manager.R;
 import es.uc3m.manager.activities.settings.SettingsActivity;
 import es.uc3m.manager.pojo.Item;
-import es.uc3m.manager.service.ProductService;
+import es.uc3m.manager.service.ItemService;
 import es.uc3m.manager.util.PhotoUtils;
 
 /**
@@ -48,6 +48,17 @@ public class AddActivity extends Activity {
         photo = (ImageView) findViewById(R.id.imageView);
         type = (Spinner) findViewById(R.id.addFragmentSpinner);
         name = (TextView) findViewById(R.id.nameInput);
+        name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                Button save = (Button) findViewById(R.id.saveButton);
+                if (name.getText() != null && !name.getText().toString().isEmpty()) {
+                    save.setEnabled(true);
+                } else {
+                    save.setEnabled(false);
+                }
+            }
+        });
         description = (TextView) findViewById(R.id.descriptionInput);
         this.addCameraButtonListener();
         this.addSaveButtonListener();
@@ -121,7 +132,7 @@ public class AddActivity extends Activity {
                             p.setPhoto(inputId);
                         }
 
-                        boolean response = ProductService.getInstance().add(p);
+                        boolean response = ItemService.getInstance().add(p);
                         if (response) {
                             Toast.makeText(getApplicationContext(), "OK!!", Toast.LENGTH_LONG).show();
                             finish();

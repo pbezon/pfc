@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -20,39 +17,28 @@ import es.uc3m.manager.activities.actions.RemoveActivity;
 import es.uc3m.manager.activities.actions.ReturnActivity;
 import es.uc3m.manager.activities.actions.WithdrawActivity;
 import es.uc3m.manager.pojo.Item;
-import es.uc3m.manager.service.ProductService;
+import es.uc3m.manager.service.ItemService;
 
 public class ScanMenuActivity extends Activity {
 
     private static final String TAG = "ScanMenuActivity";
-    private static final int REQUEST_SCAN_CODE = 0;
     private Item item;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String scannedCode = this.getIntent().getStringExtra("SCAN_RESULT");
+        id = this.getIntent().getStringExtra("SCAN_RESULT");
         setContentView(R.layout.activity_scan_menu);
-        boolean existsItem = getItemScanned(scannedCode);
+        boolean existsItem = getItemScanned(id) != null;
         setUpButtonListeners();
         setUpButtonDisabler(existsItem);
-        Toast.makeText(getApplicationContext(), "ID READ: " + scannedCode, Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        setUpButtonDisabler(getItemScanned(item.get_id()));
-    }
-
-    /*
-         * Menu bar
-         */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.scan_menu, menu);
-        return true;
+        setUpButtonDisabler(getItemScanned(id) != null);
     }
 
     @Override
@@ -92,24 +78,8 @@ public class ScanMenuActivity extends Activity {
     }
 
     private void addRemoveListener() {
-        Button removeButton = (Button) findViewById(R.id.removeButton);
-        try {
-            removeButton.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            //lanzamos intent
-                            Intent returnActivity = new Intent(getBaseContext(), RemoveActivity.class);
-                            returnActivity.putExtra("ID", item.get_id());
-                            //arrancamos intent
-                            startActivity(returnActivity);
-                        }
-                    }
-            );
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
-        }
+        ImageButton removeButton = (ImageButton) findViewById(R.id.removeButton);
+        setupActivityListener(removeButton, RemoveActivity.class);
     }
 
     private void addSearchListener() {
@@ -124,10 +94,11 @@ public class ScanMenuActivity extends Activity {
                         @Override
                         public void onClick(View view) {
                             //lanzamos intent
-                            Intent returnActivity = new Intent(getBaseContext(), clazz);
-                            returnActivity.putExtra("ID", item.get_id());
+                            Intent activity = new Intent(getBaseContext(), clazz);
+                            activity.putExtra("ID", id);
+                            activity.putExtra("ITEM", item);
                             //arrancamos intent
-                            startActivity(returnActivity);
+                            startActivity(activity);
                         }
                     }
             );
@@ -148,7 +119,7 @@ public class ScanMenuActivity extends Activity {
             findViewById(R.id.menuAdd).setEnabled(true);
             findViewById(R.id.menuAdd).setBackground(getResources().getDrawable(R.drawable.add));
             findViewById(R.id.removeButton).setEnabled(false);
-//            findViewById(R.id.removeButton).setBackground(getResources().getDrawable(R.drawable.re));
+            findViewById(R.id.removeButton).setBackground(getResources().getDrawable(R.drawable.delete_disable));
         } else {
             if (item.getCurrentStatus().getStatus().equalsIgnoreCase("Taken")) {
                 findViewById(R.id.menuFind).setEnabled(true);
@@ -160,6 +131,7 @@ public class ScanMenuActivity extends Activity {
                 findViewById(R.id.menuAdd).setEnabled(false);
                 findViewById(R.id.menuAdd).setBackground(getResources().getDrawable(R.drawable.add_disabled));
                 findViewById(R.id.removeButton).setEnabled(false);
+                findViewById(R.id.removeButton).setBackground(getResources().getDrawable(R.drawable.delete_disable));
             }
 
             if (item.getCurrentStatus().getStatus().equalsIgnoreCase("Available")) {
@@ -172,21 +144,17 @@ public class ScanMenuActivity extends Activity {
                 findViewById(R.id.menuAdd).setEnabled(false);
                 findViewById(R.id.menuAdd).setBackground(getResources().getDrawable(R.drawable.add_disabled));
                 findViewById(R.id.removeButton).setEnabled(true);
+                findViewById(R.id.removeButton).setBackground(getResources().getDrawable(R.drawable.delete));
             }
         }
     }
 
-    private boolean getItemScanned(String scannedCode) {
-        List<Item> items = ProductService.getInstance().getProduct(scannedCode);
+    private Item getItemScanned(String scannedCode) {
+        List<Item> items = ItemService.getInstance().getProduct(scannedCode);
         if (!items.isEmpty()) {
             item = items.get(0);
-            return true;
-        } else {
-            item = new Item();
-            item.set_id(scannedCode);
-            return false;
+            return item;
         }
+        return null;
     }
-
-
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
     android:background="@drawable/background">
 
     <TableLayout
@@ -45,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:textColor="@color/holo_blue"
-                android:entries="@array/productTypes"
+                android:entries="@array/itemTypes"
                 android:layout_column="1" />
         </TableRow>
 
@@ -127,7 +128,9 @@
                 android:id="@+id/editCalendarDescription"
                 android:layout_column="1"
                 android:background="@android:drawable/editbox_background_normal"
-                android:hint="No event created" />
+                android:hint="No event created"
+                android:enabled="true"
+                android:focusable="false" />
 
         </TableRow>
 
@@ -143,7 +146,9 @@
                 android:id="@+id/editCalendarReminder"
                 android:layout_column="1"
                 android:background="@android:drawable/editbox_background_normal"
-                android:hint="-" />
+                android:hint="-"
+                android:enabled="true"
+                android:focusable="false" />
         </TableRow>
 
         <TableRow
@@ -180,7 +185,9 @@
                 android:id="@+id/editContactName"
                 android:layout_column="1"
                 android:background="@android:drawable/editbox_background_normal"
-                android:hint="No contact assigned" />
+                android:hint="No contact assigned"
+                android:enabled="true"
+                android:focusable="false" />
         </TableRow>
 
         <TableRow
@@ -202,7 +209,9 @@
                 android:id="@+id/editContactPhone"
                 android:layout_column="1"
                 android:background="@android:drawable/editbox_background_normal"
-                android:hint="-" />
+                android:hint="-"
+                android:enabled="true"
+                android:focusable="false" />
         </TableRow>
 
         <TableRow

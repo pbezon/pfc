@@ -16,4 +16,7 @@ public class Constants {
             this.value = value;
         }
     }
+
+    public static final String STATUS_AVAILABLE = "Available";
+    public static final String STATUS_TAKEN = "Taken";
 }

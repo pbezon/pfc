@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import es.uc3m.manager.activities.actions.ReturnActivity;
 import es.uc3m.manager.activities.actions.WithdrawActivity;
 import es.uc3m.manager.pojo.Item;
 import es.uc3m.manager.service.ItemService;
+import es.uc3m.manager.util.Constants;
 
 public class ScanMenuActivity extends Activity {
 
@@ -28,8 +30,10 @@ public class ScanMenuActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        id = this.getIntent().getStringExtra("SCAN_RESULT");
         setContentView(R.layout.activity_scan_menu);
+        id = this.getIntent().getStringExtra("SCAN_RESULT");
+
+        ((TextView)findViewById(R.id.scanOk)).setText(getResources().getString(R.string.scanOkinfo, id));
         boolean existsItem = getItemScanned(id) != null;
         setUpButtonListeners();
         setUpButtonDisabler(existsItem);
@@ -121,7 +125,8 @@ public class ScanMenuActivity extends Activity {
             findViewById(R.id.removeButton).setEnabled(false);
             findViewById(R.id.removeButton).setBackground(getResources().getDrawable(R.drawable.delete_disable));
         } else {
-            if (item.getCurrentStatus().getStatus().equalsIgnoreCase("Taken")) {
+            ((TextView)findViewById(R.id.scanOk)).setText(String.format(getResources().getString(R.string.scanOkinfo), item.getName()));
+            if (item.getCurrentStatus().getStatus().equalsIgnoreCase(Constants.STATUS_TAKEN)) {
                 findViewById(R.id.menuFind).setEnabled(true);
                 findViewById(R.id.menuFind).setBackground(getResources().getDrawable(R.drawable.findedit));
                 findViewById(R.id.menuWithdraw).setEnabled(false);
@@ -134,7 +139,7 @@ public class ScanMenuActivity extends Activity {
                 findViewById(R.id.removeButton).setBackground(getResources().getDrawable(R.drawable.delete_disable));
             }
 
-            if (item.getCurrentStatus().getStatus().equalsIgnoreCase("Available")) {
+            if (item.getCurrentStatus().getStatus().equalsIgnoreCase(Constants.STATUS_AVAILABLE)) {
                 findViewById(R.id.menuFind).setEnabled(true);
                 findViewById(R.id.menuFind).setBackground(getResources().getDrawable(R.drawable.findedit));
                 findViewById(R.id.menuWithdraw).setEnabled(true);
@@ -150,7 +155,7 @@ public class ScanMenuActivity extends Activity {
     }
 
     private Item getItemScanned(String scannedCode) {
-        List<Item> items = ItemService.getInstance().getProduct(scannedCode);
+        List<Item> items = ItemService.getInstance().getItem(scannedCode);
         if (!items.isEmpty()) {
             item = items.get(0);
             return item;

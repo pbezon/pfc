@@ -42,7 +42,7 @@ public abstract class AbstractDetailsActivity extends Activity{
     private TextView editContactPhone;
     private TextView editCalendarDescription;
     private ImageView photoView;
-    private Item item;
+    protected Item item;
     private Spinner typeEdit;
 
     @Override
@@ -68,6 +68,7 @@ public abstract class AbstractDetailsActivity extends Activity{
         addCalendarListener();
         addContactsListener();
 
+        setupSpecificButtonListener();
     }
 
     @Override
@@ -97,6 +98,22 @@ public abstract class AbstractDetailsActivity extends Activity{
                 if (resultCode == RESULT_OK) {
                     Uri contentUri = data.getData();
                     item.getCurrentStatus().setContactUri(contentUri.toString());
+
+                    editContactName.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            viewContactEvent();
+                        }
+                    });
+                    editContactPhone.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            viewContactEvent();
+                        }
+                    });
+
+                    int id = getResources().getIdentifier("android:drawable/ic_menu_delete", null, null);
+                    ((ImageView)findViewById(R.id.editAddViewContact)).setImageResource(id);
                     this.addContactsListener();
                 }
                 break;
@@ -145,23 +162,14 @@ public abstract class AbstractDetailsActivity extends Activity{
                             Intent intent = new Intent(Intent.ACTION_PICK,
                                     ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
                             startActivityForResult(intent, REQUEST_CONTACTPICKER);
-                            editContactName.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    viewContactEvent();
-                                }
-                            });
-                            editContactPhone.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    viewContactEvent();
-                                }
-                            });
+
                         } else {
                             // acaban de darle a borrar
                             item.getCurrentStatus().setContactUri(null);
-
+                            int id = getResources().getIdentifier("android:drawable/ic_input_add", null, null);
+                            ((ImageView)findViewById(R.id.editAddViewContact)).setImageResource(id);
                             fillForm();
+
                         }
                     }
                 }
@@ -254,5 +262,7 @@ public abstract class AbstractDetailsActivity extends Activity{
     }
 
     protected abstract int getLayoutResourceId();
+
+    protected abstract void setupSpecificButtonListener();
 
 }

@@ -43,7 +43,8 @@
     <string name="scanedCode">Scanned code</string>
     <string name="type">Type</string>
     <string name="save">Save</string>
-    <string name="withdraw">Withdraw</string>
+    <string name="withdraw">Just let it go...</string>
+    <string name="retrn">Back to the stack!</string>
     <string name="product_management">Product Management</string>
     <string-array name="itemTypes">
         <item>Key</item>
@@ -63,5 +64,6 @@
     <string name="contactUri">Who</string>
     <string name="reload">Reload Server</string>
     <string name="itemTypesUpdateButton">Update Item Types</string>
+    <string name="scanOkinfo">Scanned %1s! what you wanna do?</string>
 
 </resources>

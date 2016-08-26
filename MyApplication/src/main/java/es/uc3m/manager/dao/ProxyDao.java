@@ -17,7 +17,7 @@ public class ProxyDao {
     private final RestfulDao restfulDao = new RestfulDao();
     private final Map<String, Item> dummyList = new HashMap<String, Item>();
 
-    public List<Item> getProduct(String id) {
+    public List<Item> getItem(String id) {
         if (Constants.OFFLINE) {
             if (id == null || id.isEmpty()) {
                 return new ArrayList<Item>(dummyList.values());
@@ -26,35 +26,34 @@ public class ProxyDao {
             if (p != null) return Collections.singletonList(p);
             return new ArrayList<Item>();
         } else {
-            return restfulDao.realGetProduct(id);
+            return restfulDao.realGetItem(id);
         }
     }
 
-    public Item updateProduct(Item item) {
+    public Item updateItem(Item item) {
         if (Constants.OFFLINE) {
             dummyList.put(item.get_id(), item);
             return dummyList.get(item.get_id());
         } else {
-            return restfulDao.updateProduct(item);
+            return restfulDao.updateItem(item);
         }
     }
 
-    public Boolean deleteProduct(String productId) {
+    public Boolean deleteItem(String itemId) {
         if (Constants.OFFLINE) {
-            return dummyList.remove(productId) != null;
+            return dummyList.remove(itemId) != null;
         } else {
-            return restfulDao.deleteProduct(productId);
+            return restfulDao.deleteItem(itemId);
         }
     }
 
-    public Item returnProduct(Item item) {
+    public Item returnItem(Item item) {
         if (Constants.OFFLINE) {
-            item.getCurrentStatus().setStatus("Available");
             dummyList.put(item.get_id(), item);
             return dummyList.get(item.get_id());
         } else {
-            restfulDao.returnProduct(item);
-            List<Item> itemList = restfulDao.getProduct(item.get_id());
+            restfulDao.returnItem(item);
+            List<Item> itemList = restfulDao.getItem(item.get_id());
             if (itemList != null && !itemList.isEmpty()) {
                 return itemList.get(0);
             }
@@ -62,22 +61,16 @@ public class ProxyDao {
         }
     }
 
-    public Item withdrawProduct(String id) {
+    public Item withdrawItem(Item item) {
         if (Constants.OFFLINE) {
-            Item item = dummyList.get(id);
             if (item != null) {
-                item.getCurrentStatus().setStatus("Taken");
-                dummyList.put(id, item);
-                return dummyList.get(id);
+                dummyList.put(item.get_id(), item);
+                return dummyList.get(item.get_id());
             }
             return new Item();
         } else {
-            restfulDao.withdrawProduct(id);
-            List<Item> item = restfulDao.getProduct(id);
-            if (item != null && !item.isEmpty()) {
-                return item.get(0);
-            }
-            return new Item();
+            restfulDao.withdrawItem(item);
+            return this.getItem(item.get_id()).get(0);
         }
     }
 

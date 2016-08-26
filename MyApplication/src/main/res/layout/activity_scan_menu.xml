@@ -20,7 +20,7 @@
                 android:id="@+id/scanOk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Scanned! What you wanna do?"
+                android:text="@string/scanOkinfo"
                 android:layout_above="@+id/menuFind"
                 android:layout_centerHorizontal="true" />
 

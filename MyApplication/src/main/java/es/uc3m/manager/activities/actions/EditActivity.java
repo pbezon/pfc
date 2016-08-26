@@ -188,7 +188,7 @@ public class EditActivity extends Activity {
         if (item != null) {
             items = Collections.singletonList(item);
         } else {
-            items = ItemService.getInstance().getProduct(scannedId);
+            items = ItemService.getInstance().getItem(scannedId);
         }
         if (items == null || items.isEmpty()) {
             Toast.makeText(getApplicationContext(), "The item does not exist...", Toast.LENGTH_LONG).show();
@@ -229,6 +229,7 @@ public class EditActivity extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        item.setPhoto(item.get_id());
                         boolean response = ItemService.getInstance().edit(item);
                         if (response) {
                             Toast.makeText(getApplicationContext(), "UPDATED OK!!", Toast.LENGTH_LONG).show();

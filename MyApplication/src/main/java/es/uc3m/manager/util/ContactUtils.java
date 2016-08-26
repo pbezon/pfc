@@ -27,16 +27,16 @@ public class ContactUtils {
 
         Log.d("TAG", "Contact ID: " + contactID);
         // Using the contact ID now we will get contact phone number
-        Cursor cursorPhone = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER},
-                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ? AND " +
-                        ContactsContract.CommonDataKinds.Phone.TYPE + " = " +
-                        ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE,
-                new String[]{contactID},
-                null);
+        Cursor cursorPhone = ContactUtils.getPhone(contentResolver, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE, contactID);
         if (cursorPhone != null && cursorPhone.moveToFirst()) {
             contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
             cursorPhone.close();
+        } else {
+            cursorPhone = ContactUtils.getPhone(contentResolver, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE, contactID);
+            if (cursorPhone != null && cursorPhone.moveToFirst()) {
+                contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                cursorPhone.close();
+            }
         }
         Log.d("TAG", "Contact Phone Number: " + contactNumber);
         return contactNumber;
@@ -57,5 +57,15 @@ public class ContactUtils {
         }
         Log.d("TAG", "Contact Name: " + contactName);
         return contactName;
+    }
+
+    private static Cursor getPhone (ContentResolver contentResolver, int phoneType, String contactID){
+        return contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER},
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ? AND " +
+                        ContactsContract.CommonDataKinds.Phone.TYPE + " = " +
+                        phoneType,
+                new String[]{contactID},
+                null);
     }
 }

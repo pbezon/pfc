@@ -5,6 +5,7 @@ import java.util.List;
 import es.uc3m.manager.dao.ProxyDao;
 import es.uc3m.manager.pojo.Item;
 import es.uc3m.manager.pojo.Status;
+import es.uc3m.manager.util.Constants;
 
 /**
  * Created by Snapster on 21/03/2015.
@@ -26,24 +27,26 @@ public class ItemService {
     }
 
 
-    public List<Item> getProduct(String id) {
-        return dao.getProduct(id);
+    public List<Item> getItem(String id) {
+        return dao.getItem(id);
     }
 
-    public Item updateProduct(Item item) {
-        return dao.updateProduct(item);
+    public Item updateItem(Item item) {
+        return dao.updateItem(item);
     }
 
-    public Boolean deleteProduct(String productId) {
-        return dao.deleteProduct(productId);
+    public Boolean deleteItem(String itemId) {
+        return dao.deleteItem(itemId);
     }
 
-    public Item returnProduct(Item item) {
-        return dao.returnProduct(item);
+    public Item returnItem(Item item) {
+        item.getCurrentStatus().setStatus(Constants.STATUS_AVAILABLE);
+        return dao.returnItem(item);
     }
 
-    public Item withdrawProduct(String id) {
-        return dao.withdrawProduct(id);
+    public Item withdrawItem(Item item) {
+        item.getCurrentStatus().setStatus(Constants.STATUS_TAKEN);
+        return dao.withdrawItem(item);
     }
 
     public Boolean add(Item p) {

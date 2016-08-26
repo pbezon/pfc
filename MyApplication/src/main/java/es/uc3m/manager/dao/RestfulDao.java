@@ -26,7 +26,7 @@ class RestfulDao {
     private ObjectMapper productMapper;
 
 
-    public List<Item> getProduct(String id) {
+    public List<Item> getItem(String id) {
         Item p = new Item();
         p.set_id("123456");
         p.setName("fakeProductName");
@@ -42,7 +42,7 @@ class RestfulDao {
 
     }
 
-    public List<Item> realGetProduct(String id) {
+    public List<Item> realGetItem(String id) {
         GetTask getTask = new GetTask();
 
         String getRest = "/";
@@ -62,7 +62,7 @@ class RestfulDao {
 
     }
 
-    public Item updateProduct(Item item) {
+    public Item updateItem(Item item) {
         String updateRest = "/update/";
         String urlString = url + updateRest; // URL to call
         // HTTP post
@@ -76,9 +76,9 @@ class RestfulDao {
         return new Item();
     }
 
-    public Boolean deleteProduct(String productId) {
+    public Boolean deleteItem(String itemId) {
         String deleteRest = "/delete/";
-        String urlString = url + deleteRest + productId; // URL to call
+        String urlString = url + deleteRest + itemId; // URL to call
         // HTTP post
         try {
             RestTemplate template = new RestTemplate();
@@ -90,11 +90,11 @@ class RestfulDao {
         return false;
     }
 
-    public Boolean returnProduct(Item item) {
+    public Boolean returnItem(Item item) {
         return true;
     }
 
-    public Item withdrawProduct(String id) {
+    public Item withdrawItem(Item item) {
         Item p = new Item();
         p.set_id("123456");
         p.setDescription("fakeProduct");

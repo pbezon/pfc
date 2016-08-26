@@ -27,9 +27,9 @@ public class RemoveActivity extends Activity {
 
     private TextView nameEdit;
     private TextView descriptionEdit;
-    private TextView editStatusDescription;
     private ImageView photoView;
     private Spinner typeEdit;
+    private TextView itemIdView;
     private Item item;
 
     @Override
@@ -37,15 +37,12 @@ public class RemoveActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remove_item);
 
-        nameEdit = (TextView) findViewById(R.id.nameEdit);
-        descriptionEdit = (TextView) findViewById(R.id.descriptionEdit);
-        typeEdit = (Spinner) findViewById(R.id.typeEdit);
-        editStatusDescription = (TextView) findViewById(R.id.editStatusDescription);
-        photoView = (ImageView) findViewById(R.id.imageViewEdit);
+        nameEdit = (TextView) findViewById(R.id.nameInput);
+        descriptionEdit = (TextView) findViewById(R.id.descriptionInput);
+        typeEdit = (Spinner) findViewById(R.id.addFragmentSpinner);
+        photoView = (ImageView) findViewById(R.id.imageView);
+        itemIdView = (TextView) findViewById(R.id.scannedCodeFragment);
         item = (Item) this.getIntent().getSerializableExtra("ITEM");
-
-        findViewById(R.id.editViewCalendarEvent).setVisibility(View.INVISIBLE);
-        findViewById(R.id.editAddViewContact).setVisibility(View.INVISIBLE);
 
         fillForm();
         addDeleteListener();
@@ -57,7 +54,7 @@ public class RemoveActivity extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ItemService.getInstance().deleteProduct(item.get_id());
+                        ItemService.getInstance().deleteItem(item.get_id());
                         Toast.makeText(getApplicationContext(), "Item deleted!", Toast.LENGTH_SHORT).show();
                         finish();
                     }
@@ -72,7 +69,7 @@ public class RemoveActivity extends Activity {
         } else {
             nameEdit.setText(item.getName());
             descriptionEdit.setText(item.getDescription());
-            editStatusDescription.setText(item.getCurrentStatus().getStatus());
+            itemIdView.setText(item.get_id());
             typeEdit.setSelection(SpinnerUtils.getIndex(typeEdit, item.getType()));
             if (item.getPhoto() != null && !item.getPhoto().isEmpty()) {
                 File photo = new File(Environment.getExternalStorageDirectory() + SettingsActivity.PATH, item.getPhoto());

@@ -30,7 +30,7 @@ public class ListCollectionActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_results);
 
-        ItemAdapter itemAdapter = new ItemAdapter(this, ItemService.getInstance().getProduct(""));
+        final ItemAdapter itemAdapter = new ItemAdapter(this, ItemService.getInstance().getItem(""));
         setListAdapter(itemAdapter);
 
         addFilterListener(itemAdapter);
@@ -42,10 +42,15 @@ public class ListCollectionActivity extends ListActivity {
                 AlertDialog.Builder alert = new AlertDialog.Builder(ListCollectionActivity.this);
                 alert.setTitle("Alert!!");
                 alert.setMessage("Are you sure to delete record");
+
+                final Item localItem = itemAdapter.getItem(position);
+
                 alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        ItemService.getInstance().deleteItem(localItem.get_id());
+                        getListView().deferNotifyDataSetChanged();
                         //do your work here
                         dialog.dismiss();
                     }
@@ -62,7 +67,6 @@ public class ListCollectionActivity extends ListActivity {
             }
         });
     }
-
 
     private void addFilterListener(final ItemAdapter itemAdapter) {
         EditText inputSearch = (EditText) findViewById(R.id.inputSearch);
@@ -104,38 +108,5 @@ public class ListCollectionActivity extends ListActivity {
         int id = item.getItemId();
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
-
-//    private void flipCard(Integer position) {
-//
-//        try {
-//            CardBackFragment fragment = new CardBackFragment();
-//            Bundle bundle = new Bundle();
-//            bundle.putInt("position", position);
-//            fragment.setArguments(bundle);
-//            // Create and commit a new fragment transaction that adds the fragment for the back of
-//            // the card, uses custom animations, and is part of the fragment manager's back stack.
-//            getFragmentManager()
-//                    .beginTransaction()
-//                            // Replace the default fragment animations with animator resources representing
-//                            // rotations when switching to the back of the card, as well as animator
-//                            // resources representing rotations when flipping back to the front (e.g. when
-//                            // the system Back button is pressed).
-//                    .setCustomAnimations(
-//                            R.animator.card_flip_right_in, R.animator.card_flip_right_out,
-//                            R.animator.card_flip_left_in, R.animator.card_flip_left_out)
-//                            // Replace any fragments currently in the container view with a fragment
-//                            // representing the next page (indicated by the just-incremented currentPage
-//                            // variable).
-//                    .replace(R.id.flipContainer, fragment)
-//                            // Add this transaction to the back stack, allowing users to press Back
-//                            // to get to the front of the card.
-//                    .addToBackStack(null)
-//                            // Commit the transaction.
-//                    .commit();
-//        } catch (Exception e) {
-//            Log.e(e.getMessage(), e.getMessage());
-//        }
-//    }
-
 
 }

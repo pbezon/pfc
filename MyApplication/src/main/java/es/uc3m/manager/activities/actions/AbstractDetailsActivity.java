@@ -33,17 +33,19 @@ public abstract class AbstractDetailsActivity extends Activity{
 
     private static final int REQUEST_CALENDAR_EVENT = 2;
     private static final int REQUEST_CONTACTPICKER = 3;
-    private long max_event_id;
-    private TextView nameEditText;
-    private TextView descriptionEditText;
-    private TextView editCalendarReminderText;
-    private TextView editStatusDescriptionText;
-    private TextView editContactName;
-    private TextView editContactPhone;
-    private TextView editCalendarDescription;
-    private ImageView photoView;
+    protected long max_event_id;
+    protected TextView nameEditText;
+    protected TextView descriptionEditText;
+    protected TextView editCalendarReminderText;
+    protected TextView editStatusDescriptionText;
+    protected TextView editContactName;
+    protected TextView editContactPhone;
+    protected TextView editCalendarDescription;
+    protected ImageView photoView;
     protected Item item;
-    private Spinner typeEdit;
+    protected Spinner typeEdit;
+    protected ImageView calendarImage;
+    protected ImageView contactAddIcon;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -62,6 +64,9 @@ public abstract class AbstractDetailsActivity extends Activity{
         editContactPhone = (TextView) findViewById(R.id.editContactPhone);
         editCalendarDescription = (TextView) findViewById(R.id.editCalendarDescription);
         photoView = (ImageView) findViewById(R.id.imageViewEdit);
+        calendarImage = (ImageView) findViewById(R.id.editViewCalendarEvent);
+        contactAddIcon = ((ImageView)findViewById(R.id.editAddViewContact));
+
         // fill layout
         fillForm();
         // button listeners
@@ -69,6 +74,7 @@ public abstract class AbstractDetailsActivity extends Activity{
         addContactsListener();
 
         setupSpecificButtonListener();
+        setupDisabledButtons();
     }
 
     @Override
@@ -113,7 +119,7 @@ public abstract class AbstractDetailsActivity extends Activity{
                     });
 
                     int id = getResources().getIdentifier("android:drawable/ic_menu_delete", null, null);
-                    ((ImageView)findViewById(R.id.editAddViewContact)).setImageResource(id);
+                    contactAddIcon.setImageResource(id);
                     this.addContactsListener();
                 }
                 break;
@@ -152,8 +158,11 @@ public abstract class AbstractDetailsActivity extends Activity{
     }
 
     private void addContactsListener() {
-        ImageView contacts = (ImageView) findViewById(R.id.editAddViewContact);
-        contacts.setOnClickListener(
+        if (item.getCurrentStatus().getContactUri() != null && !item.getCurrentStatus().getContactUri().isEmpty()) {
+            int id = getResources().getIdentifier("android:drawable/ic_menu_delete", null, null);
+            contactAddIcon.setImageResource(id);
+        }
+        contactAddIcon.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -167,7 +176,7 @@ public abstract class AbstractDetailsActivity extends Activity{
                             // acaban de darle a borrar
                             item.getCurrentStatus().setContactUri(null);
                             int id = getResources().getIdentifier("android:drawable/ic_input_add", null, null);
-                            ((ImageView)findViewById(R.id.editAddViewContact)).setImageResource(id);
+                            contactAddIcon.setImageResource(id);
                             fillForm();
 
                         }
@@ -177,7 +186,6 @@ public abstract class AbstractDetailsActivity extends Activity{
     }
 
     private void addCalendarListener() {
-        ImageView calendarImage = (ImageView) findViewById(R.id.editViewCalendarEvent);
         String calendarUri = item.getCurrentStatus().getCalendarEventId();
 
         if (calendarUri != null && !calendarUri.isEmpty()) {
@@ -263,6 +271,60 @@ public abstract class AbstractDetailsActivity extends Activity{
 
     protected abstract int getLayoutResourceId();
 
+    protected abstract void setupDisabledButtons();
+
     protected abstract void setupSpecificButtonListener();
+
+    protected void disableCalendar() {
+        calendarImage.setVisibility(View.INVISIBLE);
+        calendarImage.setClickable(false);
+        calendarImage.setEnabled(false);
+        calendarImage.setFocusable(false);
+    }
+
+    protected void enableCalendar() {
+        calendarImage.setVisibility(View.VISIBLE);
+        calendarImage.setClickable(true);
+        calendarImage.setEnabled(true);
+        calendarImage.setFocusable(true);
+    }
+
+    protected void disableContact () {
+        contactAddIcon.setVisibility(View.INVISIBLE);
+        contactAddIcon.setClickable(false);
+        contactAddIcon.setEnabled(false);
+        contactAddIcon.setFocusable(false);
+    }
+
+    protected void enableContact() {
+        contactAddIcon.setVisibility(View.VISIBLE);
+        contactAddIcon.setClickable(true);
+        contactAddIcon.setEnabled(true);
+        contactAddIcon.setFocusable(true);
+    }
+
+    protected void disableSpinner () {
+        typeEdit.setClickable(false);
+        typeEdit.setEnabled(false);
+        typeEdit.setFocusable(false);
+    }
+
+    protected void enableSpinner () {
+        typeEdit.setClickable(true);
+        typeEdit.setEnabled(true);
+        typeEdit.setFocusable(true);
+    }
+
+    protected void disablePhoto () {
+        photoView.setClickable(false);
+        photoView.setEnabled(false);
+        photoView.setFocusable(false);
+    }
+
+    protected void enablePhoto () {
+        photoView.setClickable(true);
+        photoView.setEnabled(true);
+        photoView.setFocusable(true);
+    }
 
 }

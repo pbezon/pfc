@@ -64,6 +64,6 @@
     <string name="contactUri">Who</string>
     <string name="reload">Reload Server</string>
     <string name="itemTypesUpdateButton">Update Item Types</string>
-    <string name="scanOkinfo">Scanned %1s! what you wanna do?</string>
+    <string name="scanOkinfo">Scanned \"%1s\" tag. What you wanna do?</string>
 
 </resources>

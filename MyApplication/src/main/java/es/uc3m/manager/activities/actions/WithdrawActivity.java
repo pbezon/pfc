@@ -20,6 +20,15 @@ public class WithdrawActivity extends AbstractDetailsActivity {
     }
 
     @Override
+    protected void setupDisabledButtons() {
+        super.enableCalendar();
+        super.enableContact();
+        super.disablePhoto();
+        super.disableSpinner();
+    }
+
+
+    @Override
     protected void setupSpecificButtonListener() {
         Button button = (Button) findViewById(R.id.withdrawButton);
         button.setOnClickListener(new View.OnClickListener() {
@@ -27,6 +36,7 @@ public class WithdrawActivity extends AbstractDetailsActivity {
             public void onClick(View view) {
                 Item returnItem = ItemService.getInstance().withdrawItem(ItemService.getInstance().withdrawItem(item));
                 if (returnItem != null) {
+                    item = returnItem;
                     Toast.makeText(getApplicationContext(), "See you soon "+item.getName()+"!!",Toast.LENGTH_SHORT).show();
                     finish();
                 } else {

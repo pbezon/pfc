@@ -57,17 +57,14 @@ public class ProxyDao {
             if (itemList != null && !itemList.isEmpty()) {
                 return itemList.get(0);
             }
-            return item;
+            return null;
         }
     }
 
     public Item withdrawItem(Item item) {
         if (Constants.OFFLINE) {
-            if (item != null) {
                 dummyList.put(item.get_id(), item);
                 return dummyList.get(item.get_id());
-            }
-            return new Item();
         } else {
             restfulDao.withdrawItem(item);
             return this.getItem(item.get_id()).get(0);

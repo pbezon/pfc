@@ -22,7 +22,7 @@
         android:text="Ok"
         android:id="@+id/editOk"
         android:background="@drawable/oktick"
-        android:layout_marginLeft="76dp"
+        android:layout_marginLeft="87dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true" />
 

@@ -41,6 +41,8 @@ public class ItemService {
 
     public Item returnItem(Item item) {
         item.getCurrentStatus().setStatus(Constants.STATUS_AVAILABLE);
+        item.getCurrentStatus().setContactUri("");
+        item.getCurrentStatus().setCalendarEventId("");
         return dao.returnItem(item);
     }
 

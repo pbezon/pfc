@@ -12,7 +12,7 @@ import android.util.Log;
 public class ContactUtils {
 
     public static String getContactNumber(String uriContact, ContentResolver contentResolver) {
-        if (uriContact == null) {
+        if (uriContact == null || uriContact.isEmpty()) {
             return "";
         }
         String contactNumber = null;
@@ -27,17 +27,27 @@ public class ContactUtils {
 
         Log.d("TAG", "Contact ID: " + contactID);
         // Using the contact ID now we will get contact phone number
-        Cursor cursorPhone = ContactUtils.getPhone(contentResolver, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE, contactID);
-        if (cursorPhone != null && cursorPhone.moveToFirst()) {
-            contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            cursorPhone.close();
-        } else {
-            cursorPhone = ContactUtils.getPhone(contentResolver, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE, contactID);
-            if (cursorPhone != null && cursorPhone.moveToFirst()) {
-                contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                cursorPhone.close();
+        //
+        //  Get all phone numbers.
+        //
+        Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactID, null, null);
+        while (phones.moveToNext()) {
+            String number = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            int type = phones.getInt(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+            switch (type) {
+                case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                    // do something with the Home number here...
+                    break;
+                case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                    // do something with the Mobile number here...
+                    break;
+                case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                    // do something with the Work number here...
+                    break;
             }
         }
+        phones.close();
         Log.d("TAG", "Contact Phone Number: " + contactNumber);
         return contactNumber;
     }

@@ -134,10 +134,10 @@ public class AddActivity extends Activity {
 
                         boolean response = ItemService.getInstance().add(p);
                         if (response) {
-                            Toast.makeText(getApplicationContext(), "OK!!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Item " + p.getName()+" was correctly added!!", Toast.LENGTH_LONG).show();
                             finish();
                         } else {
-                            Toast.makeText(getApplicationContext(), "ERROR!!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "ERROR adding item "+p.getName(), Toast.LENGTH_LONG).show();
                         }
                     }
                 }

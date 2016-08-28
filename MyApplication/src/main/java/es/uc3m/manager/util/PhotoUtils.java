@@ -17,7 +17,9 @@ public class PhotoUtils {
 
     public static void drawPhoto(Uri selectedImage, ContentResolver contentResolver, ImageView imageView, Context applicationContext) {
         contentResolver.notifyChange(selectedImage, null);
-
+        if (selectedImage == null) {
+            return;
+        }
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
@@ -32,11 +34,9 @@ public class PhotoUtils {
                 Bitmap actuallyUsableBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
                 imageView.setImageBitmap(actuallyUsableBitmap);
                 imageView.setRotation(90);
-                Toast.makeText(applicationContext, selectedImage.toString(), Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
-            Toast.makeText(applicationContext, "Failed to load", Toast.LENGTH_SHORT).show();
-            Log.e("Camera", e.toString());
+            Log.e("Camera", e.toString(),e);
         }
 
     }

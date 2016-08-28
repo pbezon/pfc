@@ -115,4 +115,9 @@ public class ItemAdapter extends ArrayAdapter<Item> implements Filterable {
         }
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+
+    }
 }

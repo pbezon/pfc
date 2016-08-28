@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -25,12 +26,15 @@ public class ListCollectionActivity extends ListActivity {
 
     private String id;
 
+    private ItemAdapter itemAdapter;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_results);
 
-        final ItemAdapter itemAdapter = new ItemAdapter(this, ItemService.getInstance().getItem(""));
+        itemAdapter = new ItemAdapter(this, ItemService.getInstance().getItem(""));
         setListAdapter(itemAdapter);
 
         addFilterListener(itemAdapter);
@@ -50,7 +54,8 @@ public class ListCollectionActivity extends ListActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ItemService.getInstance().deleteItem(localItem.get_id());
-                        getListView().deferNotifyDataSetChanged();
+                        itemAdapter.notifyDataSetChanged();
+                        itemAdapter.remove(localItem);
                         //do your work here
                         dialog.dismiss();
                     }
@@ -94,6 +99,7 @@ public class ListCollectionActivity extends ListActivity {
             Toast.makeText(this, item.getName() + " selected", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(getBaseContext(), EditActivity.class);
             intent.putExtra("ID", item.get_id());
+            intent.putExtra("ITEM", item);
             startActivity(intent);
         } catch (Exception e) {
             Log.e(e.getMessage(), e.getMessage());
@@ -109,4 +115,11 @@ public class ListCollectionActivity extends ListActivity {
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        itemAdapter = new ItemAdapter(this, ItemService.getInstance().getItem(""));
+        setListAdapter(itemAdapter);
+        addFilterListener(itemAdapter);
+    }
 }

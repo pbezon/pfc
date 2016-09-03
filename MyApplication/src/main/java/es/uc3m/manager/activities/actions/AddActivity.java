@@ -71,6 +71,7 @@ public class AddActivity extends Activity {
             case SCAN:
                 if (resultCode == Activity.RESULT_OK) {
                     PhotoUtils.drawPhoto(imageUri, getContentResolver(), (ImageView) findViewById(R.id.imageView), getApplicationContext());
+
                 }
                 break;
         }

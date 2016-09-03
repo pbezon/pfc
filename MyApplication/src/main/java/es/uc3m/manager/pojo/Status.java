@@ -6,12 +6,12 @@ import java.io.Serializable;
 
 public class Status implements Serializable {
 
-    @JsonProperty("calendarEventId")
+    @JsonProperty("calendarEvent")
     private
     String calendarEventId;
     @JsonProperty("status")
     private String status;
-    @JsonProperty("contactUri")
+    @JsonProperty("contactId")
     private String contactUri;
 
     public String getCalendarEventId() {

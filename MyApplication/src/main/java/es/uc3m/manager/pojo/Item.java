@@ -81,6 +81,8 @@ public class Item implements Serializable {
     }
 
     public Status getCurrentStatus() {
+        if (currentStatus == null)
+            currentStatus = new Status();
         return currentStatus;
     }
 

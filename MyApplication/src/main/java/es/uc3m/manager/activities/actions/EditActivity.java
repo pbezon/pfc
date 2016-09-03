@@ -93,6 +93,8 @@ public class EditActivity extends AbstractDetailsActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     PhotoUtils.drawPhoto(imageUri, getContentResolver(), (ImageView) findViewById(R.id.imageView), getApplicationContext());
                     item.setPhoto(item.get_id());
+                    File photo = new File(Environment.getExternalStorageDirectory() + SettingsActivity.PATH, item.getPhoto());
+                    PhotoUtils.drawPhoto(Uri.fromFile(photo), getContentResolver(), photoView, getApplicationContext());
                 }
                 break;
         }

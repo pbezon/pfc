@@ -69,7 +69,7 @@ class RestfulDao implements ItemDao {
         String urlString = url + deleteRest + itemId; // URL to call
         // HTTP post
         try {
-            return new PutTask().execute(urlString, null).get();
+            return new DeleteTask().execute(urlString, itemId).get();
         } catch (InterruptedException e) {
             Log.e("RestfulDao", e.getMessage());
             return false;

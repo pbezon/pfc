@@ -140,7 +140,7 @@ public class EditActivity extends AbstractDetailsActivity {
                         if (photoView != null && photoView.getDrawable() != null) {
                             item.setPhoto(item.get_id());
                         }
-                        boolean response = ItemService.getInstance().edit(item);
+                        boolean response = ItemService.getInstance().updateItem(item);
                         if (response) {
                             Toast.makeText(getApplicationContext(), "Item "+item.getName()+" correctly updated!", Toast.LENGTH_LONG).show();
                             finish();

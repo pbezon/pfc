@@ -1,6 +1,7 @@
 package es.uc3m.manager.dao;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,31 +19,15 @@ import es.uc3m.manager.pojo.Status;
 /**
  * Created by Snapster on 5/1/2016.
  */
-class RestfulDao {
+class RestfulDao implements ItemDao {
 
     private String url = "http://192.168.1.81:8082";
     private final String returnRest = "/return/";
     private final String withdrawRest = "/withdraw/";
     private ObjectMapper productMapper;
 
-
+    @Override
     public List<Item> getItem(String id) {
-        Item p = new Item();
-        p.set_id("123456");
-        p.setName("fakeProductName");
-        p.setDescription("fakeProductDescription");
-        Status nowStatus = new Status();
-        p.setCurrentStatus(nowStatus);
-        p.getCurrentStatus().setCalendarEventId("4771");
-        p.getCurrentStatus().setContactUri("content://com.android.contacts/data/36");
-        ArrayList<Item> result = new ArrayList<Item>();
-        result.add(p);
-        result.add(p);
-        return result;
-
-    }
-
-    public List<Item> realGetItem(String id) {
         GetTask getTask = new GetTask();
 
         String getRest = "/";
@@ -54,70 +39,92 @@ class RestfulDao {
             Item[] items = response.get();
             Collections.addAll(result, items);
         } catch (InterruptedException e) {
+            Log.e("RestfulDao", e.getMessage());
             e.printStackTrace();
         } catch (ExecutionException e) {
+            Log.e("RestfulDao", e.getMessage());
             e.printStackTrace();
         }
         return result;
-
     }
 
-    public Item updateItem(Item item) {
-        String updateRest = "/update/";
+    @Override
+    public Boolean updateItem(Item item) {
+        String updateRest = "/update";
         String urlString = url + updateRest; // URL to call
-        // HTTP post
         try {
-            RestTemplate template = new RestTemplate();
-            template.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            return template.postForObject(urlString, item, Item.class);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+            return new PutTask().execute(urlString, item).get();
+        } catch (InterruptedException e) {
+            Log.e("RestfulDao", e.getMessage());
+            return false;
+        } catch (ExecutionException e) {
+            Log.e("RestfulDao", e.getMessage());
+            return false;
         }
-        return new Item();
     }
 
+    @Override
     public Boolean deleteItem(String itemId) {
         String deleteRest = "/delete/";
         String urlString = url + deleteRest + itemId; // URL to call
         // HTTP post
         try {
-            RestTemplate template = new RestTemplate();
-//            template.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            return template.postForObject(urlString, null, Boolean.class);
-        } catch (Exception e) {
-//            System.out.println(e.getMessage());
+            return new PutTask().execute(urlString, null).get();
+        } catch (InterruptedException e) {
+            Log.e("RestfulDao", e.getMessage());
+            return false;
+        } catch (ExecutionException e) {
+            Log.e("RestfulDao", e.getMessage());
+            return false;
         }
-        return false;
     }
 
+    @Override
     public Boolean returnItem(Item item) {
-        return true;
+        String returnRest = "/return/";
+        String urlString = url + returnRest + item.get_id(); // URL to call
+        try {
+            return new PutTask().execute(urlString, item).get();
+        } catch (InterruptedException e) {
+            Log.e("RestfulDao", e.getMessage());
+            return false;
+        } catch (ExecutionException e) {
+            Log.e("RestfulDao", e.getMessage());
+            return false;
+        }
     }
 
-    public Item withdrawItem(Item item) {
-        Item p = new Item();
-        p.set_id("123456");
-        p.setDescription("fakeProduct");
-        Status nowStatus = new Status();
-//        nowStatus.setOutDate(new Date().toString());
-        nowStatus.setStatus("Taken");
-        nowStatus.setContactUri("Dude");
-        p.setCurrentStatus(nowStatus);
-        return p;
+    @Override
+    public Boolean withdrawItem(Item item) {
+        String withdrawRest = "/withdraw/";
+        String urlString = url + withdrawRest + item.get_id(); // URL to call
+        try {
+            return new PutTask().execute(urlString, item).get();
+        } catch (InterruptedException e) {
+            Log.e("RestfulDao", e.getMessage());
+            return false;
+        } catch (ExecutionException e) {
+            Log.e("RestfulDao", e.getMessage());
+            return false;
+        }
     }
 
+    @Override
     public Boolean add(Item p) {
         String newRest = "/new";
         String urlString = url + newRest; // URL to call
         try {
             return new PutTask().execute(urlString, p).get();
         } catch (InterruptedException e) {
+            Log.e("RestfulDao", e.getMessage());
             return false;
         } catch (ExecutionException e) {
+            Log.e("RestfulDao", e.getMessage());
             return false;
         }
     }
 
+    @Override
     public boolean reload(String ip, String port) {
         url = "http://"+ip+":"+port;
         return true;

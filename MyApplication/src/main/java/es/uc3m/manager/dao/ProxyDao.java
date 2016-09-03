@@ -12,7 +12,7 @@ import es.uc3m.manager.util.Constants;
 /**
  * Created by Snapster on 5/1/2016.
  */
-public class ProxyDao {
+public class ProxyDao implements ItemDao {
 
     private final RestfulDao restfulDao = new RestfulDao();
     private final Map<String, Item> dummyList = new HashMap<String, Item>();
@@ -26,14 +26,14 @@ public class ProxyDao {
             if (p != null) return Collections.singletonList(p);
             return new ArrayList<Item>();
         } else {
-            return restfulDao.realGetItem(id);
+            return restfulDao.getItem(id);
         }
     }
 
-    public Item updateItem(Item item) {
+    public Boolean updateItem(Item item) {
         if (Constants.OFFLINE) {
             dummyList.put(item.get_id(), item);
-            return dummyList.get(item.get_id());
+            return true;
         } else {
             return restfulDao.updateItem(item);
         }
@@ -47,27 +47,25 @@ public class ProxyDao {
         }
     }
 
-    public Item returnItem(Item item) {
+    public Boolean returnItem(Item item) {
         if (Constants.OFFLINE) {
+            item.getCurrentStatus().setStatus(Constants.STATUS_AVAILABLE);
+            item.getCurrentStatus().setContactUri("");
+            item.getCurrentStatus().setCalendarEventId("");
             dummyList.put(item.get_id(), item);
-            return dummyList.get(item.get_id());
+            return true;
         } else {
-            restfulDao.returnItem(item);
-            List<Item> itemList = restfulDao.getItem(item.get_id());
-            if (itemList != null && !itemList.isEmpty()) {
-                return itemList.get(0);
-            }
-            return null;
+            return restfulDao.returnItem(item);
         }
     }
 
-    public Item withdrawItem(Item item) {
+    public Boolean withdrawItem(Item item) {
         if (Constants.OFFLINE) {
-                dummyList.put(item.get_id(), item);
-                return dummyList.get(item.get_id());
+            item.getCurrentStatus().setStatus(Constants.STATUS_TAKEN);
+            dummyList.put(item.get_id(), item);
+            return true;
         } else {
-            restfulDao.withdrawItem(item);
-            return this.getItem(item.get_id()).get(0);
+            return restfulDao.withdrawItem(item);
         }
     }
 

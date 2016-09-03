@@ -33,9 +33,8 @@ public class ReturnActivity extends AbstractDetailsActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Item returnItem = ItemService.getInstance().returnItem(item);
-                if (returnItem != null) {
-                    item = returnItem;
+                Boolean returnItem = ItemService.getInstance().returnItem(item);
+                if (returnItem) {
                     Toast.makeText(getApplicationContext(), "Welcome back "+item.getName()+"!!",Toast.LENGTH_SHORT).show();
                     finish();
                 } else {

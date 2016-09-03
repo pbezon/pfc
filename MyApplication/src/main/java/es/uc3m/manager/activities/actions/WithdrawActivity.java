@@ -34,9 +34,8 @@ public class WithdrawActivity extends AbstractDetailsActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Item returnItem = ItemService.getInstance().withdrawItem(ItemService.getInstance().withdrawItem(item));
-                if (returnItem != null) {
-                    item = returnItem;
+                Boolean returnItem = ItemService.getInstance().withdrawItem(item);
+                if (returnItem) {
                     Toast.makeText(getApplicationContext(), "See you soon "+item.getName()+"!!",Toast.LENGTH_SHORT).show();
                     finish();
                 } else {

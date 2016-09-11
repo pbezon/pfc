@@ -45,6 +45,13 @@
             android:indeterminate="true" />
     </RelativeLayout>
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/performance"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/loadingPanel" />
+
 </RelativeLayout>
 
 

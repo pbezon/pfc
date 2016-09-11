@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background">
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/performanceInput"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:hint="Number of iterations"
+        android:textColor="@color/holo_blue" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GO insert!"
+        android:id="@+id/launchPerformance"
+        android:layout_marginTop="42dp"
+        android:layout_below="@+id/performanceInput"
+        android:layout_alignParentLeft="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/logResultPerformance"
+        android:layout_below="@+id/launchPerformance"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:hint="results" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GO getAll!"
+        android:id="@+id/launchGet"
+        android:layout_above="@+id/logResultPerformance"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear log"
+        android:id="@+id/clearConsole"
+        android:layout_above="@+id/logResultPerformance"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

@@ -39,6 +39,7 @@ import java.util.List;
 
 import es.uc3m.manager.R;
 import es.uc3m.manager.activities.collection.ListCollectionActivity;
+import es.uc3m.manager.activities.profiling.ProfilingActivity;
 import es.uc3m.manager.activities.scan.ManualInputActivity;
 import es.uc3m.manager.activities.scan.ScanMenuActivity;
 import es.uc3m.manager.activities.settings.SettingsActivity;
@@ -105,6 +106,13 @@ public class MainActivity extends Activity {
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         handleIntent(getIntent());
+
+        ((ImageButton)findViewById(R.id.performance)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), ProfilingActivity.class));
+            }
+        });
     }
 
     private void setupFolder() {

@@ -1,29 +1,27 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This is my final degree project for the UC3M university.
+
+I'll upload:
+* Android App
+* NodeJS server
+* IgniteUI frontend
 
 ### What is this repository for? ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* Provide an online and updated version of the application
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+* Grab the Android App
+* Grab the backend (nodejs) code
+* You'll need to install a mongoDB and update the configuration on the server side
+* You can change the backend IP from the application (Settings)
 
 ### Contribution guidelines ###
 
-* Writing tests
-* Code review
-* Other guidelines
+* I'll leve the code untouched, no pull requests
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
+* Me
